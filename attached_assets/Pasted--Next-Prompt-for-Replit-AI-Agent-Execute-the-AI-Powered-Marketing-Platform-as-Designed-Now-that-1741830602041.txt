@@ -1,0 +1,66 @@
+🔥 Next Prompt for Replit AI Agent – Execute the AI-Powered Marketing Platform as Designed
+
+Now that the AI-Powered Marketing Platform Structure is finalized, focus on executing the design exactly as outlined. This prompt ensures the AI agent stays aligned with the agreed vision and builds the platform with perfect visual and UX execution.
+
+⸻
+
+🎨 Prompt: Implement the Visual & UX Design of the AI-Powered Marketing Platform
+
+🚀 “Design and execute a visually stunning, modern, and intuitive UI for the AI-powered marketing platform. Every section must align with the predefined structure, ensuring a seamless user experience. Focus purely on aesthetics, clarity, and usability—do not change functionality or structure.”
+
+⸻
+
+📌 UI & UX Execution Guidelines
+
+✅ 1️⃣ Sidebar Navigation (Fixed & Intuitive)
+	•	Left-aligned vertical sidebar with collapsible sections.
+	•	Minimal, high-contrast icons with smooth hover effects.
+	•	Active section glows subtly to indicate selection.
+	•	User profile & settings placed at the bottom.
+
+✅ 2️⃣ AI Agents Section (Facebook-Style Directory – NOT a Standard List)
+	•	Grid-style AI agent cards that look like a sleek marketplace.
+	•	Each card must display an avatar, name, quick description, and action buttons (“Use Now” / “Add to Workflow”).
+	•	Smooth hover animations that expand to reveal agent details.
+	•	Filters & search functionality for quickly finding the right AI agent.
+
+✅ 3️⃣ AI-Powered Content Hub (Interactive & Guided Workflow, NOT a Simple Input Box)
+	•	Step-by-step input process guiding users to refine prompts.
+	•	Pre-filled dropdowns with structured options (tone, length, format).
+	•	Live AI Preview Panel on the right (real-time content updates).
+	•	Clean, uncluttered UI with soft animations for transitions.
+
+✅ 4️⃣ AI Workflows (Pre-Made & Custom Workflow, NOT Just Static Templates)
+	•	Pre-Made Workflows must be structured into interactive steps.
+	•	Custom Workflow Builder = Drag-and-drop interface.
+	•	Users can visually connect AI agents into sequences.
+	•	Step indicators & smooth animations to guide users through setup.
+
+✅ 5️⃣ AI Tools Section (NOT Just a List of Features, But a Functional Toolkit)
+	•	Grid-based layout for AI tools (image generator, transcription, etc.).
+	•	Clear call-to-action buttons for each tool.
+	•	Lightweight modals for quick tool access, avoiding full-page reloads.
+
+✅ 6️⃣ AI Task Manager & Planner (NOT Just a Basic To-Do List)
+	•	Full AI-powered scheduling assistant, not just manual task entry.
+	•	AI should recommend task priorities dynamically.
+	•	Smooth calendar integration with auto-scheduling.
+	•	Subtle animations for new task entries and AI-suggested optimizations.
+
+✅ 7️⃣ Micro-Interactions & UX Enhancements (For a Premium Experience)
+	•	Smooth animations for hover, click, and page transitions.
+	•	Soft-glow highlights on active elements (modern, futuristic aesthetic).
+	•	Glassmorphism transparency on dropdowns & modals.
+	•	Seamless content-loading effects (not harsh spinners, but subtle progress indicators).
+
+⸻
+
+🔥 Final Execution Guidelines
+
+👉 DO NOT CHANGE ANY STRUCTURE—only execute the agreed vision.
+👉 Ensure a world-class UI that feels effortless, premium, and ultra-modern.
+👉 Prioritize clarity, usability, and smooth animations over unnecessary complexity.
+
+🚀 This prompt ensures the AI agent delivers a flawless execution of the AI-Powered Marketing Platform.
+
+Do you want to refine anything before sending this? 🔥🔥

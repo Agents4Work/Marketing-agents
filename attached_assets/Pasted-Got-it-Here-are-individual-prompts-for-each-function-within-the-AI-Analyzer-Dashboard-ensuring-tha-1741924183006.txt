@@ -1,0 +1,70 @@
+Got it! Here are individual prompts for each function within the AI Analyzer Dashboard, ensuring that each function behaves as a structured AI-powered prompt workflow.
+
+⸻
+
+1️⃣ Headline Analyzer - AI Prompt
+
+📌 What Happens?
+Users enter up to 5 headlines and choose the content type. AI evaluates engagement, suggests improvements, and ranks them.
+
+🔹 Prompt for Replit AI:
+💡 “We are building an AI-powered Headline Analyzer. Users can input up to 5 headlines, select the content type (Landing Page, Facebook Ad, Blog Title, etc.), and AI will score them based on engagement potential, clarity, and conversion effectiveness. AI should:
+✅ Rank headlines from best to worst.
+✅ Provide an engagement score (color-coded) (e.g., Red = Low, Green = High).
+✅ Suggest improvements & AI-generated alternatives for better performance.
+✅ Allow users to tweak inputs and regenerate results dynamically.
+✅ Ensure a fast, real-time AI response.”**
+
+⸻
+
+2️⃣ Ad Analyzer - AI Prompt
+
+📌 What Happens?
+Users paste their ad copy. AI scores effectiveness, evaluates the CTA, and recommends optimization strategies.
+
+🔹 Prompt for Replit AI:
+💡 “We are building an AI-powered Ad Analyzer. Users can input an ad copy (from Facebook, Google, LinkedIn, etc.), and AI will analyze it for effectiveness. AI should:
+✅ Score the ad on CTR potential, engagement, clarity, and persuasiveness.
+✅ Highlight weak areas and recommend improvements for better conversion.
+✅ Generate an improved AI-powered version of the ad based on best practices.
+✅ Compare input with top-performing industry ads if possible.”**
+
+⸻
+
+3️⃣ Competition Analyzer - AI Prompt
+
+📌 What Happens?
+Users enter a competitor’s website URL or ad text, and AI retrieves insights about their content strategy, engagement, and ad approach.
+
+🔹 Prompt for Replit AI:
+💡 “We are building an AI-powered Competition Analyzer. Users can input a competitor’s URL or ad copy, and AI should:
+✅ Retrieve engagement insights (best-performing ads, website messaging, etc.).
+✅ Compare competitor’s approach to the user’s input.
+✅ Suggest ways to improve based on competitor success.
+✅ Provide AI-generated strategic recommendations to outperform the competition.”**
+
+⸻
+
+4️⃣ Ad Data Integrations - AI Prompt
+
+📌 What Happens?
+Users connect Google Ads, Facebook Ads, LinkedIn Ads, etc., and AI provides real-time insights.
+
+🔹 Prompt for Replit AI:
+💡 “We are building an Ad Data Integrations system. Users can connect Google Ads, Facebook Ads, etc., to retrieve real-time performance insights. AI should:
+✅ Provide a real-time dashboard of ad spend, CTR, CPC, and engagement metrics.
+✅ Highlight underperforming campaigns with AI-powered recommendations.
+✅ Suggest budget reallocations for better ad efficiency.
+✅ Identify trends & anomalies to help marketers optimize ad strategies.”**
+
+⸻
+
+🔥 Final Notes
+
+✅ These AI prompts ensure structured input → AI team processes → Real-time feedback.
+✅ No blank text fields—AI guides users in every step for optimized results.
+✅ The AI Agent Team dynamically handles each function separately while keeping everything under one unified dashboard.
+
+⸻
+
+💡 Next Step: Confirm if this structure works before we send to Replit AI for implementation! 🚀

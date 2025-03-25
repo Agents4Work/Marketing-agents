@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Test Page</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    .card {
+      background-color: #f3f4f6;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    pre {
+      background-color: #1f2937;
+      color: #f9fafb;
+      padding: 1rem;
+      border-radius: 0.375rem;
+      overflow-x: auto;
+    }
+    .success { color: #10b981; }
+    .error { color: #ef4444; }
+  </style>
+</head>
+<body>
+  <h1>Simple Test Page</h1>
+  <p>This page tests basic connectivity to the server without requiring React or any other framework.</p>
+
+  <div class="card">
+    <h2>Server Status</h2>
+    <button id="checkServer">Check Server Status</button>
+    <div id="serverStatus"></div>
+  </div>
+
+  <div class="card">
+    <h2>API Tests</h2>
+    <button id="testApi">Test API Endpoint</button>
+    <button id="testDocuments">Test Documents API</button>
+    <button id="testHealth">Test Health Endpoint</button>
+    <div id="apiResult"></div>
+  </div>
+
+  <div class="card">
+    <h2>Debug Information</h2>
+    <p>Current URL: <span id="currentUrl"></span></p>
+    <p>Browser: <span id="browserInfo"></span></p>
+    <p>Timestamp: <span id="timestamp"></span></p>
+  </div>
+
+  <script>
+    // Display debug information
+    document.getElementById('currentUrl').textContent = window.location.href;
+    document.getElementById('browserInfo').textContent = navigator.userAgent;
+    document.getElementById('timestamp').textContent = new Date().toISOString();
+
+    // Check server status
+    document.getElementById('checkServer').addEventListener('click', async () => {
+      const statusDiv = document.getElementById('serverStatus');
+      statusDiv.innerHTML = '<p>Checking server status...</p>';
+      
+      try {
+        const startTime = performance.now();
+        const response = await fetch('/', {
+          method: 'GET',
+          headers: { 'Accept': 'text/html' }
+        });
+        const endTime = performance.now();
+        const responseTime = Math.round(endTime - startTime);
+        
+        let responseText = '';
+        try {
+          responseText = await response.text();
+        } catch (e) {
+          responseText = 'Could not read response body';
+        }
+        
+        statusDiv.innerHTML = `
+          <p class="${response.ok ? 'success' : 'error'}">Server is ${response.ok ? 'responding' : 'not responding properly'} to HTTP requests.</p>
+          <p>Status: ${response.status} ${response.statusText}</p>
+          <p>Response Time: ${responseTime}ms</p>
+          <p>Response size: ${responseText.length} bytes</p>
+        `;
+      } catch (error) {
+        statusDiv.innerHTML = `
+          <p class="error">Error connecting to server:</p>
+          <pre>${error.message}</pre>
+        `;
+      }
+    });
+
+    // Test API endpoint
+    document.getElementById('testApi').addEventListener('click', async () => {
+      const resultDiv = document.getElementById('apiResult');
+      resultDiv.innerHTML = '<p>Testing API endpoint...</p>';
+      
+      try {
+        const response = await fetch('/api/test');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        resultDiv.innerHTML = `
+          <p class="success">API endpoint responded successfully:</p>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <p class="error">Error calling API:</p>
+          <pre>${error.message}</pre>
+        `;
+      }
+    });
+
+    // Test Documents API
+    document.getElementById('testDocuments').addEventListener('click', async () => {
+      const resultDiv = document.getElementById('apiResult');
+      resultDiv.innerHTML = '<p>Testing Documents API endpoint...</p>';
+      
+      try {
+        const response = await fetch('/api/documents', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title: 'Test Document',
+            content: 'This is a test document created from the test.html page.'
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        resultDiv.innerHTML = `
+          <p class="success">Documents API responded successfully:</p>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <p class="error">Error calling Documents API:</p>
+          <pre>${error.message}</pre>
+        `;
+      }
+    });
+
+    // Test Health endpoint
+    document.getElementById('testHealth').addEventListener('click', async () => {
+      const resultDiv = document.getElementById('apiResult');
+      resultDiv.innerHTML = '<p>Testing Health endpoint...</p>';
+      
+      try {
+        const response = await fetch('/health');
+        let data;
+        
+        try {
+          data = await response.json();
+        } catch (e) {
+          data = await response.text();
+        }
+        
+        resultDiv.innerHTML = `
+          <p class="${response.ok ? 'success' : 'error'}">Health endpoint ${response.ok ? 'responded successfully' : 'returned an error'}:</p>
+          <p>Status: ${response.status} ${response.statusText}</p>
+          <pre>${typeof data === 'object' ? JSON.stringify(data, null, 2) : data}</pre>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <p class="error">Error calling Health endpoint:</p>
+          <pre>${error.message}</pre>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

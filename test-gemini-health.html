@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini Health Check Test</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    button { padding: 10px 15px; background: #4361ee; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .result { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Gemini Health Check Test</h1>
+  
+  <div>
+    <h2>Health Check</h2>
+    <button id="healthCheck">Test Health Endpoint</button>
+    <div class="result">
+      <pre id="healthResult">Results will appear here...</pre>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('healthCheck').addEventListener('click', async () => {
+      const resultElement = document.getElementById('healthResult');
+      resultElement.textContent = 'Loading...';
+      
+      try {
+        console.log('Fetching /api/gemini/health endpoint...');
+        
+        const response = await fetch('/api/gemini/health');
+        console.log('Response received:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`Status: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('Response data:', data);
+        
+        resultElement.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        console.error('Error testing health endpoint:', error);
+        resultElement.textContent = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Marketing Platform</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      background-color: #4a6cf7;
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    nav ul li {
+      margin-left: 1.5rem;
+    }
+    
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    nav ul li a:hover {
+      color: #e5e5ff;
+    }
+    
+    .hero {
+      padding: 4rem 0;
+      background: linear-gradient(135deg, #4a6cf7 0%, #8a5cf2 100%);
+      color: white;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      background-color: white;
+      color: #4a6cf7;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    
+    .btn:hover {
+      background-color: transparent;
+      color: white;
+      border-color: white;
+    }
+    
+    .features {
+      padding: 4rem 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-title h2 {
+      font-size: 2rem;
+      color: #333;
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    
+    .section-title h2:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: #4a6cf7;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .feature-card {
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+      padding: 2rem;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background-color: #f0f4ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: #4a6cf7;
+      font-size: 1.5rem;
+    }
+    
+    .feature-title {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    
+    .cta {
+      background-color: #f0f4ff;
+      padding: 4rem 0;
+      text-align: center;
+    }
+    
+    .cta h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    
+    .cta-btn {
+      background-color: #4a6cf7;
+      color: white;
+    }
+    
+    .cta-btn:hover {
+      background-color: #3a5be6;
+      color: white;
+      border-color: #3a5be6;
+    }
+    
+    footer {
+      background-color: #1d2636;
+      color: #99a1b3;
+      padding: 3rem 0 1rem;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .footer-column h3 {
+      color: white;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-column ul li a {
+      color: #99a1b3;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-column ul li a:hover {
+      color: white;
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid #384050;
+    }
+    
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      nav ul {
+        margin-top: 1rem;
+        justify-content: center;
+      }
+      
+      nav ul li {
+        margin: 0 0.7rem;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+    }
+    
+    /* Agent section */
+    .agents {
+      padding: 4rem 0;
+      background-color: white;
+    }
+    
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    
+    .agent-card {
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .agent-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .agent-img {
+      height: 200px;
+      background-color: #f0f4ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4a6cf7;
+      font-size: 3rem;
+    }
+    
+    .agent-content {
+      padding: 1.5rem;
+    }
+    
+    .agent-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    
+    .agent-role {
+      color: #4a6cf7;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <div class="logo">AI Marketing Platform</div>
+      <nav>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#agents">AI Agents</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <section class="hero">
+    <div class="container">
+      <h1>Transform Your Marketing with AI Intelligence</h1>
+      <p>Our AI-powered platform helps businesses create targeted, personalized marketing campaigns that drive results with less effort.</p>
+      <a href="#get-started" class="btn">Get Started Free</a>
+    </div>
+  </section>
+  
+  <section id="features" class="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Key Features</h2>
+        <p>Discover how our AI-powered tools can transform your marketing strategy</p>
+      </div>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">AI</div>
+          <h3 class="feature-title">Intelligent Content Creation</h3>
+          <p>Our AI generates high-converting marketing copy, social media posts, and email campaigns tailored to your audience.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Audience Analytics</h3>
+          <p>Gain deep insights into your audience behavior and preferences to create more effective marketing strategies.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3 class="feature-title">Multilingual Support</h3>
+          <p>Reach global audiences with AI-powered translations that maintain your brand voice across languages.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3 class="feature-title">Campaign Automation</h3>
+          <p>Set up intelligent workflows that automatically adapt based on customer interactions and campaign performance.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-title">Personalization Engine</h3>
+          <p>Deliver the right message to the right person at the right time with our AI personalization engine.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📈</div>
+          <h3 class="feature-title">Performance Optimization</h3>
+          <p>Our AI continuously analyzes campaign performance to suggest improvements and optimize results.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section id="agents" class="agents">
+    <div class="container">
+      <div class="section-title">
+        <h2>Meet Your AI Marketing Team</h2>
+        <p>Our specialized AI agents work together to power your marketing success</p>
+      </div>
+      
+      <div class="agent-grid">
+        <div class="agent-card">
+          <div class="agent-img">📝</div>
+          <div class="agent-content">
+            <h3 class="agent-title">ContentMaster</h3>
+            <p class="agent-role">Content Creation Specialist</p>
+            <p>Creates engaging, SEO-optimized content for any marketing channel based on your brand guidelines.</p>
+          </div>
+        </div>
+        
+        <div class="agent-card">
+          <div class="agent-img">👥</div>
+          <div class="agent-content">
+            <h3 class="agent-title">AudienceAnalyst</h3>
+            <p class="agent-role">Customer Insights Expert</p>
+            <p>Analyzes customer data to identify trends, preferences, and opportunities for better targeting.</p>
+          </div>
+        </div>
+        
+        <div class="agent-card">
+          <div class="agent-img">📊</div>
+          <div class="agent-content">
+            <h3 class="agent-title">CampaignOptimizer</h3>
+            <p class="agent-role">Performance Enhancement Specialist</p>
+            <p>Continuously monitors campaign performance and makes real-time adjustments to improve results.</p>
+          </div>
+        </div>
+        
+        <div class="agent-card">
+          <div class="agent-img">🌐</div>
+          <div class="agent-content">
+            <h3 class="agent-title">GlobalReach</h3>
+            <p class="agent-role">Multilingual Marketing Expert</p>
+            <p>Adapts your marketing content for international audiences while preserving your brand message.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section id="pricing" class="cta">
+    <div class="container">
+      <h2>Ready to Transform Your Marketing?</h2>
+      <p>Choose the plan that fits your business needs and start achieving better marketing results today.</p>
+      <a href="#get-started" class="btn cta-btn">Start Your Free Trial</a>
+    </div>
+  </section>
+  
+  <footer id="contact">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>AI Marketing Platform</h3>
+          <p>Advanced AI-powered marketing automation to help businesses grow faster and smarter.</p>
+        </div>
+        
+        <div class="footer-column">
+          <h3>Features</h3>
+          <ul>
+            <li><a href="#features">Content Creation</a></li>
+            <li><a href="#features">Audience Analytics</a></li>
+            <li><a href="#features">Campaign Automation</a></li>
+            <li><a href="#features">Performance Optimization</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Case Studies</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Support Center</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        <p>&copy; 2025 AI Marketing Platform. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple JavaScript for page interactions
+    document.addEventListener('DOMContentLoaded', () => {
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            window.scrollTo({
+              top: target.offsetTop - 70,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Add animation class to feature cards when they come into view
+      const animateOnScroll = () => {
+        const cards = document.querySelectorAll('.feature-card, .agent-card');
+        cards.forEach(card => {
+          const cardPosition = card.getBoundingClientRect();
+          const isVisible = cardPosition.top < window.innerHeight - 100;
+          if (isVisible) {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }
+        });
+      };
+      
+      // Initialize cards with transition
+      const cards = document.querySelectorAll('.feature-card, .agent-card');
+      cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      });
+      
+      // Run animation on scroll and on page load
+      window.addEventListener('scroll', animateOnScroll);
+      animateOnScroll(); // Run once on page load
+      
+      console.log('AI Marketing Platform - Simple Demo initialized');
+    });
+  </script>
+</body>
+</html>

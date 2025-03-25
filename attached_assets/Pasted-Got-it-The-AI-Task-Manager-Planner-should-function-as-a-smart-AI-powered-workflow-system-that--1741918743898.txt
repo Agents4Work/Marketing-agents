@@ -1,0 +1,51 @@
+Got it! The AI Task Manager & Planner should function as a smart, AI-powered workflow system that:
+
+1️⃣ To-Do List (Task List) → Users add tasks, and AI assigns the correct AI agent team to handle them.
+2️⃣ AI Calendar → Tasks automatically sync to a dynamic calendar with deadlines.
+3️⃣ Auto-Publish & Scheduling → Only for scheduling and publishing finalized content.
+
+⸻
+
+🚀 Final AI Prompt for Replit AI
+
+🎯 Goal (Objective)
+Develop a Smart AI Task Manager & Planner where users can track content tasks, manage deadlines in a calendar, and assign AI-powered teams automatically.
+
+📌 Return Format (Expected Output)
+The AI should generate a structured, intuitive dashboard with the following workflow:
+
+🔹 Main Section: AI Task Manager & Planner (Dashboard View)
+✅ Task List (To-Do List) – Users create content-related tasks.
+	•	AI auto-assigns the right AI team (e.g., Blog team, Social Media team).
+	•	Tasks automatically sync to the calendar.
+	•	Users can manually adjust AI assignments if needed.
+
+✅ AI Calendar – A dynamic timeline where all content deadlines, AI-generated tasks, and publishing schedules appear.
+	•	Clicking a task opens details & action options.
+	•	AI suggests deadlines based on urgency & workload.
+
+✅ Auto-Publish & Scheduling – Only for finalized content that is ready to go live.
+	•	Users select publishing platforms (Social Media, Email, Website, etc.).
+	•	AI suggests best posting times based on engagement trends.
+
+⸻
+
+⚡ Core AI Functionality
+	•	Seamless Workflow – A task added in the To-Do List is automatically assigned to an AI Team and added to the AI Calendar.
+	•	Task Dependencies – If a task is overdue, the system suggests adjustments.
+	•	Smart AI Assignments – AI detects the right team based on the task type.
+
+⸻
+
+⚠️ Warnings & Constraints
+	•	Keep UX simple → Users should not feel overwhelmed switching between views.
+	•	AI assignments must be logical → The right AI agents must be chosen for each task.
+	•	Tasks & Calendar should sync in real-time → No delays in updates.
+
+⸻
+
+💡 Next Steps:
+✅ Does this structure feel intuitive?
+✅ Should users be able to manually adjust AI team assignments?
+
+🔥 Once confirmed, we move to the UI design prompt to ensure the experience is fluid & high-end! 🚀

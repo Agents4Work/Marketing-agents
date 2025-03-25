@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Marketing Platform - Test Page</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.5;
+      color: #1a202c;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #2563eb;
+    }
+    h2 {
+      font-size: 1.75rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #4f46e5;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.5rem;
+    }
+    .card {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #e2e8f0;
+    }
+    .success {
+      color: #059669;
+      font-weight: bold;
+    }
+    .error {
+      color: #dc2626;
+      font-weight: bold;
+    }
+    pre {
+      background: #f1f5f9;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.7;
+    }
+    button {
+      background: #4f46e5;
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.375rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    button:hover {
+      background: #4338ca;
+    }
+    .button-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .test-result {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 0.375rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    #api-results {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>AI Marketing Platform - Test Page</h1>
+  <p>This standalone HTML page can be used to test various aspects of the platform without depending on the React application.</p>
+  
+  <h2>Server Status Checks</h2>
+  <div class="card">
+    <div class="button-row">
+      <button onclick="testHealthEndpoint()">Test Health Endpoint</button>
+      <button onclick="testApiEndpoint()">Test API Endpoint</button>
+      <button onclick="testAllEndpoints()">Test All Endpoints</button>
+    </div>
+    <div id="api-results"></div>
+  </div>
+  
+  <h2>Navigation Tests</h2>
+  <div class="card">
+    <p>Test navigation to different pages:</p>
+    <div class="button-row">
+      <button onclick="navigateTo('/')">Home</button>
+      <button onclick="navigateTo('/dashboard')">Dashboard</button>
+      <button onclick="navigateTo('/test-direct')">Test Direct</button>
+      <button onclick="navigateTo('/test-server')">Test Server</button>
+    </div>
+  </div>
+  
+  <h2>Environment Information</h2>
+  <div class="card">
+    <pre id="env-info">
+Current URL: <span id="current-url"></span>
+User Agent: <span id="user-agent"></span>
+Viewport: <span id="viewport"></span>
+    </pre>
+  </div>
+  
+  <h2>Available Routes</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>API Routes</h3>
+      <ul>
+        <li><a href="/api/test" target="_blank">/api/test</a> - Test API</li>
+        <li><a href="/health" target="_blank">/health</a> - Health Check</li>
+        <li><a href="/api/debug/routes" target="_blank">/api/debug/routes</a> - All Routes</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Test Routes</h3>
+      <ul>
+        <li><a href="/test-server" target="_blank">/test-server</a> - Express Test</li>
+        <li><a href="/test-plain.html" target="_blank">/test-plain.html</a> - Basic HTML</li>
+        <li><a href="/test-view.html" target="_blank">/test-view.html</a> - This Page</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>App Routes</h3>
+      <ul>
+        <li><a href="/" target="_blank">/</a> - Home</li>
+        <li><a href="/dashboard" target="_blank">/dashboard</a> - Dashboard</li>
+        <li><a href="/test-direct" target="_blank">/test-direct</a> - Test Direct</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // Update env info on load
+    document.getElementById('current-url').textContent = window.location.href;
+    document.getElementById('user-agent').textContent = navigator.userAgent;
+    document.getElementById('viewport').textContent = `${window.innerWidth}px × ${window.innerHeight}px`;
+
+    // Navigate to a path
+    function navigateTo(path) {
+      window.location.href = path;
+    }
+
+    // Test health endpoint
+    async function testHealthEndpoint() {
+      const resultDiv = document.getElementById('api-results');
+      resultDiv.innerHTML = '<div class="test-result">Testing health endpoint...</div>';
+      
+      try {
+        const response = await fetch('/health');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        resultDiv.innerHTML = `
+          <div class="test-result success">
+            Health endpoint is working! 
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          </div>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="test-result error">
+            Error testing health endpoint: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // Test API endpoint
+    async function testApiEndpoint() {
+      const resultDiv = document.getElementById('api-results');
+      resultDiv.innerHTML = '<div class="test-result">Testing API endpoint...</div>';
+      
+      try {
+        const response = await fetch('/api/test');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        resultDiv.innerHTML = `
+          <div class="test-result success">
+            API endpoint is working! 
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          </div>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="test-result error">
+            Error testing API endpoint: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // Test all endpoints
+    async function testAllEndpoints() {
+      const resultDiv = document.getElementById('api-results');
+      resultDiv.innerHTML = '<div class="test-result">Testing all endpoints...</div>';
+      
+      const endpoints = [
+        { name: 'Health Check', url: '/health' },
+        { name: 'API Test', url: '/api/test' },
+        { name: 'Debug Routes', url: '/api/debug/routes' }
+      ];
+      
+      const results = [];
+      
+      for (const endpoint of endpoints) {
+        try {
+          const response = await fetch(endpoint.url);
+          
+          if (!response.ok) {
+            results.push(`❌ ${endpoint.name} (${endpoint.url}): HTTP error ${response.status}`);
+            continue;
+          }
+          
+          const data = await response.json();
+          results.push(`✅ ${endpoint.name} (${endpoint.url}): Success`);
+        } catch (error) {
+          results.push(`❌ ${endpoint.name} (${endpoint.url}): ${error.message}`);
+        }
+      }
+      
+      resultDiv.innerHTML = `
+        <div class="test-result">
+          <h4>Test Results:</h4>
+          <ul>
+            ${results.map(r => `<li>${r}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

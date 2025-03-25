@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Direct Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #3b82f6;
+      margin-bottom: 1rem;
+    }
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 1px solid #e5e7eb;
+    }
+    button {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    pre {
+      background-color: #f3f4f6;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow: auto;
+      font-size: 14px;
+    }
+    .output {
+      background-color: #f9fafb;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+      border: 1px solid #e5e7eb;
+      min-height: 50px;
+    }
+    .success {
+      background-color: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 1rem;
+    }
+    .error {
+      background-color: #fee2e2;
+      border-left: 4px solid #ef4444;
+      padding: 1rem;
+    }
+    .test-group {
+      margin-bottom: 2rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background-color: #e5e7eb;
+      border-radius: 9999px;
+      font-size: 12px;
+      margin-right: 8px;
+    }
+    .badge.get {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    .badge.post {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    .badge.put {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    .badge.delete {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    textarea {
+      min-height: 80px;
+    }
+    .btn-group {
+      margin-top: 1rem;
+    }
+    .loading {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(59, 130, 246, 0.3);
+      border-radius: 50%;
+      border-top-color: #3b82f6;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 0.5rem;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>API Direct Test</h1>
+  <p>This page tests direct API connectivity to verify that the application server is working properly.</p>
+  
+  <div class="card">
+    <h2>API Endpoints</h2>
+    <p>Click the buttons below to test different API endpoints:</p>
+    
+    <div class="test-group">
+      <h3>Health & Status</h3>
+      <button onclick="testEndpoint('/health')"><span class="badge get">GET</span> Health Check</button>
+      <button onclick="testEndpoint('/api/test')"><span class="badge get">GET</span> API Test</button>
+    </div>
+    
+    <div class="test-group">
+      <h3>Data Endpoints</h3>
+      <button onclick="testEndpoint('/api/users')"><span class="badge get">GET</span> Users</button>
+      <button onclick="testEndpoint('/api/campaigns')"><span class="badge get">GET</span> Campaigns</button>
+    </div>
+    
+    <div class="test-group">
+      <h3>Custom Request</h3>
+      <div class="input-group">
+        <label for="custom-url">URL Path:</label>
+        <input type="text" id="custom-url" placeholder="/api/..." value="/api/test">
+      </div>
+      <div class="input-group">
+        <label for="request-method">Method:</label>
+        <select id="request-method">
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+      </div>
+      <div class="input-group" id="body-container" style="display: none;">
+        <label for="request-body">Request Body (JSON):</label>
+        <textarea id="request-body" placeholder='{
+  "name": "Test",
+  "description": "A test request"
+}'></textarea>
+      </div>
+      <div class="btn-group">
+        <button onclick="testCustomEndpoint()">Send Request</button>
+      </div>
+    </div>
+    
+    <h3>Results</h3>
+    <div id="results" class="output">Results will appear here...</div>
+  </div>
+  
+  <script>
+    // Show/hide request body based on method
+    document.getElementById('request-method').addEventListener('change', function() {
+      const method = this.value;
+      const bodyContainer = document.getElementById('body-container');
+      bodyContainer.style.display = (method === 'GET' || method === 'DELETE') ? 'none' : 'block';
+    });
+    
+    // Test a specific endpoint
+    function testEndpoint(endpoint) {
+      const results = document.getElementById('results');
+      results.innerHTML = '<div class="loading"></div> Loading...';
+      results.className = 'output';
+      
+      fetch(endpoint)
+        .then(response => {
+          const statusText = `${response.status} ${response.statusText}`;
+          if (!response.ok) {
+            throw new Error(`HTTP Error: ${statusText}`);
+          }
+          return response.json().then(data => ({ status: statusText, data }));
+        })
+        .then(({ status, data }) => {
+          results.innerHTML = `
+            <div class="success">Request successful (${status})</div>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          `;
+        })
+        .catch(error => {
+          results.innerHTML = `
+            <div class="error">Request failed: ${error.message}</div>
+          `;
+          console.error('API request error:', error);
+        });
+    }
+    
+    // Test custom endpoint
+    function testCustomEndpoint() {
+      const url = document.getElementById('custom-url').value;
+      const method = document.getElementById('request-method').value;
+      const bodyEl = document.getElementById('request-body');
+      
+      const results = document.getElementById('results');
+      results.innerHTML = '<div class="loading"></div> Loading...';
+      results.className = 'output';
+      
+      const options = {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      };
+      
+      // Add body for POST or PUT requests
+      if (method === 'POST' || method === 'PUT') {
+        try {
+          options.body = JSON.stringify(JSON.parse(bodyEl.value));
+        } catch (e) {
+          results.innerHTML = `<div class="error">Invalid JSON in request body: ${e.message}</div>`;
+          return;
+        }
+      }
+      
+      fetch(url, options)
+        .then(response => {
+          const statusText = `${response.status} ${response.statusText}`;
+          return response.json()
+            .then(data => ({ status: statusText, data }))
+            .catch(() => ({ status: statusText, data: { message: 'No JSON response' } }));
+        })
+        .then(({ status, data }) => {
+          results.innerHTML = `
+            <div class="success">Request successful (${status})</div>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          `;
+        })
+        .catch(error => {
+          results.innerHTML = `
+            <div class="error">Request failed: ${error.message}</div>
+          `;
+          console.error('API request error:', error);
+        });
+    }
+  </script>
+</body>
+</html>

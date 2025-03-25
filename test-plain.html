@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Test Page</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
+    button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+    .output {
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>AI Marketing Platform - API Test Page</h1>
+  <p>This simple page tests the API endpoints for the AI Marketing Platform.</p>
+  
+  <div class="container">
+    <div class="card">
+      <h2>Test API Connection</h2>
+      <p>Click the button below to test the connection to the API healthcheck endpoint.</p>
+      <button id="testHealthcheck">Test Health Check</button>
+      <div class="output" id="healthOutput">Results will appear here...</div>
+    </div>
+    
+    <div class="card">
+      <h2>Test User API</h2>
+      <p>Click the button below to test fetching a user from the API.</p>
+      <button id="testUser">Test User API</button>
+      <div class="output" id="userOutput">Results will appear here...</div>
+    </div>
+    
+    <div class="card">
+      <h2>Test API Routes</h2>
+      <p>Click the button below to list all available API routes.</p>
+      <button id="testRoutes">Test API Routes</button>
+      <div class="output" id="routesOutput">Results will appear here...</div>
+    </div>
+  </div>
+
+  <script>
+    // Configuration
+    const API_BASE_URL = 'http://localhost:5000'; // Default API URL
+    
+    // Helper for making API requests with timeout
+    async function fetchWithTimeout(url, options = {}, timeout = 5000) {
+      const controller = new AbortController();
+      const { signal } = controller;
+      
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      
+      try {
+        const response = await fetch(url, { ...options, signal });
+        clearTimeout(timeoutId);
+        return response;
+      } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+      }
+    }
+    
+    // Format response as JSON
+    function formatResponse(data) {
+      return JSON.stringify(data, null, 2);
+    }
+    
+    // Test health check endpoint
+    document.getElementById('testHealthcheck').addEventListener('click', async () => {
+      const outputEl = document.getElementById('healthOutput');
+      outputEl.innerHTML = 'Testing API health check...';
+      
+      try {
+        const start = performance.now();
+        const response = await fetchWithTimeout(`${API_BASE_URL}/api/healthcheck`);
+        const end = performance.now();
+        const responseTime = Math.round(end - start);
+        
+        if (response.ok) {
+          const data = await response.json();
+          outputEl.innerHTML = `<span class="success">✅ Health check successful (${responseTime}ms)</span>\n${formatResponse(data)}`;
+        } else {
+          outputEl.innerHTML = `<span class="error">❌ Health check failed: ${response.status} ${response.statusText} (${responseTime}ms)</span>`;
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          outputEl.innerHTML = `<span class="error">❌ Request timed out after 5000ms</span>`;
+        } else {
+          outputEl.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+        }
+      }
+    });
+    
+    // Test user API endpoint
+    document.getElementById('testUser').addEventListener('click', async () => {
+      const outputEl = document.getElementById('userOutput');
+      outputEl.innerHTML = 'Testing User API...';
+      
+      try {
+        const start = performance.now();
+        const response = await fetchWithTimeout(`${API_BASE_URL}/api/users/test-user`);
+        const end = performance.now();
+        const responseTime = Math.round(end - start);
+        
+        if (response.ok) {
+          const data = await response.json();
+          outputEl.innerHTML = `<span class="success">✅ User API successful (${responseTime}ms)</span>\n${formatResponse(data)}`;
+        } else {
+          outputEl.innerHTML = `<span class="error">❌ User API failed: ${response.status} ${response.statusText} (${responseTime}ms)</span>`;
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          outputEl.innerHTML = `<span class="error">❌ Request timed out after 5000ms</span>`;
+        } else {
+          outputEl.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+        }
+      }
+    });
+    
+    // Test routes API endpoint
+    document.getElementById('testRoutes').addEventListener('click', async () => {
+      const outputEl = document.getElementById('routesOutput');
+      outputEl.innerHTML = 'Testing API Routes...';
+      
+      try {
+        const start = performance.now();
+        const response = await fetchWithTimeout(`${API_BASE_URL}/api/debug/routes`);
+        const end = performance.now();
+        const responseTime = Math.round(end - start);
+        
+        if (response.ok) {
+          const data = await response.json();
+          outputEl.innerHTML = `<span class="success">✅ Routes API successful (${responseTime}ms)</span>\n${formatResponse(data)}`;
+        } else {
+          outputEl.innerHTML = `<span class="error">❌ Routes API failed: ${response.status} ${response.statusText} (${responseTime}ms)</span>`;
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          outputEl.innerHTML = `<span class="error">❌ Request timed out after 5000ms</span>`;
+        } else {
+          outputEl.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+        }
+      }
+    });
+
+    // Detect environment and adjust API URL
+    window.addEventListener('load', () => {
+      // Try to automatically determine the API URL based on the current location
+      if (window.location.hostname !== 'localhost') {
+        const newBaseUrl = `${window.location.protocol}//${window.location.hostname}:5000`;
+        console.log(`Setting API base URL to: ${newBaseUrl}`);
+        window.API_BASE_URL = newBaseUrl;
+      }
+    });
+  </script>
+</body>
+</html>

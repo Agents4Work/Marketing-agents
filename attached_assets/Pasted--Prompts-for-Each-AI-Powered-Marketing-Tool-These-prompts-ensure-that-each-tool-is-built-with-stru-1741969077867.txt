@@ -1,0 +1,90 @@
+✅ Prompts for Each AI-Powered Marketing Tool
+
+These prompts ensure that each tool is built with structured AI functionality, user-friendly navigation, and modern UI/UX.
+
+⸻
+
+🎨 AI Image & Logo Creator Prompt
+
+“We are building an AI-powered Image & Logo Creator that enables users to generate high-quality branding assets, social media graphics, and custom illustrations. This tool should be simple to use, with AI-driven recommendations and real-time customization options.”
+
+📌 Core Features
+✅ Users input brand details, industry, and style preferences.
+✅ AI generates multiple logo & image variations.
+✅ Editable elements: Colors, fonts, layouts, transparency.
+✅ AI-powered branding suggestions (matching color schemes, typography).
+✅ Export in PNG, JPG, SVG formats.
+
+⚡ User Flow
+🔹 Users enter brand details and select a style → AI generates multiple designs → Users refine/customize → Export and save.
+
+⚠️ Warnings
+🚨 Ensure fast rendering time for AI-generated images.
+🚨 Include undo/redo functionality for easy edits.
+
+⸻
+
+🎧 AI Voice & Audio Generator Prompt
+
+“This AI-powered Voice & Audio Generator creates realistic voiceovers, podcasts, and sound effects. Users can input text, select a voice style, and generate professional-quality audio files instantly.”
+
+📌 Core Features
+✅ Users input text OR upload an existing audio file.
+✅ AI converts text to speech with multiple voice tones & accents.
+✅ AI applies background music, effects, and noise reduction.
+✅ Export in MP3/WAV with adjustable bitrates.
+
+⚡ User Flow
+🔹 Users input text or upload an audio file → Select voice style & effects → AI processes & generates → Preview & export.
+
+⚠️ Warnings
+🚨 Ensure AI-generated voices sound natural, not robotic.
+🚨 Provide playback controls before exporting.
+
+⸻
+
+⌨️ AI Transcription & Subtitles Prompt
+
+“We are developing an AI-powered Transcription & Subtitle tool that automatically converts speech from audio/video into text, generates captions, and supports real-time translations.”
+
+📌 Core Features
+✅ Users upload an audio/video file OR record in real-time.
+✅ AI transcribes speech into text with timestamp alignment.
+✅ AI auto-generates captions & syncs with video.
+✅ Supports multiple languages & real-time translation.
+✅ Export as TXT, SRT, VTT formats.
+
+⚡ User Flow
+🔹 Users upload media OR record → AI transcribes in real-time → Users review & edit → Export transcript/subtitles.
+
+⚠️ Warnings
+🚨 Ensure high accuracy in speech recognition.
+🚨 Allow manual editing of AI-generated transcripts.
+
+⸻
+
+🎥 AI Video Editor Prompt
+
+“The AI Video Editor will provide smart video enhancement, automated trimming, scene transitions, and AI-generated captions. It should be intuitive and work seamlessly with the user’s uploaded content.”
+
+📌 Core Features
+✅ Users upload video clips & select enhancement preferences.
+✅ AI automatically improves color grading, lighting, and sharpness.
+✅ AI generates smart transitions & scene cuts.
+✅ Users can overlay AI-generated captions & animated text.
+✅ Export in MP4, MOV, WEBM with resolution selection.
+
+⚡ User Flow
+🔹 Users upload video → AI enhances & suggests edits → Users customize effects & text → Export video.
+
+⚠️ Warnings
+🚨 Ensure smooth playback & fast rendering.
+🚨 Keep UI simple, avoiding complex video editing tools.
+
+⸻
+
+Final Instructions for AI Agent Execution
+
+💡 “Each AI tool should function as an independent module but be accessible from a single dashboard. Transitions between tools should be smooth. Ensure each tool has AI-generated previews before finalizing outputs. The UI must be clean, modern, and intuitive.”
+
+🚀 Once confirmed, the AI can begin development!

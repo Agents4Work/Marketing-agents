@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Minimal Test</title>
+</head>
+<body>
+  <h1>Minimal Test Page</h1>
+  <p>This is a minimal test page to verify that the server is serving static files.</p>
+  
+  <div id="health-check">Loading health check...</div>
+  
+  <script>
+    // Check if the server is running and can serve API requests
+    fetch('/api/health')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('health-check').innerHTML = 
+          `<p>Server health: ${data.status}</p><p>Time: ${data.timestamp}</p>`;
+      })
+      .catch(error => {
+        document.getElementById('health-check').innerHTML = 
+          `<p>Error checking server health: ${error.message}</p>`;
+      });
+  </script>
+</body>
+</html>

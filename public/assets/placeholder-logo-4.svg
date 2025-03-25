@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#f0f0f0"/>
+  <path d="M150,80 C190,80 220,110 220,150 C220,190 190,220 150,220 C110,220 80,190 80,150 C80,110 110,80 150,80 Z" fill="#ff9800"/>
+  <path d="M150,100 C130,100 115,115 115,135 C115,155 130,170 150,170 C170,170 185,155 185,135 C185,115 170,100 150,100 Z" fill="#f0f0f0"/>
+  <text x="150" y="160" font-family="Arial" font-size="24" text-anchor="middle" fill="white">Logo 4</text>
+</svg>

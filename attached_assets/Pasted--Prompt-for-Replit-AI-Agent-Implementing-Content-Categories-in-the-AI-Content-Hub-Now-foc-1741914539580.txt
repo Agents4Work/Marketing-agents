@@ -1,0 +1,80 @@
+🔥 Prompt for Replit AI Agent: Implementing Content Categories in the AI Content Hub
+
+💡 **“Now, focus on structuring the AI-Powered Content Hub using the following three main categories:
+1️⃣ Content Types – Users select the type of content they need from a visually engaging, grid-based interface.
+2️⃣ Marketing Functions – Users pick a marketing strategy focus with clear explanations.
+3️⃣ Funnel Stage – Users choose content based on the customer journey.
+
+Each section should feature:
+✅ A large, bold title & short description explaining what users will find.
+✅ A structured, grid-based UI with hover effects for interactivity.
+✅ Smooth transition effects when selecting a category or subcategory.
+
+⸻
+
+📌 Category Breakdown & Implementation
+
+1️⃣ Content Types – Defines the Nature of Content Being Created
+
+🔹 Display these options in a visually appealing grid format:
+	•	Blog & Long-form (Guides, Whitepapers, Case Studies)
+	•	Email & Notifications (Newsletters, Promotional Emails)
+	•	Product & Enablement (Product Documentation, Training Materials)
+	•	Remix Content (Repurposed Content, Snippets, Highlights)
+	•	Social Media (Posts, Stories, Reels)
+	•	Strategy & Planning (Campaign Blueprints, Editorial Calendars)
+	•	Website (Landing Pages, Web Copy, SEO Content)
+	•	Advertising (Ad Creatives, Copy for Paid Media)
+	•	Audio & Video (Podcasts, Video Content)
+	•	Image (Infographics, Illustrations, Visual Branding)
+	•	PR & Comms (Press Releases, Public Relations Content)
+
+✅ Smooth UI: Clicking a category transitions into a subcategory view where AI-powered tools for that content type are displayed.
+
+⸻
+
+2️⃣ Marketing Functions – Defines the Marketing Focus
+
+🔹 Users select from the following structured marketing areas:
+	•	Product Marketing (Positioning, Messaging, Competitive Analysis)
+	•	Social Media Marketing (Engagement, Growth Strategies)
+	•	Performance Marketing (Paid Ads, Conversion Optimization)
+	•	Brand Marketing (Brand Identity, Thought Leadership)
+	•	Content Marketing (Inbound Content, Lead Generation)
+	•	Field Marketing (Events, Sponsorships, In-Person Campaigns)
+	•	Lifecycle Marketing (Customer Journey, Retention Strategies)
+	•	Partner Marketing (Affiliate Programs, Co-Marketing)
+	•	PR & Communications (Crisis Management, Reputation Building)
+
+✅ Hover interactions: A short tooltip-style description appears when hovering over each function.
+✅ Clicking a function transitions to AI-powered apps relevant to that marketing focus.
+
+⸻
+
+3️⃣ Funnel Stage – Mapping Content to the Customer Journey
+
+🔹 Users refine their content strategy based on the stage in the funnel:
+	•	Awareness (SEO Content, Blog Posts, Social Media)
+	•	Consideration (Case Studies, Product Comparisons, Webinars)
+	•	Conversion (Landing Pages, Sales Copy, Retargeting Ads)
+	•	Retention (Onboarding Emails, Loyalty Programs, Surveys)
+
+✅ A simple but effective UI layout with four large buttons for each stage.
+✅ Clicking a stage opens AI-powered tools optimized for that funnel position.
+
+⸻
+
+🚀 Final Implementation Details:
+
+📌 Ensure UI feels smooth, interactive, and easy to navigate.
+📌 All selections should feel dynamic with real-time transitions.
+📌 Users should never feel lost—each section should guide them naturally toward AI-powered content creation.
+
+🔥 Final Outcome: Users instantly understand where to go, find AI-powered tools efficiently, and transition smoothly into content generation.
+
+⸻
+
+Next Steps:
+
+1️⃣ Confirm if this matches the vision.
+2️⃣ If good, I’ll add it to the document. 🚀

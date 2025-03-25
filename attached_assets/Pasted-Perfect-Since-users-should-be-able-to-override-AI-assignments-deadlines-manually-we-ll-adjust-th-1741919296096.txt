@@ -1,0 +1,83 @@
+Perfect! Since users should be able to override AI assignments & deadlines manually, we’ll adjust the prompts to ensure Replit AI builds this flexibility correctly. Here’s the final optimized version:
+
+⸻
+
+🔥 Finalized Prompt for Replit AI - AI Task & Content Dashboard
+
+🎯 Goal (Objective)
+
+“We are creating a Unified AI Task & Content Dashboard, combining an AI-powered Task List (To-Do List), AI Calendar, and Auto-Publish & Scheduling. This system allows users to plan content, assign tasks, and schedule publishing efficiently, while ensuring users can manually override AI-generated assignments & deadlines if needed.”
+
+✅ Key Features & Workflow:
+1️⃣ Task List (To-Do List)
+	•	Users add content-related tasks, and AI assigns the appropriate AI agent team automatically.
+	•	Users can manually edit task assignments or deadlines.
+	•	AI suggests deadlines, but users can override them at any time.
+
+2️⃣ AI Calendar
+	•	Visual dashboard showing all content plans, tasks, and publishing schedules.
+	•	Clicking any task or deadline opens details, allowing users to adjust manually.
+	•	AI adjusts related deadlines dynamically (e.g., if a blog deadline is moved, its publishing schedule updates).
+
+3️⃣ Auto-Publish & Scheduling
+	•	Only final, approved content appears here (NO drafts or incomplete tasks).
+	•	AI suggests optimal publishing times, but users can manually reschedule.
+	•	Direct integration with publishing platforms (social media, blogs, emails).
+
+⸻
+
+🔥 Replit AI - Feature Breakdown & Rules
+
+1️⃣ Task List (To-Do List) - AI Agent Assignment & Overrides
+
+🔹 Prompt:
+“The Task List allows users to track marketing content tasks. When a user adds a task, AI suggests an appropriate AI team for execution, but users can manually change the assignment or deadline.”
+
+✅ Task List Rules for AI Execution:
+	•	AI auto-assigns tasks to the correct AI agent team (e.g., SEO Blog → AI Copywriter + SEO Specialist).
+	•	Users can override AI’s team assignment and select different AI agents if needed.
+	•	AI suggests a deadline, but users can manually adjust it.
+	•	Once a task is added, it appears in the AI Calendar automatically.
+
+⸻
+
+2️⃣ AI Calendar - Dynamic Task & Publishing View
+
+🔹 Prompt:
+“The AI Calendar is a global planning view where users see all content tasks, deadlines, and publishing schedules. AI dynamically updates deadlines based on dependencies, but users can manually override any scheduled date.”
+
+✅ Calendar Rules for AI Execution:
+	•	Clicking on any event/task opens detailed editing options (team, deadlines, progress).
+	•	Drag-and-drop functionality allows easy rescheduling.
+	•	AI auto-updates dependent tasks if one deadline changes, but users can disable this automation for manual control.
+	•	Three color-coded categories:
+	•	🔵 Tasks in Progress
+	•	🟢 Content Ready
+	•	🔴 Overdue Tasks
+
+🚨 Manual Overrides:
+	•	Users can manually change any deadline or dependency.
+	•	AI provides rescheduling suggestions, but users must approve changes.
+
+⸻
+
+3️⃣ Auto-Publish & Scheduling - Finalized Content Queue
+
+🔹 Prompt:
+“Auto-Publish & Scheduling is where final, approved content is queued for publishing. AI suggests the best posting time based on engagement trends, but users can manually override the schedule.”
+
+✅ Publishing Rules for AI Execution:
+	•	Only final, approved content appears here—NO drafts or incomplete content.
+	•	AI suggests optimal publishing times based on engagement trends, but users can reschedule manually.
+	•	Direct integrations with WordPress, Facebook, LinkedIn, Twitter, etc.
+	•	Users must approve the publishing schedule before content goes live.
+
+⸻
+
+🔥 Final Confirmation - Does This Cover Everything?
+
+✅ Users can manually override AI-generated deadlines & assignments
+✅ AI dynamically updates tasks, but users can disable automation if needed
+✅ Separate Task List, Calendar, and Publishing Queue for clarity
+
+Let me know if any final refinements are needed before we send this to Replit AI! 🚀🔥

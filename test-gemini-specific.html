@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direct Gemini API Test</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    button { padding: 10px 15px; background: #4361ee; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; }
+    .result { margin-top: 20px; }
+    textarea { width: 100%; height: 100px; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 4px; }
+    label { display: block; margin-top: 20px; font-weight: bold; }
+    .buttons { margin-top: 10px; }
+    .output-text { background: #e0f7fa; padding: 15px; border-radius: 4px; margin-top: 10px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Direct Gemini API Test</h1>
+  
+  <div>
+    <button id="testDirectApi">Test API Configuration</button>
+    <div class="result">
+      <pre id="apiResult">Configuration check results will appear here...</pre>
+    </div>
+  </div>
+
+  <div>
+    <label for="messageInput">Enter message to send to Gemini:</label>
+    <textarea id="messageInput" placeholder="Type your message here...">What's the best way to create engaging marketing content?</textarea>
+    
+    <div class="buttons">
+      <button id="sendMessage">Send Message</button>
+      <button id="clearResults">Clear Results</button>
+    </div>
+    
+    <label>Response from Gemini:</label>
+    <div id="geminiOutput" class="output-text">Send a message to see the response...</div>
+    
+    <label>Raw API Response:</label>
+    <pre id="rawResponse">Raw response will appear here...</pre>
+  </div>
+
+  <script>
+    // Test direct API configuration
+    document.getElementById('testDirectApi').addEventListener('click', async () => {
+      const resultElement = document.getElementById('apiResult');
+      resultElement.textContent = 'Testing API configuration...';
+      
+      try {
+        const response = await fetch('/direct-gemini-test', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Status: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        resultElement.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        resultElement.textContent = `Error: ${error.message}`;
+      }
+    });
+
+    // Send message to Gemini API
+    document.getElementById('sendMessage').addEventListener('click', async () => {
+      const messageInput = document.getElementById('messageInput');
+      const geminiOutput = document.getElementById('geminiOutput');
+      const rawResponse = document.getElementById('rawResponse');
+      
+      const message = messageInput.value.trim();
+      
+      if (!message) {
+        geminiOutput.textContent = 'Please enter a message';
+        return;
+      }
+      
+      geminiOutput.textContent = 'Sending message to Gemini...';
+      rawResponse.textContent = 'Waiting for response...';
+      
+      try {
+        const response = await fetch('/direct-gemini-message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Status: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        rawResponse.textContent = JSON.stringify(data, null, 2);
+        
+        // Extract the actual text response from Gemini
+        if (data.response && 
+            data.response.candidates && 
+            data.response.candidates[0] && 
+            data.response.candidates[0].content && 
+            data.response.candidates[0].content.parts && 
+            data.response.candidates[0].content.parts[0] &&
+            data.response.candidates[0].content.parts[0].text) {
+          geminiOutput.textContent = data.response.candidates[0].content.parts[0].text;
+        } else {
+          geminiOutput.textContent = 'No readable response from Gemini. Check the raw response for details.';
+        }
+      } catch (error) {
+        geminiOutput.textContent = `Error: ${error.message}`;
+        rawResponse.textContent = `Error: ${error.message}`;
+      }
+    });
+    
+    // Clear results
+    document.getElementById('clearResults').addEventListener('click', () => {
+      document.getElementById('geminiOutput').textContent = 'Send a message to see the response...';
+      document.getElementById('rawResponse').textContent = 'Raw response will appear here...';
+    });
+  </script>
+</body>
+</html>

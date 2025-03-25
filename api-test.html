@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Test Page</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    .section {
+      margin-bottom: 25px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .output {
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      white-space: pre-wrap;
+      margin-top: 10px;
+      overflow-x: auto;
+    }
+    .success {
+      color: #28a745;
+    }
+    .error {
+      color: #dc3545;
+    }
+    .warning {
+      color: #ffc107;
+    }
+    .btn-group {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>API Connection Test</h1>
+  
+  <div class="section">
+    <h2>API Health Check</h2>
+    <p>Tests the connection to the API health endpoint</p>
+    <div class="btn-group">
+      <button id="healthCheck">Check Health</button>
+    </div>
+    <div id="healthOutput" class="output">Results will appear here</div>
+  </div>
+  
+  <div class="section">
+    <h2>CSRF Token Test</h2>
+    <p>Tests fetching a CSRF token from the API</p>
+    <div class="btn-group">
+      <button id="csrfCheck">Get CSRF Token</button>
+    </div>
+    <div id="csrfOutput" class="output">Results will appear here</div>
+  </div>
+  
+  <div class="section">
+    <h2>System Information</h2>
+    <div id="systemInfo" class="output">
+      <p><strong>Browser URL:</strong> <span id="currentUrl"></span></p>
+      <p><strong>API Base:</strong> <span id="apiBase"></span></p>
+      <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Cookie Information</h2>
+    <div class="btn-group">
+      <button id="checkCookies">Check Cookies</button>
+    </div>
+    <div id="cookieOutput" class="output">Click button to check cookies</div>
+  </div>
+
+  <script>
+    // Helper function to make API requests
+    async function makeRequest(url, options = {}) {
+      const startTime = new Date();
+      try {
+        const response = await fetch(url, {
+          ...options,
+          credentials: 'include' // Include cookies
+        });
+        
+        const endTime = new Date();
+        const timeTaken = endTime - startTime;
+        
+        let responseData;
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          responseData = await response.json();
+        } else {
+          responseData = await response.text();
+        }
+        
+        return {
+          success: response.ok,
+          status: response.status,
+          statusText: response.statusText,
+          data: responseData,
+          timeTaken: timeTaken,
+          headers: Object.fromEntries([...response.headers])
+        };
+      } catch (error) {
+        const endTime = new Date();
+        const timeTaken = endTime - startTime;
+        return {
+          success: false,
+          error: error.message,
+          timeTaken: timeTaken
+        };
+      }
+    }
+
+    // Format response for display
+    function formatResponse(response) {
+      if (!response.success && response.error) {
+        return `❌ Error: ${response.error}\nTime: ${response.timeTaken}ms`;
+      }
+      
+      let output = response.success ? '✅ Success' : `❌ Error: ${response.status} ${response.statusText}`;
+      output += `\nTime: ${response.timeTaken}ms\n\n`;
+      
+      if (response.headers) {
+        output += 'Headers:\n';
+        output += JSON.stringify(response.headers, null, 2);
+        output += '\n\n';
+      }
+      
+      if (response.data) {
+        if (typeof response.data === 'object') {
+          output += 'Data:\n';
+          output += JSON.stringify(response.data, null, 2);
+        } else {
+          output += 'Response Text:\n';
+          // Limit text display to avoid overwhelming the output
+          output += response.data.length > 500 
+            ? response.data.substring(0, 500) + '...' 
+            : response.data;
+        }
+      }
+      
+      return output;
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      // System information
+      document.getElementById('currentUrl').textContent = window.location.href;
+      document.getElementById('apiBase').textContent = window.location.origin;
+      document.getElementById('userAgent').textContent = navigator.userAgent;
+      
+      // Health check handler
+      document.getElementById('healthCheck').addEventListener('click', async function() {
+        const button = this;
+        const output = document.getElementById('healthOutput');
+        
+        button.disabled = true;
+        output.textContent = 'Sending request...';
+        output.classList.remove('success', 'error');
+        
+        try {
+          const response = await makeRequest('/api/health');
+          output.textContent = formatResponse(response);
+          output.classList.add(response.success ? 'success' : 'error');
+        } catch (error) {
+          output.textContent = `❌ Unexpected error: ${error.message}`;
+          output.classList.add('error');
+        } finally {
+          button.disabled = false;
+        }
+      });
+      
+      // CSRF token handler
+      document.getElementById('csrfCheck').addEventListener('click', async function() {
+        const button = this;
+        const output = document.getElementById('csrfOutput');
+        
+        button.disabled = true;
+        output.textContent = 'Sending request...';
+        output.classList.remove('success', 'error');
+        
+        try {
+          const response = await makeRequest('/api/csrf-token');
+          output.textContent = formatResponse(response);
+          output.classList.add(response.success ? 'success' : 'error');
+        } catch (error) {
+          output.textContent = `❌ Unexpected error: ${error.message}`;
+          output.classList.add('error');
+        } finally {
+          button.disabled = false;
+        }
+      });
+      
+      // Cookie check handler
+      document.getElementById('checkCookies').addEventListener('click', function() {
+        const output = document.getElementById('cookieOutput');
+        const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+        
+        if (cookies.length === 0 || (cookies.length === 1 && cookies[0] === '')) {
+          output.textContent = 'No cookies found.';
+          output.classList.add('warning');
+          return;
+        }
+        
+        let cookieOutput = 'Found cookies:\n\n';
+        cookies.forEach(cookie => {
+          const [name, value] = cookie.split('=');
+          cookieOutput += `${name}: ${value ? '(has value)' : '(empty)'}\n`;
+        });
+        
+        output.textContent = cookieOutput;
+        output.classList.add('success');
+      });
+    });
+  </script>
+</body>
+</html>

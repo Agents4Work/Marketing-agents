@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Health Test</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f7f8fa;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin-top: 0;
+      color: #2563eb;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    pre {
+      background: #f1f5f9;
+      padding: 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 14px;
+    }
+    .result {
+      margin-top: 20px;
+      border-left: 4px solid #2563eb;
+      padding-left: 12px;
+    }
+    .success {
+      color: #16a34a;
+    }
+    .error {
+      color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Simple Health Test</h1>
+    <p>Use this page to verify that the API server is responding correctly.</p>
+    
+    <div>
+      <button id="testHealth">Test Health Endpoint</button>
+      <button id="testGoogleDocs">Test Google Docs Endpoint</button>
+      <button id="testGoogleDrive">Test Google Drive Endpoint</button>
+      <button id="clearResults">Clear Results</button>
+    </div>
+    
+    <div id="results"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const resultsDiv = document.getElementById('results');
+      
+      async function testEndpoint(name, url) {
+        const resultBlock = document.createElement('div');
+        resultBlock.className = 'result';
+        
+        const timestamp = new Date().toLocaleTimeString();
+        const titleEl = document.createElement('h3');
+        titleEl.textContent = `Testing ${name} (${timestamp})`;
+        resultBlock.appendChild(titleEl);
+        
+        try {
+          console.log(`Fetching ${url}...`);
+          const response = await fetch(url);
+          console.log(`Received response from ${url}:`, response);
+          
+          let data;
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+          } else {
+            data = await response.text();
+            // Truncate if too long
+            if (data.length > 1000) {
+              data = data.substring(0, 1000) + '... [truncated]';
+            }
+          }
+          
+          const statusEl = document.createElement('p');
+          statusEl.className = response.ok ? 'success' : 'error';
+          statusEl.innerHTML = `<strong>Status:</strong> ${response.status} ${response.statusText} ${response.ok ? '✅' : '❌'}`;
+          resultBlock.appendChild(statusEl);
+          
+          const pre = document.createElement('pre');
+          pre.textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : data;
+          resultBlock.appendChild(pre);
+          
+        } catch (error) {
+          console.error(`Error testing ${url}:`, error);
+          
+          const errorEl = document.createElement('p');
+          errorEl.className = 'error';
+          errorEl.innerHTML = `<strong>Error:</strong> ${error.message}`;
+          resultBlock.appendChild(errorEl);
+        }
+        
+        resultsDiv.prepend(resultBlock);
+      }
+      
+      document.getElementById('testHealth').addEventListener('click', () => {
+        testEndpoint('Health API', '/api/health');
+      });
+      
+      document.getElementById('testGoogleDocs').addEventListener('click', () => {
+        testEndpoint('Google Docs API', '/api/google-docs/status');
+      });
+      
+      document.getElementById('testGoogleDrive').addEventListener('click', () => {
+        testEndpoint('Google Drive API', '/api/google-drive/status');
+      });
+      
+      document.getElementById('clearResults').addEventListener('click', () => {
+        resultsDiv.innerHTML = '';
+      });
+    });
+  </script>
+</body>
+</html>

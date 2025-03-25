@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini API Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .response {
+      min-height: 100px;
+      white-space: pre-wrap;
+    }
+    .status {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gemini API Test</h1>
+  
+  <div class="card">
+    <h2>Health Check</h2>
+    <button id="checkHealth">Check Gemini Health</button>
+    <pre id="healthResult" class="response">Results will appear here...</pre>
+  </div>
+  
+  <div class="card">
+    <h2>Generate Content</h2>
+    <textarea id="prompt" rows="4" placeholder="Enter your prompt here...">Write a short marketing tagline for an AI marketing platform</textarea>
+    <div>
+      <button id="generateContent">Generate Content</button>
+    </div>
+    <pre id="contentResult" class="response">Generated content will appear here...</pre>
+  </div>
+  
+  <div class="card">
+    <h2>Chat with Gemini</h2>
+    <textarea id="chatPrompt" rows="4" placeholder="Enter your message here...">What are the top 3 marketing trends for 2025?</textarea>
+    <div>
+      <button id="sendMessage">Send Message</button>
+    </div>
+    <pre id="chatResult" class="response">Chat response will appear here...</pre>
+  </div>
+
+  <script>
+    // Health check
+    document.getElementById('checkHealth').addEventListener('click', async () => {
+      const healthResult = document.getElementById('healthResult');
+      
+      try {
+        healthResult.textContent = 'Checking Gemini health...';
+        const response = await fetch('/api/gemini/health');
+        const data = await response.json();
+        
+        healthResult.textContent = JSON.stringify(data, null, 2);
+        healthResult.className = 'response ' + (data.status === 'operational' ? 'success' : 'error');
+      } catch (error) {
+        healthResult.textContent = `Error: ${error.message}`;
+        healthResult.className = 'response error';
+      }
+    });
+    
+    // Generate content
+    document.getElementById('generateContent').addEventListener('click', async () => {
+      const contentResult = document.getElementById('contentResult');
+      const prompt = document.getElementById('prompt').value;
+      
+      if (!prompt) {
+        contentResult.textContent = 'Please enter a prompt';
+        contentResult.className = 'response error';
+        return;
+      }
+      
+      try {
+        contentResult.textContent = 'Generating content...';
+        const response = await fetch('/api/gemini/generate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ prompt, type: 'text' }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          contentResult.textContent = data.content || 'No content generated';
+          contentResult.className = 'response success';
+        } else {
+          contentResult.textContent = `Error: ${data.error || 'Unknown error'}`;
+          contentResult.className = 'response error';
+        }
+      } catch (error) {
+        contentResult.textContent = `Error: ${error.message}`;
+        contentResult.className = 'response error';
+      }
+    });
+    
+    // Chat with Gemini
+    document.getElementById('sendMessage').addEventListener('click', async () => {
+      const chatResult = document.getElementById('chatResult');
+      const message = document.getElementById('chatPrompt').value;
+      
+      if (!message) {
+        chatResult.textContent = 'Please enter a message';
+        chatResult.className = 'response error';
+        return;
+      }
+      
+      try {
+        chatResult.textContent = 'Sending message...';
+        const response = await fetch('/api/gemini/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          chatResult.textContent = data.content || 'No response generated';
+          chatResult.className = 'response success';
+        } else {
+          chatResult.textContent = `Error: ${data.error || 'Unknown error'}`;
+          chatResult.className = 'response error';
+        }
+      } catch (error) {
+        chatResult.textContent = `Error: ${error.message}`;
+        chatResult.className = 'response error';
+      }
+    });
+  </script>
+</body>
+</html>

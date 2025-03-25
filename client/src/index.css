@@ -1,0 +1,763 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-spektr-cyan-50 {
+    color: rgb(14, 165, 233);
+  }
+  
+  /* Modern 3D Design System Classes */
+  .perspective {
+    perspective: 1000px;
+  }
+  
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  
+  /* Hide scrollbar for modern UI */
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+  
+  /* 3D Elevation & effects */
+  .elevation-1 {
+    box-shadow: 
+      0 2px 10px -3px rgba(0,0,0,0.07),
+      0 1px 4px -2px rgba(0,0,0,0.02);
+  }
+  
+  .elevation-2 {
+    box-shadow: 
+      0 4px 20px -5px rgba(0,0,0,0.08),
+      0 2px 8px -3px rgba(0,0,0,0.03);
+  }
+  
+  .elevation-3 {
+    box-shadow: 
+      0 8px 30px -8px rgba(0,0,0,0.1),
+      0 3px 15px -4px rgba(0,0,0,0.04);
+  }
+  
+  /* 3D Transform Effects */
+  .translate-z-1 {
+    transform: translateZ(1px);
+  }
+  
+  .translate-z-2 {
+    transform: translateZ(2px);
+  }
+  
+  .translate-z-3 {
+    transform: translateZ(3px);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/* CSS Replacements for framer-motion animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fadeInLeft {
+  animation: fadeInLeft 0.5s ease forwards;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fadeInRight {
+  animation: fadeInRight 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInDown {
+  animation: fadeInDown 0.5s ease forwards;
+}
+
+@keyframes floatAnimation {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: floatAnimation 3s ease-in-out infinite;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.5s ease forwards;
+}
+
+/* Staggered animations with CSS-only solutions */
+.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-animation > *:nth-child(6) { animation-delay: 0.6s; }
+.stagger-animation > *:nth-child(7) { animation-delay: 0.7s; }
+.stagger-animation > *:nth-child(8) { animation-delay: 0.8s; }
+.stagger-animation > *:nth-child(9) { animation-delay: 0.9s; }
+.stagger-animation > *:nth-child(10) { animation-delay: 1s; }
+
+/* Animations for BeamWithCollision component */
+@keyframes beamAnimation {
+  from {
+    transform: translateY(-200px);
+  }
+  to {
+    transform: translateY(1800px);
+  }
+}
+
+.beam-animation {
+  animation-name: beamAnimation;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes explosionFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes explosionFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes particleSpread {
+  from {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: translate(var(--final-x, 20px), var(--final-y, -20px));
+    opacity: 0;
+  }
+}
+
+.explosion-animate-in {
+  animation: explosionFadeIn 0.5s ease forwards;
+}
+
+.explosion-animate-out {
+  animation: explosionFadeOut 1.5s ease forwards;
+}
+
+/* Animación para las líneas de conexión */
+@keyframes dash {
+  from {
+    stroke-dashoffset: 10;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Animación de pulso para líneas temporales */
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+    stroke-width: 3px;
+  }
+  50% {
+    opacity: 0.8;
+    stroke-width: 4px;
+  }
+  100% {
+    opacity: 0.5;
+    stroke-width: 3px;
+  }
+}
+
+/* Reglas específicas para líneas de conexión */
+.lego-connection-line {
+  fill: none;
+  stroke-linecap: round;
+  pointer-events: stroke;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: stroke-width 0.2s ease, filter 0.2s ease;
+}
+
+.lego-connection-line:hover {
+  stroke-width: 5px !important;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+}
+
+/* Estilo para la línea animada durante el proceso de conexión */
+.lego-connection-line-animated {
+  animation: pulse 1.5s infinite;
+  stroke-dasharray: 5,5;
+}
+
+/* Estilo para la línea de conexión temporal */
+.temp-connection-line {
+  stroke-dasharray: 5,5;
+  stroke: rgba(34, 211, 238, 0.8); /* Color cyan para líneas temporales */
+  stroke-width: 3px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  animation: dash 1s linear infinite;
+}
+
+/* Estilo para los puertos de conexión */
+.connection-handle {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.connection-handle:hover {
+  transform: scale(1.2) translateY(-50%);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.output-handle {
+  cursor: grab;
+}
+
+.output-handle:active {
+  cursor: grabbing;
+}
+
+/* Estilos de grid para el canvas */
+.bg-grid-gray-200\/50 {
+  background-image: linear-gradient(to right, rgba(229, 231, 235, 0.2) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(229, 231, 235, 0.2) 1px, transparent 1px);
+}
+
+.bg-grid-gray-800\/30 {
+  background-image: linear-gradient(to right, rgba(31, 41, 55, 0.2) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(31, 41, 55, 0.2) 1px, transparent 1px);
+}
+
+/* Mejoras para arrastrar y soltar */
+.cursor-grabbing {
+  cursor: grabbing !important;
+}
+
+/* Prevenir la selección de texto en el canvas */
+.lego-canvas {
+  user-select: none;
+  touch-action: none;
+}
+
+/* Pricing Component Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleX {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toggle {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(32px);
+  }
+}
+
+@keyframes popBadge {
+  0% {
+    transform: rotate(0) scale(1);
+  }
+  25% {
+    transform: rotate(10deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(0) scale(0.9);
+  }
+  75% {
+    transform: rotate(-10deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(0) scale(1);
+  }
+}
+
+@keyframes pulsate {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes floatParticle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(var(--move-x, 0), -30px) scale(1.5);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+}
+
+/* Global 3D Design System Animation Classes */
+@keyframes textGlitch {
+  0% {
+    filter: blur(0px);
+    transform: translate(0, 0);
+  }
+  20% {
+    filter: blur(2px);
+    transform: translate(-2px, 1px);
+  }
+  30% {
+    filter: blur(0px);
+    transform: translate(3px, -1px);
+  }
+  40% {
+    filter: blur(3px);
+    transform: translate(-3px, 2px);
+  }
+  100% {
+    filter: blur(0px);
+    transform: translate(0, 0);
+  }
+}
+
+.text-glitch {
+  animation: textGlitch 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes floatSlow {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatMedium {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatFast {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Animation classes */
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.animate-fadeInDown {
+  animation: fadeInDown 0.5s ease forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.5s ease forwards;
+}
+
+.animate-floatSlow {
+  animation: floatSlow 3s ease-in-out infinite;
+}
+
+.animate-floatMedium {
+  animation: floatMedium 2s ease-in-out infinite;
+}
+
+.animate-floatFast {
+  animation: floatFast 1s ease-in-out infinite;
+}
+
+/* Animation with delays */
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+/* 3D Card Styles */
+.card-3d {
+  border: 3px solid black;
+  border-radius: 0.75rem;
+  background-color: white;
+  box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+  transition: all 0.2s ease;
+}
+
+.card-3d:hover {
+  box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+  transform: translateX(-1px) translateY(-1px);
+}
+
+.card-3d:active {
+  box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.9);
+  transform: translateX(1px) translateY(1px);
+}
+
+/* 3D Button Styles */
+.button-3d {
+  font-weight: bold;
+  border: 2px solid black;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.9);
+  transition: all 0.2s ease;
+}
+
+.button-3d:hover {
+  box-shadow: 5px 5px 0px 0px rgba(0,0,0,0.9);
+  transform: translateX(-1px) translateY(-1px);
+}
+
+.button-3d:active {
+  box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.9);
+  transform: translateX(1px) translateY(1px);
+}
+
+/* Primary Button */
+.button-3d-primary {
+  background-color: rgb(59, 130, 246);
+  color: white;
+}
+
+/* Header Styles */
+.header-3d {
+  background-color: white;
+  border-bottom: 3px solid black;
+  box-shadow: 0px 4px 0px 0px rgba(0,0,0,0.9);
+}
+
+/* Sidebar Styles */
+.sidebar-3d {
+  background-color: white;
+  border-right: 3px solid black;
+  box-shadow: 6px 0px 0px 0px rgba(0,0,0,0.9);
+}
+
+/* Menu Item Styles */
+.menu-item-3d {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.menu-item-3d:hover {
+  background-color: rgb(243, 244, 246);
+}
+
+.menu-item-3d-active {
+  background-color: rgb(239, 246, 255);
+  color: rgb(37, 99, 235);
+  font-weight: 500;
+  border: 2px solid black;
+  box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.9);
+}
+
+.pricing-header-animate {
+  animation: fadeInDown 0.8s ease forwards;
+}
+
+.pricing-divider-animate {
+  animation: scaleX 0.8s ease forwards;
+  animation-delay: 0.5s;
+  transform-origin: left;
+}
+
+.pricing-card-animate {
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: calc(var(--index, 0) * 0.2s);
+}
+
+.pricing-save-badge {
+  animation: slideIn 0.5s ease forwards;
+}
+
+.pricing-toggle-knob {
+  transition: transform 0.3s ease;
+}
+
+.pricing-toggle-knob.yearly {
+  transform: translateX(32px);
+}
+
+.pricing-price-badge {
+  animation: popBadge 5s ease infinite;
+}
+
+.pricing-popular-badge {
+  animation: pulsate 2s ease infinite;
+}
+
+.pricing-feature-item {
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: calc(var(--index, 0) * 0.1s);
+}
+
+.pricing-feature-item:hover {
+  transform: translateX(5px) scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+.pricing-feature-check {
+  transition: transform 0.3s ease;
+}
+
+.pricing-feature-check:hover {
+  transform: scale(1.2) rotate(360deg);
+}
+
+.pricing-cta-button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pricing-cta-button:hover {
+  transform: scale(1.02);
+}
+
+.pricing-cta-button:active {
+  transform: scale(0.95) rotate(-1deg);
+}
+
+.pricing-particle {
+  position: absolute;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: rgba(0, 0, 0, 0.05);
+  animation: floatParticle 3s ease-in-out infinite;
+  animation-delay: calc(var(--delay, 0) * 1s);
+}

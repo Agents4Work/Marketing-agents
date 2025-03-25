@@ -1,0 +1,47 @@
+Here’s your optimized prompt to generate a compelling Problem Statement for the “Marketing is Broken – AI Fixes It” section, including pain points, agitation, and visual effects:
+
+⸻
+
+🎯 Goal (Objective) – What Needs to Be Created?
+
+Generate a high-impact Problem Statement section for a landing page with a strong headline, compelling pain points, and engaging visuals.
+
+📌 Content & Structure Requirements
+
+✅ Headline:
+	•	"Marketing is Broken – AI Fixes It" (Bold, attention-grabbing)
+
+✅ Pain Points (Bullet Format for Clarity):
+	•	Marketing is expensive and inefficient.
+	•	Producing high-quality content, ads, and copywriting is difficult.
+	•	Hiring skilled talent is costly and takes too long.
+	•	Without the right team, businesses waste time and money.
+
+✅ Agitation Statement:
+	•	“Sticking to outdated methods means falling behind competitors.”
+
+✅ Call-to-Action (Optional):
+	•	Encourage users to explore how AI solves these problems immediately.
+
+🎨 Visual & Motion Effects
+
+✅ Glitch Effect on “old-school marketing” to emphasize problems.
+✅ Smooth fading and distortion animations when introducing pain points.
+✅ Dark-to-light transition effect when revealing the AI solution, symbolizing transformation.
+✅ Typography variation (bold vs. fading text) to create contrast and emotional impact.
+
+⚙️ Technical Considerations
+
+✅ Built with Framer Motion, GSAP, or CSS animations for smooth glitch effects.
+✅ Optimized for fast loading & responsiveness (works across desktop & mobile).
+✅ Ensures clear readability and accessibility while maintaining a high-end look.
+
+🏆 Final Goal
+
+🔥 Create a visually striking and emotionally compelling problem statement.
+🔥 The user should instantly feel the frustration of traditional marketing and be excited to learn how AI fixes it.
+🔥 The section should set up AI as the clear solution, guiding users smoothly into the next step of the landing page.
+
+⸻
+
+💎 This prompt ensures a powerful, modern, and highly engaging Problem Statement section. Let me know if you need any refinements! 🚀

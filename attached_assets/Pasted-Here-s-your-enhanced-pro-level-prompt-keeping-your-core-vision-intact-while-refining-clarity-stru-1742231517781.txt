@@ -1,0 +1,58 @@
+Here’s your enhanced, pro-level prompt, keeping your core vision intact while refining clarity, structure, and execution precision. 🔥
+
+⸻
+
+🛠️ Improved Prompt: Next-Gen AI Team Builder
+
+🎯 Goal:
+
+Design a human-like, interactive AI team builder where agents feel like real collaborators instead of robotic boxes. Once placed inside the workflow, agents should appear as profile-based entities that users can click to interact with, modify, and assign tasks.
+
+⸻
+
+2️⃣ Core Features
+
+👤 Agent Profiles (Human-Like Representation)
+
+✅ Visual Representation:
+	•	Agents should look like real profiles, not abstract shapes.
+	•	Use circular avatars or profile cards instead of generic boxes.
+	•	Allow custom avatars (upload or auto-generate).
+	•	Display name, role, and bio directly on the profile.
+
+✅ Interactive Customization (Click-to-Modify)
+	•	Clicking on an agent inside the workflow should open an interactive panel where users can:
+	•	Edit details (expertise, personality traits, working style).
+	•	Attach reference documents & materials.
+	•	Define collaboration rules (e.g., “Always work with Product Marketer”).
+
+⸻
+
+🔗 Smart & Dynamic Connections
+
+✅ Natural, Meaningful Links (No Plain Arrows!)
+	•	Agents should connect through smart, interactive relationships:
+	•	🔵 Collaboration – Agents work together on the same task.
+	•	🟢 Approval Flow – One agent must approve before the next moves forward.
+	•	🟠 Feedback Loop – Work is reviewed and sent back if needed.
+	•	Clicking a connection allows users to edit rules (dependencies, review process, workflow type).
+
+⸻
+
+📊 Workflow Interaction & Management
+
+✅ Drag & Drop Functionality
+	•	Agents can be moved and positioned dynamically.
+	•	The layout should automatically adjust for clean & structured workflows.
+
+✅ Status Indicators & Activity Tracking
+	•	Each agent and connection should display real-time status:
+	•	🟡 Pending – Waiting for action.
+	•	🔵 In Progress – Actively working.
+	•	✅ Completed – Task finished.
+
+⸻
+
+🚀 Final Execution Goal
+
+Build a modern, intelligent AI workflow builder where agents are human-like, interactive, and dynamically connected—creating a natural, seamless, and engaging experience for users.

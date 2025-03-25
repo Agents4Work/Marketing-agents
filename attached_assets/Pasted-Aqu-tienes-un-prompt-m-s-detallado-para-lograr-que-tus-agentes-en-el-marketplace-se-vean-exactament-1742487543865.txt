@@ -1,0 +1,109 @@
+Aquí tienes un prompt más detallado para lograr que tus agentes en el marketplace se vean exactamente como en las imágenes:
+
+⸻
+
+Prompt detallado para UI de marketplace de agentes de IA:
+
+“Crea una interfaz de usuario moderna y bien estructurada para un marketplace de agentes de IA especializados en marketing digital. La interfaz debe incluir varias secciones bien definidas y organizadas con métricas, compatibilidades y capacidades de cada agente. El diseño debe ser limpio, profesional y atractivo, con iconos representativos, colores modernos y una experiencia intuitiva.”
+
+Estructura y secciones clave:
+	1.	Página principal del agente (Ejemplo: “Copywriting Pro”)
+	•	Encabezado del agente:
+	•	Icono representativo (ejemplo: emoji ✍️ en un fondo azul con bordes redondeados).
+	•	Nombre del agente en grande (ejemplo: “Copywriting Pro (Advanced)”).
+	•	Etiqueta de categoría (“Content Creation”) con un 98% de compatibilidad con el equipo.
+	•	Puntuación general con estrellas (ejemplo: ⭐️4.9 basado en 342 reviews).
+	•	Botones de acción:
+	•	“Add to Team” (con un fondo azul moderno).
+	•	“Try Demo”.
+	•	“Quick Integration”.
+	2.	Sección “Workflow Integration” (Integración en flujo de trabajo)
+	•	Representa un flujo de trabajo con 5 pasos visuales:
+	1.	Request (Marketing Brief) - Ícono de documento.
+	2.	Strategy Agent (Plans Approach) - Ícono de bombilla.
+	3.	Copywriting Pro (Creates Content) - Ícono ✍️ (Resaltado en azul).
+	4.	SEO Agent (Optimizes) - Ícono de lupa.
+	5.	Results (Finalized Content) - Ícono de check verde.
+	•	Botón destacado en azul: “Build Custom Workflow”.
+	3.	Sección “Performance Metrics” (Métricas de desempeño)
+	•	Incluye barras de rendimiento con porcentajes específicos:
+	•	Conversion Rate Improvement: +37%.
+	•	Engagement Score: +42%.
+	•	Output Quality: 98%.
+	•	Creativity Score: 95%.
+	•	Consistency Rating: 96%.
+	•	Comparación con humanos (Benchmarking)
+	•	Velocidad: IA 50x más rápida que un humano.
+	•	Eficiencia de costos: IA 85% más barata.
+	•	Consistencia: IA 96% consistente vs humano variable.
+	•	Creatividad: IA 95% creativa, humano aún lidera.
+	•	Historial de versiones del agente:
+	•	Versión actual 3.5 (lanzada hace 2 semanas).
+	•	Mejoras recientes: mejor comprensión del tono de marca, generación de titulares optimizada, inteligencia emocional avanzada.
+	4.	Sección “Ratings & User Testimonials” (Calificaciones y testimonios)
+	•	Calificación general: ⭐️ 4.9 basada en 342 reviews.
+	•	Distribución de estrellas:
+	•	5⭐️ (82%)
+	•	4⭐️ (12%)
+	•	3⭐️ (4%)
+	•	2⭐️ (1%)
+	•	1⭐️ (<1%).
+	•	Testimonios destacados con imágenes de usuarios reales:
+	•	Sarah Johnson (TechStart Inc.): “El Copywriting Pro transformó nuestra página de aterrizaje. +37% en conversiones en solo 2 semanas!” ⭐️⭐️⭐️⭐️⭐️.
+	•	Michael Chen (Growth Marketing): “Uso este agente para todas mis campañas de clientes. La calidad y consistencia son increíbles.” ⭐️⭐️⭐️⭐️⭐️.
+	•	Amanda Taylor (E-commerce Solutions): “Nuestros textos de productos se revitalizaron completamente. Ventas mejoraron significativamente.” ⭐️⭐️⭐️⭐️.
+	5.	Sección “Sample Outputs” (Ejemplos de contenido generado)
+	•	Ejemplo de copy para una landing page:
+
+# Transforma tu Marketing con IA
+Harness the future of marketing today with our AI-powered platform that delivers results while saving you time and resources.
+
+## Why Choose Us?
+- 🚀 3x faster campaign creation.
+- 📈 45% higher engagement rates.
+- 🔄 Set-and-forget automation that works.
+
+[Get Started Free] [See How It Works]
+
+
+	•	Botón para copiar sample.
+
+	6.	Sección “Agent Skills & Capabilities” (Habilidades y capacidades del agente)
+	•	Barras de progreso para cada habilidad con un porcentaje de dominio:
+	•	Copywriting: 98%.
+	•	Ad Writing: 95%.
+	•	Landing Pages: 92%.
+	•	Email Sequences: 90%.
+	•	Brand Storytelling: 88%.
+	•	SEO Content: 85%.
+	•	Key Benefits:
+	•	✅ Crea textos persuasivos que convierten visitantes en clientes.
+	•	✅ Optimiza contenido para SEO y legibilidad.
+	•	✅ Adapta el tono y estilo a la marca.
+	•	✅ Genera contenido para múltiples canales de marketing.
+	•	✅ Entiende la psicología de compra y los gatillos emocionales.
+	7.	Sección “Team Integration” (Integración en equipos)
+	•	Muestra los mejores agentes compatibles con “Copywriting Pro”:
+	•	SEO Specialist (95% compatible) 🔍.
+	•	Social Media Strategist (92% compatible) 📱.
+	•	Analytics Advisor (90% compatible) 📊.
+	•	Quick Team Builder: Botón para crear un equipo optimizado con estos agentes.
+	8.	Sección “Related Agents” (Agentes relacionados)
+	•	Muestra tarjetas de agentes adicionales con compatibilidad:
+	•	SEO Specialist (95% compatible) → “View Details”.
+	•	Social Media Strategist (92% compatible) → “View Details”.
+	•	Analytics Advisor (90% compatible) → “View Details”.
+	•	Botón “View All” para explorar más agentes.
+
+⸻
+
+Estilo Visual:
+	•	Colores predominantes: Azul #1976D2, blanco y tonos grises.
+	•	Tarjetas con sombras suaves y bordes redondeados.
+	•	Tipografía moderna y profesional.
+	•	Iconos representativos en cada sección.
+	•	Diseño modular con secciones bien diferenciadas.
+
+⸻
+
+Este prompt generará una interfaz visual idéntica a la que quieres, asegurando que tu marketplace de agentes se vea moderno, atractivo y profesional. 🚀

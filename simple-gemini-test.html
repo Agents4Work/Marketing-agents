@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Gemini API Connection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .response {
+      white-space: pre-wrap;
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 10px 5px 10px 0;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      min-height: 100px;
+    }
+    .status {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .success {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+    .error {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Gemini API Test</h1>
+  
+  <h2>Health Check</h2>
+  <button id="checkHealth">Check API Health</button>
+  <div id="healthStatus" class="status"></div>
+  
+  <h2>Generate Content</h2>
+  <textarea id="generatePrompt">Write a short paragraph about AI and marketing automation.</textarea>
+  <button id="generateContent">Generate Content</button>
+  <div id="generateStatus" class="status"></div>
+  <div id="generateResponse" class="response"></div>
+  
+  <h2>Chat Completion</h2>
+  <textarea id="chatPrompt">What are the benefits of AI in digital marketing?</textarea>
+  <button id="chatComplete">Send Message</button>
+  <div id="chatStatus" class="status"></div>
+  <div id="chatResponse" class="response"></div>
+
+  <script>
+    // Get CSRF token from cookies
+    function getCsrfToken() {
+      const match = document.cookie.match(new RegExp('(^| )XSRF-TOKEN=([^;]+)'));
+      if (match) return match[2];
+      return '';
+    }
+
+    // Function to show loading state
+    function showLoading(buttonId, statusId) {
+      const button = document.getElementById(buttonId);
+      button.innerHTML = button.textContent + ' <span class="loading"></span>';
+      button.disabled = true;
+      document.getElementById(statusId).textContent = 'Loading...';
+      document.getElementById(statusId).className = 'status';
+    }
+
+    // Function to hide loading state
+    function hideLoading(buttonId, originalText) {
+      const button = document.getElementById(buttonId);
+      button.innerHTML = originalText;
+      button.disabled = false;
+    }
+
+    // Function to handle API errors
+    function handleApiError(error, statusId) {
+      console.error('API Error:', error);
+      const statusElement = document.getElementById(statusId);
+      statusElement.textContent = `Error: ${error.message || 'Unknown error occurred'}`;
+      statusElement.className = 'status error';
+    }
+
+    // Health check
+    document.getElementById('checkHealth').addEventListener('click', async () => {
+      const buttonId = 'checkHealth';
+      const statusId = 'healthStatus';
+      const originalText = 'Check API Health';
+      
+      showLoading(buttonId, statusId);
+      
+      try {
+        const response = await fetch('/api/gemini/health');
+        const data = await response.json();
+        
+        hideLoading(buttonId, originalText);
+        
+        const statusElement = document.getElementById(statusId);
+        statusElement.textContent = `Status: ${data.status} - ${data.message || 'API is responding'} (${data.timestamp || new Date().toISOString()})`;
+        statusElement.className = data.status === 'operational' ? 'status success' : 'status error';
+      } catch (error) {
+        hideLoading(buttonId, originalText);
+        handleApiError(error, statusId);
+      }
+    });
+
+    // Generate content
+    document.getElementById('generateContent').addEventListener('click', async () => {
+      const buttonId = 'generateContent';
+      const statusId = 'generateStatus';
+      const responseId = 'generateResponse';
+      const originalText = 'Generate Content';
+      
+      showLoading(buttonId, statusId);
+      
+      const prompt = document.getElementById('generatePrompt').value;
+      
+      try {
+        const token = getCsrfToken();
+        const response = await fetch('/api/gemini/generate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': token
+          },
+          body: JSON.stringify({
+            prompt,
+            type: 'text'
+          })
+        });
+        
+        const data = await response.json();
+        
+        hideLoading(buttonId, originalText);
+        
+        if (data.error) {
+          document.getElementById(statusId).textContent = `Error: ${data.error}`;
+          document.getElementById(statusId).className = 'status error';
+        } else {
+          document.getElementById(statusId).textContent = 'Content generated successfully!';
+          document.getElementById(statusId).className = 'status success';
+          document.getElementById(responseId).textContent = data.content || 'No content returned';
+        }
+      } catch (error) {
+        hideLoading(buttonId, originalText);
+        handleApiError(error, statusId);
+      }
+    });
+
+    // Chat completion
+    document.getElementById('chatComplete').addEventListener('click', async () => {
+      const buttonId = 'chatComplete';
+      const statusId = 'chatStatus';
+      const responseId = 'chatResponse';
+      const originalText = 'Send Message';
+      
+      showLoading(buttonId, statusId);
+      
+      const message = document.getElementById('chatPrompt').value;
+      
+      try {
+        const token = getCsrfToken();
+        const response = await fetch('/api/gemini/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': token
+          },
+          body: JSON.stringify({
+            message,
+            contentType: 'text'
+          })
+        });
+        
+        const data = await response.json();
+        
+        hideLoading(buttonId, originalText);
+        
+        if (data.error) {
+          document.getElementById(statusId).textContent = `Error: ${data.error}`;
+          document.getElementById(statusId).className = 'status error';
+        } else {
+          document.getElementById(statusId).textContent = 'Response received successfully!';
+          document.getElementById(statusId).className = 'status success';
+          document.getElementById(responseId).textContent = data.content || 'No content returned';
+        }
+      } catch (error) {
+        hideLoading(buttonId, originalText);
+        handleApiError(error, statusId);
+      }
+    });
+  </script>
+</body>
+</html>

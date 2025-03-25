@@ -1,0 +1,43 @@
+Roadmap para implementar el Sistema de Identificación de Agentes con Control de Versiones
+Voy a implementar el sistema de identificación de agentes y añadir el control de versiones siguiendo este plan:
+
+Fase 1: Actualización del esquema de datos (Semana 1)
+Actualizar la interfaz ExtendedAgent
+Añadir campos de versión al modelo de agentes
+Añadir soporte para compatibilidad entre versiones
+Crear archivo de documentación
+Documentar el nuevo sistema de identificación y versionado
+Explicar las mejores prácticas para desarrolladores
+Actualizar los agentes existentes
+Agregar información de versión a todos los agentes (comenzando con v1.0)
+Fase 2: Implementación de la lógica de validación (Semana 2)
+Crear servicio centralizado de agentes
+Implementar funciones para validar IDs de agentes
+Añadir lógica para manejar compatibilidad entre versiones
+Implementar sistema de logs
+Crear sistema para registrar uso de agentes
+Incluir tracking de versiones utilizadas
+Desarrollar manejo de errores
+Implementar respuestas para casos de agentes no encontrados
+Crear sistema de sugerencias de alternativas
+Fase 3: Integración con componentes existentes (Semana 3)
+Actualizar componente de Workflow
+Modificar para usar el nuevo sistema de identificación
+Implementar verificación de compatibilidad
+Actualizar Content Hub
+Integrar sistema de identificación en generación de contenidos
+Añadir registro de qué versión del agente generó cada contenido
+Actualizar Marketplace
+Mostrar información de versión en la interfaz
+Añadir historial de cambios para cada agente
+Fase 4: Implementación de pruebas y documentación final (Semana 4)
+Crear suite de pruebas
+Desarrollar pruebas unitarias para validación de agentes
+Implementar pruebas de integración para el sistema completo
+Finalizar documentación
+Actualizar toda la documentación con el nuevo sistema
+Crear guías para desarrolladores que creen nuevos agentes
+Crear dashboard de monitoreo
+Implementar panel para administradores que muestre uso de agentes
+Incluir alertas para problemas potenciales
+Ahora, voy a crear el documento de documentación para este sistema:

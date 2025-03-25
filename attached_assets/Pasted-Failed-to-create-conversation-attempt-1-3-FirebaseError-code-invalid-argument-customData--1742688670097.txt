@@ -1,0 +1,35 @@
+Failed to create conversation (attempt 1/3): 
+_FirebaseError {code: "invalid-argument", customData: undefined, name: "FirebaseError", toString: ƒ}
+
+Warning: Each child in a list should have a unique &quot;key&quot; prop.
+
+Check the render method of `AIAgentChat`. See https://reactjs.org/link/warning-keys for more information.
+motion.div@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/framer-motion.js:945:40
+AIAgentChat@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/src/components/AIAgentChat.tsx:263:14
+div
+div
+div
+Primitive.div@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VZNMAICS.js:41:11
+Presence@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-4K3L2YAF.js:25:31
+TabsContent@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js:176:80
+_c5@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/src/components/ui/tabs.tsx:72:10
+div
+Primitive.div@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VZNMAICS.js:41:11
+TabsProvider@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-GE6KQUNF.js:38:13
+Tabs@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js:53:11
+div
+AIContentHub@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/src/components/AIContentHub.tsx:469:55
+div
+div
+main
+div
+div
+ContentHub
+Route@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js:191:14
+Switch@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js:248:27
+Router
+AuthProvider@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/src/hooks/useAuth.tsx:49:5
+CsrfTokenProvider@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/src/components/security/CsrfTokenProvider.tsx:21:5
+QueryClientProvider@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js:2805:9
+App@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/src/App.tsx:436:38
+QueryClientProvider@https://d0ee6c7d-230b-454a-98cc-b0943f43dacb-00-3ke4vnhop9mnj.picard.replit.dev:5000/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js:2805:9

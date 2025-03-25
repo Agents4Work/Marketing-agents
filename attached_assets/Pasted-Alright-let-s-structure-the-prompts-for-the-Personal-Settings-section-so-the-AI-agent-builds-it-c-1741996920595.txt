@@ -1,0 +1,72 @@
+Alright, let’s structure the prompts for the Personal & Settings section so the AI agent builds it correctly.
+
+⸻
+
+🎯 Goal (Objective)
+
+We are creating a Personal & Settings dashboard where users can manage their profile, app preferences, and subscription plans. The design should be clean, intuitive, and efficient.
+
+📌 Sections to Include:
+1️⃣ User Profile → Manage personal information, profile picture, and account security.
+2️⃣ App Settings → Customize notifications, AI preferences, and integrations.
+3️⃣ Subscription → View plan details, upgrade/downgrade, billing info.
+
+⸻
+
+📌 Prompts for Each Section
+
+1️⃣ User Profile - Prompt
+
+🔹 Prompt for AI Agent:
+“Create a ‘User Profile’ section where users can edit their personal details, change profile pictures, update email/password, and enable two-factor authentication. The UI should be clean and modern with intuitive settings.”
+
+✅ Features:
+	•	Profile Picture Upload
+	•	Name, Email, and Password Update
+	•	Security: Two-Factor Authentication (Enable/Disable)
+	•	Account Actions: Delete Account, Logout
+
+⸻
+
+2️⃣ App Settings - Prompt
+
+🔹 Prompt for AI Agent:
+“Build an ‘App Settings’ page where users can customize their experience, including notification preferences, AI-generated content settings, and third-party integrations.”
+
+✅ Features:
+	•	Notification Preferences: Email, Push, In-App
+	•	AI Customization: Default Content Style, Preferred AI Tone
+	•	Integrations: Connect to Google, Facebook, Zapier, etc.
+	•	Dark Mode Toggle
+
+⸻
+
+3️⃣ Subscription - Prompt
+
+🔹 Prompt for AI Agent:
+“Develop a ‘Subscription’ page where users can view their plan, manage billing, and upgrade/downgrade subscriptions. The UI should clearly display current plan benefits and upsell premium features.”
+
+✅ Features:
+	•	Current Plan Overview (e.g., Free, Pro, Enterprise)
+	•	Billing Information & Payment Methods
+	•	Upgrade/Downgrade Subscription
+	•	Cancel Subscription Option
+	•	Invoice Download
+
+⸻
+
+⚡ Core UI/UX Requirements
+
+✅ Navigation should be simple & accessible from the sidebar.
+✅ Modern, high-end UI (not overly cluttered).
+✅ Clear CTAs (Save Changes, Upgrade Plan, etc.).
+✅ Security-first approach for sensitive settings (password updates, billing, etc.).
+
+⸻
+
+🚀 Next Steps
+
+💡 Do we need team management settings (if multi-user accounts are supported)?
+💡 Should AI auto-suggest the best plan based on usage? (e.g., “You’re exceeding your limits, consider upgrading.”)
+
+Let me know if you want to refine this further before implementation! 🚀🔥

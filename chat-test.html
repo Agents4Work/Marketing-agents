@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Chat Endpoint Test</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    button { padding: 10px 15px; background: #4361ee; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; }
+    .result { margin-top: 20px; }
+    textarea { width: 100%; height: 100px; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 4px; }
+    label { display: block; margin-top: 20px; font-weight: bold; }
+    .buttons { margin-top: 10px; }
+    .output-text { background: #e0f7fa; padding: 15px; border-radius: 4px; margin-top: 10px; white-space: pre-wrap; }
+    .tab-container { display: flex; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .tab { padding: 10px 15px; cursor: pointer; background: #f0f0f0; border: 1px solid #ddd; border-bottom: none; border-radius: 4px 4px 0 0; margin-right: 5px; }
+    .tab.active { background: #fff; border-bottom: 1px solid #fff; margin-bottom: -1px; }
+    .endpoint { margin-bottom: 10px; }
+    .status { padding: 10px; margin-top: 10px; border-radius: 4px; }
+    .success { background: #e6ffe6; }
+    .error { background: #ffe6e6; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>API Chat Endpoint Test</h1>
+  
+  <div>
+    <div class="endpoint">
+      <strong>API Health Check:</strong>
+      <button id="checkApiHealth">Test API Health</button>
+      <div id="healthStatus" class="status"></div>
+    </div>
+  </div>
+
+  <div class="tab-container">
+    <div class="tab active" data-tab="direct">Direct Endpoint Test</div>
+    <div class="tab" data-tab="api">API Endpoint Test</div>
+  </div>
+
+  <div id="directTab" class="tab-content">
+    <label for="directMessageInput">Message to Gemini (Direct Test):</label>
+    <textarea id="directMessageInput" placeholder="Type your message here...">What are the top 3 digital marketing trends that will dominate in 2025?</textarea>
+    
+    <div class="buttons">
+      <button id="sendDirectMessage">Send Direct Message</button>
+      <button id="clearDirectResults">Clear Results</button>
+    </div>
+    
+    <label>Response from Gemini (Direct):</label>
+    <div id="directGeminiOutput" class="output-text">Send a message to see the response...</div>
+    
+    <label>Raw API Response (Direct):</label>
+    <pre id="directRawResponse">Raw response will appear here...</pre>
+  </div>
+
+  <div id="apiTab" class="tab-content hidden">
+    <label for="apiMessageInput">Message to Gemini (API Test):</label>
+    <textarea id="apiMessageInput" placeholder="Type your message here...">What are the top 3 digital marketing trends that will dominate in 2025?</textarea>
+    
+    <div class="buttons">
+      <button id="sendApiMessage">Send API Message</button>
+      <button id="clearApiResults">Clear Results</button>
+    </div>
+    
+    <label>Response from Gemini (API):</label>
+    <div id="apiGeminiOutput" class="output-text">Send a message to see the response...</div>
+    
+    <label>Raw API Response (API):</label>
+    <pre id="apiRawResponse">Raw response will appear here...</pre>
+  </div>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Update tabs
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Show corresponding content
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+        document.getElementById(`${tab.dataset.tab}Tab`).classList.remove('hidden');
+      });
+    });
+    
+    // API Health Check
+    document.getElementById('checkApiHealth').addEventListener('click', async () => {
+      const healthStatus = document.getElementById('healthStatus');
+      healthStatus.textContent = 'Checking API health...';
+      healthStatus.className = 'status';
+      
+      try {
+        // Check direct Gemini configuration
+        const directResponse = await fetch('/direct-gemini-test');
+        const directData = await directResponse.json();
+        
+        // Check API health endpoint
+        const apiResponse = await fetch('/api/gemini/health');
+        const apiData = await apiResponse.json();
+        
+        const statusHTML = `
+          <div>Direct Gemini: <strong>${directData.status}</strong> - ${directData.message || ''}</div>
+          <div>API Status: <strong>${apiData.status}</strong> - ${apiData.message || ''}</div>
+          <div>Timestamp: ${new Date().toLocaleTimeString()}</div>
+        `;
+        
+        healthStatus.innerHTML = statusHTML;
+        healthStatus.className = 'status success';
+      } catch (error) {
+        healthStatus.textContent = `Error checking health: ${error.message}`;
+        healthStatus.className = 'status error';
+      }
+    });
+
+    // Direct endpoint test
+    document.getElementById('sendDirectMessage').addEventListener('click', async () => {
+      const messageInput = document.getElementById('directMessageInput');
+      const geminiOutput = document.getElementById('directGeminiOutput');
+      const rawResponse = document.getElementById('directRawResponse');
+      
+      const message = messageInput.value.trim();
+      
+      if (!message) {
+        geminiOutput.textContent = 'Please enter a message';
+        return;
+      }
+      
+      geminiOutput.textContent = 'Sending message to Gemini...';
+      rawResponse.textContent = 'Waiting for response...';
+      
+      try {
+        const response = await fetch('/direct-gemini-message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Status: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        rawResponse.textContent = JSON.stringify(data, null, 2);
+        
+        // Extract the actual text response from Gemini
+        if (data.response && 
+            data.response.candidates && 
+            data.response.candidates[0] && 
+            data.response.candidates[0].content && 
+            data.response.candidates[0].content.parts && 
+            data.response.candidates[0].content.parts[0] &&
+            data.response.candidates[0].content.parts[0].text) {
+          geminiOutput.textContent = data.response.candidates[0].content.parts[0].text;
+        } else {
+          geminiOutput.textContent = 'No readable response from Gemini. Check the raw response for details.';
+        }
+      } catch (error) {
+        geminiOutput.textContent = `Error: ${error.message}`;
+        rawResponse.textContent = `Error: ${error.message}`;
+      }
+    });
+    
+    // Direct clear results
+    document.getElementById('clearDirectResults').addEventListener('click', () => {
+      document.getElementById('directGeminiOutput').textContent = 'Send a message to see the response...';
+      document.getElementById('directRawResponse').textContent = 'Raw response will appear here...';
+    });
+
+    // API endpoint test
+    document.getElementById('sendApiMessage').addEventListener('click', async () => {
+      const messageInput = document.getElementById('apiMessageInput');
+      const geminiOutput = document.getElementById('apiGeminiOutput');
+      const rawResponse = document.getElementById('apiRawResponse');
+      
+      const message = messageInput.value.trim();
+      
+      if (!message) {
+        geminiOutput.textContent = 'Please enter a message';
+        return;
+      }
+      
+      geminiOutput.textContent = 'Sending message to API...';
+      rawResponse.textContent = 'Waiting for response...';
+      
+      try {
+        // This is testing the actual API endpoint used by the application
+        const response = await fetch('/api/gemini/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            message,
+            contentType: 'text',
+            conversationHistory: [] 
+          })
+        });
+        
+        const data = await response.json();
+        rawResponse.textContent = JSON.stringify(data, null, 2);
+        
+        if (response.ok) {
+          // Extract the response content
+          if (data.content) {
+            geminiOutput.textContent = data.content;
+          } else {
+            geminiOutput.textContent = 'No content in response. Check the raw response for details.';
+          }
+        } else {
+          geminiOutput.textContent = `Error: ${data.error || 'Unknown error'}`;
+        }
+      } catch (error) {
+        geminiOutput.textContent = `Error: ${error.message}`;
+        rawResponse.textContent = `Error: ${error.message}`;
+      }
+    });
+    
+    // API clear results
+    document.getElementById('clearApiResults').addEventListener('click', () => {
+      document.getElementById('apiGeminiOutput').textContent = 'Send a message to see the response...';
+      document.getElementById('apiRawResponse').textContent = 'Raw response will appear here...';
+    });
+  </script>
+</body>
+</html>

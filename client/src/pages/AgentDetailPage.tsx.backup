@@ -1,0 +1,1286 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useLocation } from 'wouter';
+import { motion } from 'framer-motion';
+import SidebarOptimized from '@/components/SidebarOptimized';
+import { 
+  ArrowLeft, 
+  Star, 
+  TrendingUp,
+  TrendingDown, 
+  Users, 
+  Check, 
+  PlusCircle, 
+  ChevronRight,
+  MessagesSquare,
+  LineChart,
+  Zap,
+  BookOpen,
+  Layers,
+  Target,
+  Sparkles,
+  FileText,
+  Clock,
+  Calendar,
+  History,
+  Tag,
+  RefreshCw,
+  BarChart3,
+  Award,
+  ThumbsUp,
+  CheckCircle,
+  GitMerge,
+  Lightbulb,
+  Search,
+  ArrowRight, 
+  ArrowDown,
+  Copy,
+  Activity,
+  BadgeCheck,
+  AlertCircle,
+  CheckSquare,
+  Gauge,
+  Repeat,
+  Timer,
+  BrainCircuit,
+  Code,
+  Settings,
+  ExternalLink,
+  PenTool,
+  MessageSquare,
+  Scale,
+  Rocket,
+  Link,
+  HelpCircle,
+  Database,
+  Folder,
+  Factory
+} from 'lucide-react';
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardFooter, 
+  CardHeader, 
+  CardTitle
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useToast } from '@/hooks/use-toast';
+import { Agent, ExtendedAgent, AgentSkill } from '@/types/marketplace';
+import { agents } from '@/data/agents';
+import { formatAgentVersion } from '@/lib/agent-version-control';
+import AgentVersionBadge from '@/components/AgentVersionBadge';
+
+// Type guard function to check if a skill is an object with name and level properties
+const isSkillObject = (skill: AgentSkill): skill is { name: string; level: number } => {
+  return typeof skill === 'object' && 'name' in skill && 'level' in skill;
+};
+
+// Type guard for extended agent
+const isExtendedAgent = (agent: Agent | ExtendedAgent): agent is ExtendedAgent => {
+  return 'sampleOutputs' in agent && 'compatibleAgents' in agent;
+};
+
+// Sample default reviews (will be replaced by actual reviews from API)
+const defaultReviews = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    company: "TechStart Inc",
+    avatar: "",
+    date: "2025-03-01",
+    rating: 5,
+    title: "Game changer for our marketing team",
+    content: "The Copywriting Pro agent transformed our landing page. Conversion rates increased by 37% in just two weeks!",
+    helpfulCount: 42,
+    verifiedPurchase: true
+  },
+  {
+    id: 2,
+    name: "Michael Chen",
+    company: "Growth Marketing",
+    avatar: "",
+    date: "2025-02-20",
+    rating: 5,
+    title: "Excellent for quick content creation",
+    content: "I use this agent for all my client campaigns. The quality and consistency of copy is outstanding.",
+    helpfulCount: 18,
+    verifiedPurchase: true
+  },
+  {
+    id: 3,
+    name: "Amanda Taylor",
+    company: "E-commerce Solutions",
+    avatar: "",
+    date: "2025-02-15",
+    rating: 4,
+    title: "Worth every penny",
+    content: "Our product descriptions were completely revitalized. Sales have improved significantly since implementation.",
+    helpfulCount: 27,
+    verifiedPurchase: true
+  }
+];
+
+export default function AgentDetailPage() {
+  const params = useParams();
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const [selectedAgent, setSelectedAgent] = useState<ExtendedAgent | null>(null);
+  const [selectedTab, setSelectedTab] = useState("overview");
+  
+  useEffect(() => {
+    // Find agent by ID
+    const agent = agents.find(a => a.id === params.id);
+    
+    if (!agent) {
+      toast({
+        title: "Agent not found",
+        description: "We couldn't find the agent you're looking for",
+        variant: "destructive"
+      });
+      setLocation('/agent-marketplace');
+      return;
+    }
+    
+    if (!isExtendedAgent(agent)) {
+      toast({
+        title: "Agent data incomplete",
+        description: "This agent doesn't have detailed information",
+        variant: "destructive"
+      });
+      setLocation('/agent-marketplace');
+      return;
+    }
+    
+    setSelectedAgent(agent);
+  }, [params.id, setLocation, toast]);
+  
+  if (!selectedAgent) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-pulse flex space-x-4">
+          <div className="rounded-full bg-slate-200 h-10 w-10"></div>
+          <div className="flex-1 space-y-6 py-1">
+            <div className="h-2 bg-slate-200 rounded"></div>
+            <div className="space-y-3">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="h-2 bg-slate-200 rounded col-span-2"></div>
+                <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+              </div>
+              <div className="h-2 bg-slate-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+  
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5
+      }
+    }
+  };
+  
+  return (
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+      <SidebarOptimized />
+      
+      <div className="flex-1 overflow-auto">
+        <main className="container mx-auto px-4 py-8">
+          <div className="mb-6">
+            <Button 
+              variant="ghost" 
+              className="mb-4 pl-0"
+              onClick={() => setLocation('/agent-marketplace')}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Marketplace
+            </Button>
+            
+            {/* Agent Header - Premium Design */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mb-6">
+              <div className="flex flex-col lg:flex-row p-6 pb-4 gap-6">
+                <div className={`flex-shrink-0 h-24 w-24 ${selectedAgent.primaryColor} text-white text-4xl items-center justify-center rounded-xl border-2 border-black shadow-lg flex`}>
+                  {selectedAgent.avatar}
+                </div>
+                
+                <div className="flex-1">
+                  <div className="flex flex-wrap justify-between items-start">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h1 className="text-3xl font-bold">{selectedAgent.name}</h1>
+                        <Badge className="ml-2 bg-gray-200 text-gray-800 font-medium">Advanced</Badge>
+                      </div>
+                      
+                      <p className="mt-2 text-gray-600 dark:text-gray-400 text-lg max-w-3xl">
+                        Expert in writing compelling, conversion-driven copy for websites, landing pages, and advertisements. Specializes in creating content that drives action and engages readers across various channels.
+                      </p>
+                      
+                      <div className="mt-3 flex items-center gap-4">
+                        <div className="flex items-center">
+                          <div className="flex">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`h-5 w-5 ${i < Math.floor(selectedAgent.rating) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="ml-2 text-lg font-medium">{selectedAgent.rating.toFixed(1)}</span>
+                          <span className="ml-1 text-gray-500">({selectedAgent.reviews || 342} reviews)</span>
+                        </div>
+                        
+                        <Badge variant="outline" className="bg-white">Content Creation</Badge>
+                        
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                          <span className="font-medium">{selectedAgent.compatibility || 98}% Team Compatibility</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col gap-2 mt-4 lg:mt-0">
+                      <Button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white">
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Add to Team
+                      </Button>
+                      <Button variant="outline" className="w-full md:w-auto">
+                        <Zap className="mr-2 h-4 w-4" />
+                        Try Demo
+                      </Button>
+                      <Button variant="outline" className="w-full md:w-auto">
+                        <GitMerge className="mr-2 h-4 w-4" />
+                        Quick Integration
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border-t border-gray-200 dark:border-gray-700 px-6 py-3">
+                <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+                  <TabsList className="w-full justify-start bg-transparent border-b pb-0 mb-0 gap-1">
+                    <TabsTrigger value="overview" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 rounded-none bg-transparent">
+                      <div className="flex items-center px-1">
+                        <Layers className="w-4 h-4 mr-2" />
+                        Overview
+                      </div>
+                    </TabsTrigger>
+                    
+                    <TabsTrigger value="samples" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 rounded-none bg-transparent">
+                      <div className="flex items-center px-1">
+                        <FileText className="w-4 h-4 mr-2" />
+                        Sample Outputs
+                      </div>
+                    </TabsTrigger>
+                    
+                    <TabsTrigger value="team" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 rounded-none bg-transparent">
+                      <div className="flex items-center px-1">
+                        <Users className="w-4 h-4 mr-2" />
+                        Team Integration
+                      </div>
+                    </TabsTrigger>
+                    
+                    <TabsTrigger value="reviews" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 rounded-none bg-transparent">
+                      <div className="flex items-center px-1">
+                        <MessagesSquare className="w-4 h-4 mr-2" />
+                        Reviews
+                      </div>
+                    </TabsTrigger>
+                    
+                    <TabsTrigger value="performance" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 rounded-none bg-transparent">
+                      <div className="flex items-center px-1">
+                        <LineChart className="w-4 h-4 mr-2" />
+                        Performance
+                      </div>
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+            </div>
+            
+            <TabsContent value="overview" className={selectedTab === "overview" ? "" : "hidden"}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                {/* Agent Skills & Capabilities */}
+                <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-xl">
+                      <Zap className="h-5 w-5 mr-2 text-yellow-500" />
+                      Agent Skills & Capabilities
+                    </CardTitle>
+                    <CardDescription>
+                      Expertise levels across different copywriting disciplines
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {selectedAgent.skills && selectedAgent.skills.map((skill, index) => {
+                        const skillName = isSkillObject(skill) ? skill.name : skill;
+                        const skillLevel = isSkillObject(skill) ? skill.level : 85;
+                        
+                        return (
+                          <div key={index} className="space-y-1">
+                            <div className="flex justify-between">
+                              <span className="font-medium">{skillName}</span>
+                              <span className="text-blue-600 font-bold">{skillLevel}%</span>
+                            </div>
+                            <Progress 
+                              value={skillLevel} 
+                              className="h-2 bg-gray-100" 
+                              indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-600" 
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                {/* Key Benefits */}
+                <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-xl">
+                      <CheckCircle className="h-5 w-5 mr-2 text-green-500" />
+                      Key Benefits
+                    </CardTitle>
+                    <CardDescription>
+                      Why this agent stands out from others
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-3">
+                      {selectedAgent.benefits && selectedAgent.benefits.map((benefit, index) => (
+                        <li key={index} className="flex items-start">
+                          <div className="mt-0.5 mr-2 flex-shrink-0">
+                            <Check className="h-5 w-5 text-green-500" />
+                          </div>
+                          <span>{benefit}</span>
+                        </li>
+                      )) || (
+                        <>
+                          <li className="flex items-start">
+                            <div className="mt-0.5 mr-2 flex-shrink-0">
+                              <Check className="h-5 w-5 text-green-500" />
+                            </div>
+                            <span>Creates compelling copy that converts visitors into customers</span>
+                          </li>
+                          <li className="flex items-start">
+                            <div className="mt-0.5 mr-2 flex-shrink-0">
+                              <Check className="h-5 w-5 text-green-500" />
+                            </div>
+                            <span>Optimizes content for both readability and search engines</span>
+                          </li>
+                          <li className="flex items-start">
+                            <div className="mt-0.5 mr-2 flex-shrink-0">
+                              <Check className="h-5 w-5 text-green-500" />
+                            </div>
+                            <span>Adapts tone and style to match your brand voice</span>
+                          </li>
+                          <li className="flex items-start">
+                            <div className="mt-0.5 mr-2 flex-shrink-0">
+                              <Check className="h-5 w-5 text-green-500" />
+                            </div>
+                            <span>Produces content across multiple marketing channels</span>
+                          </li>
+                          <li className="flex items-start">
+                            <div className="mt-0.5 mr-2 flex-shrink-0">
+                              <Check className="h-5 w-5 text-green-500" />
+                            </div>
+                            <span>Understands audience psychology and buying triggers</span>
+                          </li>
+                        </>
+                      )}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+              
+              {/* Workflow Integration - Premium Section */}
+              <Card className="border border-gray-200 dark:border-gray-700 shadow-sm mb-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-xl">
+                    <GitMerge className="h-5 w-5 mr-2 text-blue-600" />
+                    Workflow Integration
+                  </CardTitle>
+                  <CardDescription>
+                    How this agent works within your marketing workflows
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-blue-50 rounded-xl p-6 mb-4">
+                    <div className="flex flex-wrap justify-center items-center gap-4 lg:gap-1">
+                      {/* Request Node */}
+                      <div className="flex flex-col items-center text-center mx-2">
+                        <div className="h-16 w-16 rounded-full bg-pink-100 flex items-center justify-center mb-2 border-2 border-gray-200 shadow-md">
+                          <FileText className="h-8 w-8 text-pink-500" />
+                        </div>
+                        <span className="text-sm font-bold">Request</span>
+                        <span className="text-xs text-gray-600">Marketing Brief</span>
+                      </div>
+                      
+                      {/* Connector */}
+                      <div className="hidden md:block w-16 h-0.5 bg-gray-300"></div>
+                      <ArrowRight className="h-6 w-6 text-gray-400 hidden md:block" />
+                      <ArrowDown className="h-6 w-6 text-gray-400 md:hidden" />
+                      
+                      {/* Strategy Agent */}
+                      <div className="flex flex-col items-center text-center mx-2">
+                        <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center mb-2 border-2 border-gray-200 shadow-md">
+                          <Lightbulb className="h-8 w-8 text-blue-500" />
+                        </div>
+                        <span className="text-sm font-bold">Strategy Agent</span>
+                        <span className="text-xs text-gray-600">Plans Approach</span>
+                      </div>
+                      
+                      {/* Connector */}
+                      <div className="hidden md:block w-16 h-0.5 bg-gray-300"></div>
+                      <ArrowRight className="h-6 w-6 text-gray-400 hidden md:block" />
+                      <ArrowDown className="h-6 w-6 text-gray-400 md:hidden" />
+                      
+                      {/* Copywriting Pro (This Agent) */}
+                      <div className="flex flex-col items-center text-center mx-2">
+                        <div className={`h-16 w-16 rounded-full ${selectedAgent.primaryColor || 'bg-blue-600'} flex items-center justify-center mb-2 border-2 border-gray-200 shadow-md`}>
+                          <PenTool className="h-8 w-8 text-white" />
+                        </div>
+                        <span className="text-sm font-bold">Copywriting Pro</span>
+                        <span className="text-xs text-gray-600">Creates Content</span>
+                      </div>
+                      
+                      {/* Connector */}
+                      <div className="hidden md:block w-16 h-0.5 bg-gray-300"></div>
+                      <ArrowRight className="h-6 w-6 text-gray-400 hidden md:block" />
+                      <ArrowDown className="h-6 w-6 text-gray-400 md:hidden" />
+                      
+                      {/* SEO Agent */}
+                      <div className="flex flex-col items-center text-center mx-2">
+                        <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-2 border-2 border-gray-200 shadow-md">
+                          <Search className="h-8 w-8 text-green-500" />
+                        </div>
+                        <span className="text-sm font-bold">SEO Agent</span>
+                        <span className="text-xs text-gray-600">Optimizes</span>
+                      </div>
+                      
+                      {/* Connector */}
+                      <div className="hidden md:block w-16 h-0.5 bg-gray-300"></div>
+                      <ArrowRight className="h-6 w-6 text-gray-400 hidden md:block" />
+                      <ArrowDown className="h-6 w-6 text-gray-400 md:hidden" />
+                      
+                      {/* Results */}
+                      <div className="flex flex-col items-center text-center mx-2">
+                        <div className="h-16 w-16 rounded-full bg-emerald-100 flex items-center justify-center mb-2 border-2 border-gray-200 shadow-md">
+                          <CheckCircle className="h-8 w-8 text-emerald-500" />
+                        </div>
+                        <span className="text-sm font-bold">Results</span>
+                        <span className="text-xs text-gray-600">Finalized Content</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-center mt-4">
+                    <Button className="bg-blue-600 hover:bg-blue-700">
+                      <GitMerge className="mr-2 h-4 w-4" />
+                      Build Custom Workflow
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Related Agents */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold">Related Agents</h3>
+                  <Button variant="ghost" size="sm" className="text-blue-600">
+                    View All <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {selectedAgent.compatibleAgents && selectedAgent.compatibleAgents.slice(0, 3).map((agent, index) => (
+                    <Card key={index} className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                      <CardContent className="pt-4">
+                        <div className="flex items-start gap-3">
+                          <div className={`h-12 w-12 rounded-lg ${agent.color || 'bg-green-500'} text-white flex items-center justify-center`}>
+                            {agent.avatar || <Search className="h-6 w-6" />}
+                          </div>
+                          <div>
+                            <h4 className="font-medium">{agent.name}</h4>
+                            <div className="text-sm text-green-600">{agent.compatibility || 95}% Compatible</div>
+                          </div>
+                        </div>
+                        <div className="mt-3">
+                          <Button variant="outline" size="sm" className="w-full">
+                            View Details
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )) || (
+                    <>
+                      <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                        <CardContent className="pt-4">
+                          <div className="flex items-start gap-3">
+                            <div className="h-12 w-12 rounded-lg bg-green-500 text-white flex items-center justify-center">
+                              <Search className="h-6 w-6" />
+                            </div>
+                            <div>
+                              <h4 className="font-medium">SEO Specialist</h4>
+                              <div className="text-sm text-green-600">95% Compatible</div>
+                            </div>
+                          </div>
+                          <div className="mt-3">
+                            <Button variant="outline" size="sm" className="w-full">
+                              View Details
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      
+                      <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                        <CardContent className="pt-4">
+                          <div className="flex items-start gap-3">
+                            <div className="h-12 w-12 rounded-lg bg-pink-500 text-white flex items-center justify-center">
+                              <MessageSquare className="h-6 w-6" />
+                            </div>
+                            <div>
+                              <h4 className="font-medium">Social Media Strategist</h4>
+                              <div className="text-sm text-green-600">92% Compatible</div>
+                            </div>
+                          </div>
+                          <div className="mt-3">
+                            <Button variant="outline" size="sm" className="w-full">
+                              View Details
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      
+                      <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                        <CardContent className="pt-4">
+                          <div className="flex items-start gap-3">
+                            <div className="h-12 w-12 rounded-lg bg-orange-500 text-white flex items-center justify-center">
+                              <BarChart3 className="h-6 w-6" />
+                            </div>
+                            <div>
+                              <h4 className="font-medium">Analytics Advisor</h4>
+                              <div className="text-sm text-green-600">90% Compatible</div>
+                            </div>
+                          </div>
+                          <div className="mt-3">
+                            <Button variant="outline" size="sm" className="w-full">
+                              View Details
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="samples" className={selectedTab === "samples" ? "" : "hidden"}>
+              <Card className="border border-gray-200 dark:border-gray-700 shadow-sm mb-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-xl">
+                    <FileText className="h-5 w-5 mr-2 text-blue-600" />
+                    Landing Page Hero Section
+                  </CardTitle>
+                  <CardDescription>
+                    Sample output for marketing content
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="p-4 bg-gray-50 rounded-lg font-mono text-sm">
+                    <pre className="whitespace-pre-wrap">
+{`# Transform Your Marketing with AI Power
+
+Harness the future of marketing today with our AI-powered platform that delivers results while saving you time and resources.
+
+## Why Choose Us?
+* 3x faster campaign creation
+* 45% higher engagement rates
+* Set-and-forget automation that works
+
+[Get Started Free] [See How It Works]`}
+                    </pre>
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <Button variant="outline" size="sm">
+                      <Copy className="mr-2 h-4 w-4" />
+                      Copy Sample
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="border border-gray-200 dark:border-gray-700 shadow-sm mb-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-xl">
+                    <FileText className="h-5 w-5 mr-2 text-blue-600" />
+                    Product Description
+                  </CardTitle>
+                  <CardDescription>
+                    E-commerce copy example
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="p-4 bg-gray-50 rounded-lg font-mono text-sm">
+                    <pre className="whitespace-pre-wrap">
+{`Transform your workspace into a productivity powerhouse with the ErgoMax Pro Standing Desk. 
+
+This revolutionary desk adapts to your workflow with whisper-quiet motors, transitioning from sitting to standing in seconds. The aerospace-grade aluminum frame supports up to 350 lbs while maintaining rock-solid stability even at maximum height.
+
+✓ Memory settings store your perfect heights
+✓ Anti-collision technology for safety
+✓ Cable management system included
+✓ 10-year warranty for peace of mind
+
+Your body wasn't designed to sit all day. Give yourself the gift of movement and watch your productivity soar.`}
+                    </pre>
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <Button variant="outline" size="sm">
+                      <Copy className="mr-2 h-4 w-4" />
+                      Copy Sample
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-xl">
+                    <FileText className="h-5 w-5 mr-2 text-blue-600" />
+                    Email Sequence Intro
+                  </CardTitle>
+                  <CardDescription>
+                    Welcome email example
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="p-4 bg-gray-50 rounded-lg font-mono text-sm">
+                    <pre className="whitespace-pre-wrap">
+{`Subject: Welcome to the Future of Marketing [Important Next Steps]
+
+Hi [First Name],
+
+You've just taken the first step toward transforming how your business connects with customers.
+
+I'm [Your Name], and I'll be your guide as you discover how our platform can:
+
+1. Cut your content creation time in half
+2. Increase your conversion rates by up to 37%
+3. Give you back precious hours in your day
+
+→ To get started immediately, click here to set up your first AI-powered campaign in less than 5 minutes.
+
+Have questions? Just hit reply – a real human (that's me!) will get back to you within 24 hours.
+
+To your success,
+[Your Name]`}
+                    </pre>
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <Button variant="outline" size="sm">
+                      <Copy className="mr-2 h-4 w-4" />
+                      Copy Sample
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="team" className={selectedTab === "team" ? "" : "hidden"}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-xl">
+                      <Users className="h-5 w-5 mr-2 text-blue-600" />
+                      Best Team Combinations
+                    </CardTitle>
+                    <CardDescription>
+                      Agents that work exceptionally well with {selectedAgent.name}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-3 p-3 rounded-lg border border-gray-200">
+                        <div className="h-12 w-12 rounded-lg bg-green-500 text-white flex items-center justify-center flex-shrink-0">
+                          <Search className="h-6 w-6" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-medium">SEO Specialist</h4>
+                            <Badge variant="outline" className="bg-green-50 text-green-700">95% Compatibility</Badge>
+                          </div>
+                          <p className="text-sm text-gray-600 mt-1">
+                            Optimizes your content for search engines while preserving the persuasive copy.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-3 p-3 rounded-lg border border-gray-200">
+                        <div className="h-12 w-12 rounded-lg bg-pink-500 text-white flex items-center justify-center flex-shrink-0">
+                          <MessageSquare className="h-6 w-6" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-medium">Social Media Strategist</h4>
+                            <Badge variant="outline" className="bg-green-50 text-green-700">92% Compatibility</Badge>
+                          </div>
+                          <p className="text-sm text-gray-600 mt-1">
+                            Adapts your copywriting to multiple social platforms while maintaining brand voice.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-3 p-3 rounded-lg border border-gray-200">
+                        <div className="h-12 w-12 rounded-lg bg-orange-500 text-white flex items-center justify-center flex-shrink-0">
+                          <BarChart3 className="h-6 w-6" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-medium">Analytics Advisor</h4>
+                            <Badge variant="outline" className="bg-green-50 text-green-700">90% Compatibility</Badge>
+                          </div>
+                          <p className="text-sm text-gray-600 mt-1">
+                            Provides data-driven insights to improve copywriting performance over time.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-xl">
+                      <Zap className="h-5 w-5 mr-2 text-yellow-500" />
+                      Quick Team Builder
+                    </CardTitle>
+                    <CardDescription>
+                      Create an optimized team with this agent
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="p-3 rounded-lg border border-gray-200 bg-blue-50">
+                        <h4 className="font-medium mb-1">Content Dream Team</h4>
+                        <div className="flex items-center gap-1 mb-2">
+                          <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs">CP</div>
+                          <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs">SEO</div>
+                          <div className="h-8 w-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs">ED</div>
+                        </div>
+                        <p className="text-xs text-gray-600 mb-2">
+                          3 agents optimized for content creation and distribution
+                        </p>
+                        <Button size="sm" className="w-full bg-blue-600">
+                          Build This Team
+                        </Button>
+                      </div>
+                      
+                      <div className="p-3 rounded-lg border border-gray-200 bg-green-50">
+                        <h4 className="font-medium mb-1">SEO Power Squad</h4>
+                        <div className="flex items-center gap-1 mb-2">
+                          <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs">CP</div>
+                          <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs">SEO</div>
+                          <div className="h-8 w-8 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs">AA</div>
+                        </div>
+                        <p className="text-xs text-gray-600 mb-2">
+                          3 agents focused on SEO-optimized content
+                        </p>
+                        <Button size="sm" className="w-full bg-green-600">
+                          Build This Team
+                        </Button>
+                      </div>
+                      
+                      <div className="p-3 rounded-lg border border-gray-200 bg-purple-50">
+                        <h4 className="font-medium mb-1">Marketing Automation Suite</h4>
+                        <div className="flex items-center gap-1 mb-2">
+                          <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs">CP</div>
+                          <div className="h-8 w-8 rounded-full bg-pink-500 flex items-center justify-center text-white text-xs">SM</div>
+                          <div className="h-8 w-8 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs">AA</div>
+                          <div className="h-8 w-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs">AP</div>
+                        </div>
+                        <p className="text-xs text-gray-600 mb-2">
+                          4 agents for complete marketing automation
+                        </p>
+                        <Button size="sm" className="w-full bg-purple-600">
+                          Build This Team
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-xl">
+                    <GitMerge className="h-5 w-5 mr-2 text-blue-600" />
+                    Integration Instructions
+                  </CardTitle>
+                  <CardDescription>
+                    How to incorporate this agent into your workflow
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <h4 className="font-medium mb-1 flex items-center">
+                        <Code className="h-5 w-5 mr-2 text-gray-600" />
+                        API Integration
+                      </h4>
+                      <p className="text-sm text-gray-600 mb-2">
+                        Use our simple API to incorporate Copywriting Pro into your applications:
+                      </p>
+                      <pre className="bg-gray-900 text-gray-100 p-3 rounded text-xs overflow-auto">
+{`// Example API Call
+fetch('https://api.aimarketingplatform.com/agents/execute', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    agentId: 'copywriting-pro',
+    input: {
+      type: 'landing-page',
+      brand: 'Your Brand',
+      targetAudience: 'Marketing Professionals',
+      keyFeatures: ['Feature 1', 'Feature 2']
+    }
+  })
+})`}
+                      </pre>
+                    </div>
+                    
+                    <div className="flex items-start gap-3 p-3 rounded-lg border border-gray-200">
+                      <div className="h-10 w-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+                        <Settings className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium">No-Code Integration</h4>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Easily connect this agent to your existing tools with our drag-and-drop workflow builder. No coding required.
+                        </p>
+                        <Button size="sm" variant="outline" className="mt-2">
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          View Integrations
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3 p-3 rounded-lg border border-gray-200">
+                      <div className="h-10 w-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0">
+                        <HelpCircle className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium">Need Integration Help?</h4>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Our team can help you integrate this agent into your existing systems. Book a free consultation call with our integration specialists.
+                        </p>
+                        <Button size="sm" variant="outline" className="mt-2">
+                          <Calendar className="mr-2 h-4 w-4" />
+                          Schedule Call
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="reviews" className={selectedTab === "reviews" ? "" : "hidden"}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-xl">
+                      <Star className="h-5 w-5 mr-2 text-yellow-500 fill-yellow-500" />
+                      Ratings Overview
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col items-center mb-6">
+                      <div className="text-5xl font-bold">{selectedAgent.rating.toFixed(1) || "4.9"}</div>
+                      <div className="flex my-2">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-6 w-6 ${i < Math.floor(selectedAgent.rating || 5) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+                          />
+                        ))}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        Based on {selectedAgent.reviews || 342} reviews
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex items-center">
+                        <span className="w-10 text-right mr-2">5 ★</span>
+                        <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full bg-yellow-500 rounded-full" style={{ width: '82%' }}></div>
+                        </div>
+                        <span className="w-10 text-left ml-2 text-sm">82%</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="w-10 text-right mr-2">4 ★</span>
+                        <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full bg-yellow-500 rounded-full" style={{ width: '12%' }}></div>
+                        </div>
+                        <span className="w-10 text-left ml-2 text-sm">12%</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="w-10 text-right mr-2">3 ★</span>
+                        <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full bg-yellow-500 rounded-full" style={{ width: '4%' }}></div>
+                        </div>
+                        <span className="w-10 text-left ml-2 text-sm">4%</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="w-10 text-right mr-2">2 ★</span>
+                        <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full bg-yellow-500 rounded-full" style={{ width: '1%' }}></div>
+                        </div>
+                        <span className="w-10 text-left ml-2 text-sm">1%</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="w-10 text-right mr-2">1 ★</span>
+                        <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full bg-yellow-500 rounded-full" style={{ width: '1%' }}></div>
+                        </div>
+                        <span className="w-10 text-left ml-2 text-sm">1%</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-xl">
+                      <MessageSquare className="h-5 w-5 mr-2 text-blue-600" />
+                      User Testimonials
+                    </CardTitle>
+                    <CardDescription>
+                      What users are saying about this agent
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {(selectedAgent.testimonials || defaultReviews).map((review, index) => (
+                        <div key={index} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                          <div className="flex justify-between mb-1">
+                            <div className="flex items-center">
+                              <Avatar className="h-6 w-6 mr-2">
+                                <AvatarFallback>{review.name[0]}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <span className="font-medium">{review.name}</span>
+                                <span className="text-xs text-gray-500 ml-2">{review.company}</span>
+                              </div>
+                            </div>
+                            <div className="flex">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-4 w-4 ${i < review.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-600">"{review.text || review.content}"</p>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="flex justify-center mt-4">
+                      <Button variant="outline">
+                        View All Reviews
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="performance" className={selectedTab === "performance" ? "" : "hidden"}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-xl">
+                      <LineChart className="h-5 w-5 mr-2 text-blue-600" />
+                      Performance Metrics
+                    </CardTitle>
+                    <CardDescription>
+                      Key indicators of agent effectiveness
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-medium">Conversion Rate Improvement</span>
+                          <span className="text-green-600 font-medium">+37%</span>
+                        </div>
+                        <Progress value={37} max={100} className="h-2.5 bg-gray-100" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-600" />
+                        <p className="text-xs text-gray-500 mt-1">Average improvement in landing page conversion rates</p>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-medium">Engagement Score</span>
+                          <span className="text-green-600 font-medium">+42%</span>
+                        </div>
+                        <Progress value={42} max={100} className="h-2.5 bg-gray-100" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-600" />
+                        <p className="text-xs text-gray-500 mt-1">Average increase in content engagement metrics</p>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-medium">Output Quality</span>
+                          <span className="text-green-600 font-medium">98%</span>
+                        </div>
+                        <Progress value={98} max={100} className="h-2.5 bg-gray-100" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-600" />
+                        <p className="text-xs text-gray-500 mt-1">Quality rating based on human evaluators</p>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-medium">Creativity Score</span>
+                          <span className="text-green-600 font-medium">95%</span>
+                        </div>
+                        <Progress value={95} max={100} className="h-2.5 bg-gray-100" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-600" />
+                        <p className="text-xs text-gray-500 mt-1">Originality and creative approach rating</p>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-medium">Consistency Rating</span>
+                          <span className="text-green-600 font-medium">96%</span>
+                        </div>
+                        <Progress value={96} max={100} className="h-2.5 bg-gray-100" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-600" />
+                        <p className="text-xs text-gray-500 mt-1">Consistency across multiple content pieces</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-xl">
+                      <Scale className="h-5 w-5 mr-2 text-blue-600" />
+                      Benchmarking
+                    </CardTitle>
+                    <CardDescription>
+                      How this agent compares to alternatives
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="mb-6">
+                      <h4 className="font-medium mb-4">Human vs AI Copywriter Comparison</h4>
+                      
+                      <div className="space-y-4">
+                        <div className="flex items-center">
+                          <div className="w-24 text-sm font-medium">Speed</div>
+                          <div className="flex-1 flex items-center">
+                            <div className="w-1/2 text-right pr-2 text-sm text-gray-600">Human: 1x</div>
+                            <div className="bg-blue-600 text-white text-xs px-3 py-1 rounded-full">AI: 8.5x faster</div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center">
+                          <div className="w-24 text-sm font-medium">Cost Efficiency</div>
+                          <div className="flex-1 flex items-center">
+                            <div className="w-1/2 text-right pr-2 text-sm text-gray-600">Human: 1x</div>
+                            <div className="bg-blue-600 text-white text-xs px-3 py-1 rounded-full">AI: 83% less</div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center">
+                          <div className="w-24 text-sm font-medium">Consistency</div>
+                          <div className="flex-1 flex items-center">
+                            <div className="w-1/2 text-right pr-2 text-sm text-gray-600">Human: Variable</div>
+                            <div className="bg-blue-600 text-white text-xs px-3 py-1 rounded-full">AI: 98% consistent</div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center">
+                          <div className="w-24 text-sm font-medium">Creativity</div>
+                          <div className="flex-1 flex items-center">
+                            <div className="w-1/2 text-right pr-2 text-sm text-gray-600">Human: Still leads</div>
+                            <div className="bg-purple-600 text-white text-xs px-3 py-1 rounded-full">AI: 85% as creative</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-3">AI Agent Version History</h4>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between items-center p-2 bg-green-50 rounded-md">
+                          <div>
+                            <span className="font-medium text-green-700">Current</span>
+                            <span className="ml-2">Version 3.5</span>
+                          </div>
+                          <span className="text-gray-500">Released 2 weeks ago</span>
+                        </div>
+                        
+                        <div className="flex justify-between items-center p-2">
+                          <div>
+                            <span className="font-medium">Version 3.0</span>
+                          </div>
+                          <span className="text-gray-500">Released 3 months ago</span>
+                        </div>
+                        
+                        <div className="flex justify-between items-center p-2">
+                          <div>
+                            <span className="font-medium">Version 2.5</span>
+                          </div>
+                          <span className="text-gray-500">Released 6 months ago</span>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-4">
+                        <h5 className="font-medium text-sm mb-2">Recent Improvements</h5>
+                        <ul className="text-xs space-y-1 text-gray-600">
+                          <li className="flex items-start">
+                            <span className="inline-block mr-1">-</span>
+                            <span>Enhanced understanding of brand voice</span>
+                          </li>
+                          <li className="flex items-start">
+                            <span className="inline-block mr-1">-</span>
+                            <span>Improved headline generation capabilities</span>
+                          </li>
+                          <li className="flex items-start">
+                            <span className="inline-block mr-1">-</span>
+                            <span>Better optimization for different platforms</span>
+                          </li>
+                          <li className="flex items-start">
+                            <span className="inline-block mr-1">-</span>
+                            <span>Advanced emotional intelligence in writing</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <Card className="border border-gray-200 dark:border-gray-700 shadow-sm p-6 mb-8">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold">Ready to supercharge your marketing?</h3>
+                    <p className="text-gray-600">Add Copywriting Pro to your team and start creating compelling content today.</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <Button className="bg-blue-600 hover:bg-blue-700">
+                      <PlusCircle className="mr-2 h-4 w-4" />
+                      Add to Team
+                    </Button>
+                    <Button variant="outline">
+                      <Zap className="mr-2 h-4 w-4" />
+                      Try Demo
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+              
+              {/* Related Agents */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold">Related Agents</h3>
+                  <Button variant="ghost" size="sm" className="text-blue-600">
+                    View All <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <CardContent className="pt-4">
+                      <div className="flex items-start gap-3">
+                        <div className="h-12 w-12 rounded-lg bg-green-500 text-white flex items-center justify-center">
+                          <Search className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium">SEO Specialist</h4>
+                          <div className="text-sm text-green-600">95% Compatible</div>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <Button variant="outline" size="sm" className="w-full">
+                          View Details
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <CardContent className="pt-4">
+                      <div className="flex items-start gap-3">
+                        <div className="h-12 w-12 rounded-lg bg-pink-500 text-white flex items-center justify-center">
+                          <MessageSquare className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium">Social Media Strategist</h4>
+                          <div className="text-sm text-green-600">92% Compatible</div>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <Button variant="outline" size="sm" className="w-full">
+                          View Details
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <CardContent className="pt-4">
+                      <div className="flex items-start gap-3">
+                        <div className="h-12 w-12 rounded-lg bg-orange-500 text-white flex items-center justify-center">
+                          <BarChart3 className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium">Analytics Advisor</h4>
+                          <div className="text-sm text-green-600">90% Compatible</div>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <Button variant="outline" size="sm" className="w-full">
+                          View Details
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </TabsContent>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}

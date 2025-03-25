@@ -1,0 +1,92 @@
+🔥 Ultimate Prompt: AI-Powered FAQ Section – Modern, Engaging, and Adapted to the Landing Page
+
+This prompt ensures that the FAQ section matches the modern, sleek, and high-converting style of the landing page. It adapts to the AI agent styling while keeping the user experience frictionless and visually appealing.
+
+⸻
+
+🎯 Goal (Objective) – What Needs to Be Designed?
+
+Create a visually engaging, easy-to-navigate FAQ section that fits seamlessly into the AI-powered landing page’s design.
+✅ Use the same clean, modern, high-tech UI style as the AI agent section.
+✅ Ensure smooth interactions, micro-animations, and premium design.
+✅ Keep the layout sleek, mobile-friendly, and intuitive.
+
+⸻
+
+📌 Visual & UX Design Requirements
+
+🔥 1️⃣ Modern Styling That Matches the Landing Page
+
+✅ Typography & Colors:
+	•	Keep bold, high-contrast text for readability.
+	•	Use light/dark mode support for adaptability.
+	•	Match gradient and neon-accented elements (like the AI agent cards).
+
+✅ Minimalist but High-Impact Design:
+	•	Rounded card-style FAQ boxes for a premium feel.
+	•	Subtle shadows & soft gradients to create depth.
+	•	Modern, legible typography with clear section spacing.
+
+✅ Headline Example:
+	•	“Have Questions? We’ve Got Answers.”
+	•	“AI-Powered Content Creation—Everything You Need to Know.”
+
+⸻
+
+🔄 2️⃣ Interactive Accordion System for FAQ Expansion
+
+✅ FAQ questions should be in an expandable accordion format (already provided in the code).
+✅ Clicking a question smoothly expands it—revealing the answer without page reloads.
+✅ Micro-animations:
+	•	Smooth fade-in effect when expanding answers.
+	•	Hover effect on questions (light glow or underline animation).
+	•	Chevron icon rotates smoothly when a question is expanded.
+
+✅ Example Interaction Flow:
+	•	Default state: Questions are collapsed for a clean look.
+	•	On hover: Slight text glow effect to signal interactivity.
+	•	On click: Answer expands smoothly, with a soft drop shadow for depth.
+
+⸻
+
+⚡ 3️⃣ Dynamic Category Tags for Better Organization
+
+✅ Each question should have a category tag for faster navigation.
+✅ Example tags:
+	•	[AI Functionality] → “How does AI replace my content team?”
+	•	[Customization] → “Can AI match my brand’s tone?”
+	•	[Security] → “Is my data secure?”
+✅ Category tags should be color-coded (light-gray backgrounds, slightly darker text).
+
+⸻
+
+🎨 4️⃣ Enhanced Contact Section for User Engagement
+
+✅ Call-to-Action (CTA) Below FAQ:
+	•	“Still have questions? Chat with AI or Book a Demo.”
+✅ Live Chat Integration:
+	•	AI-powered chatbot for instant answers (floating chat button).
+✅ Quick Contact Button:
+	•	Minimalist button under the FAQ → “Talk to an Expert” or “Ask AI”
+
+⸻
+
+⚙️ Technical Considerations
+
+✅ Use Framer Motion or GSAP for smooth transitions.
+✅ Fast-loading animations—no lag, fully optimized.
+✅ Mobile-friendly: Ensure responsive scaling for all elements.
+✅ Light/Dark Mode: Adjust colors dynamically based on user preference.
+
+⸻
+
+🏆 Final Goal: Make the FAQ Section Feel Premium, Intuitive, and Trust-Building
+
+🔥 Users should have ZERO friction in finding answers.
+🔥 Animations should feel smooth, lightweight, and engaging.
+🔥 The design should visually blend with the AI-powered landing page.
+🔥 Live chat & CTA should reinforce instant support & AI reliability.
+
+⸻
+
+💎 With this design, the FAQ section won’t just answer questions—it will CONVERT users by making AI feel trustworthy, advanced, and intuitive. 🚀 Let’s build something legendary!

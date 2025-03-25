@@ -1,0 +1,41 @@
+🎯 Goal:
+
+Perform a deep, full-scale stability audit to identify ANY potential reasons why the app might fail to run in the future and propose solutions to prevent issues before they happen.
+
+📌 Return Format:
+	1.	Structural Weakness Analysis (Code & Architecture):
+	•	Detect poor backend design patterns, inefficient API structures, or bad database schemas.
+	•	Identify high-risk dependencies or unmaintainable code that could break in future updates.
+	•	Look for hardcoded values, security vulnerabilities, or bad state management practices.
+	2.	Scalability & Load Testing Risks:
+	•	Find weak points that might cause crashes under high traffic or data load.
+	•	Ensure API calls, queries, and background jobs won’t overload the system.
+	•	Check if the app can scale properly with more users or larger datasets.
+	3.	Security & Compliance Issues:
+	•	Identify vulnerabilities that could cause app failures (e.g., expired tokens, misconfigured CORS, bad authentication).
+	•	Analyze how error handling is implemented to prevent silent failures.
+	•	Ensure dependencies and security policies won’t block app functionality in the future.
+	4.	Deployment & Environment Stability:
+	•	Verify if server, database, and third-party services are correctly configured for long-term stability.
+	•	Detect any missing environment variables, misconfigurations, or expired certificates that could break the app.
+	•	Ensure smooth CI/CD pipeline & error logging to catch failures before deployment.
+	5.	Proactive Fixes & Prevention Strategy:
+	•	List specific solutions to fix all detected risks before they cause downtime.
+	•	Suggest monitoring tools to track app health and prevent sudden failures.
+	•	Ensure future updates won’t introduce new bugs or compatibility issues.
+
+⚠️ Warnings:
+
+🚨 Investigate everything thoroughly—backend, frontend, database, security, and deployment.
+🚨 Do NOT assume anything is fine—if there’s a risk, document it!
+🚨 Propose clear solutions for every identified issue—no vague suggestions!
+
+📂 Context Dump:
+
+🔹 The app keeps breaking or failing unexpectedly.
+🔹 I need a complete list of everything that could cause it to fail in the future.
+🔹 I want solutions upfront so I don’t have to keep fixing the same problems repeatedly.
+
+⸻
+
+This forces the assistant to dig deep into all potential failure points and provide specific, actionable fixes. Let me know if you need more refinements! 🚀

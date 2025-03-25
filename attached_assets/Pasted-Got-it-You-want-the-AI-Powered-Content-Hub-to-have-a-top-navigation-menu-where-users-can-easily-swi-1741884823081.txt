@@ -1,0 +1,79 @@
+Got it! You want the AI-Powered Content Hub to have a top navigation menu where users can easily switch between different content types before generating content. This should follow the structured prompt system we defined earlier to ensure high-quality AI output.
+
+⸻
+
+🔥 Ultimate Prompt for AI-Powered Content Hub UI & Functionality
+
+🎯 Goal:
+Create an AI-powered Content Hub with an intuitive, structured workflow that guides users through content creation step by step. The interface should be visually sleek, modern, and optimized for engagement and ease of use.
+
+⸻
+
+📌 Top Navigation Menu (Content Type Selector)
+
+✅ Fixed at the top of the Content Hub so users can instantly switch between content types.
+✅ Tab-style menu with soft-rounded buttons, ensuring a clean, seamless user experience.
+✅ Default selection: “Blog Post” (can be changed dynamically).
+✅ Hover & Active Effects:
+	•	Selected tab has a subtle shadow and color change.
+	•	Unselected tabs have a muted, clean look to avoid distraction.
+✅ Ensure full responsiveness: On mobile, the tabs should be scrollable/swipeable instead of overflowing.
+
+🔹 Content Type Tabs:
+	•	📝 Blog Post (Long-form, SEO-optimized, thought leadership)
+	•	📢 Social Post (Short-form, engaging, designed for high reach)
+	•	📧 Email (Marketing, sales, follow-ups, newsletters)
+	•	📊 Ad Copy (High-converting Facebook, Google, LinkedIn ads)
+	•	🔎 SEO Content (Keyword-optimized web pages & content briefs)
+	•	🎬 Video Script (YouTube, TikTok, Instagram Reels, Podcast Scripts)
+
+⸻
+
+📌 AI-Powered Content Generation Process (Ensuring High-Quality Output)
+
+Users don’t just type a vague prompt—instead, AI guides them through a structured process for maximum accuracy.
+
+✅ 1️⃣ Context-Aware AI Input System
+	•	Instead of a basic text box, users are prompted with structured questions to ensure high-quality AI outputs.
+	•	Example for Ad Copy:
+	•	“What product/service is this ad for?”
+	•	“What’s the main offer or hook?”
+	•	“Which platform will this run on?” (Facebook, Google, LinkedIn, TikTok)
+
+✅ 2️⃣ AI Live Preview (Real-Time Suggestions)
+	•	As users enter input, AI previews how the final content will look.
+	•	If the input is too vague, AI suggests improvements dynamically.
+	•	Example:
+	•	If the user types “Create an ad for a fitness product”, AI responds:
+“Would you like to target beginners, athletes, or weight loss customers?”
+
+✅ 3️⃣ Dynamic AI Adjustments Based on User Preferences
+	•	Tone of voice selector (Friendly, Professional, Bold, Witty).
+	•	Length settings (Short, Medium, Long).
+	•	SEO & Engagement Enhancements (Keyword suggestions for SEO, emotional triggers for ads).
+
+✅ 4️⃣ Generated Content Output (Clean & Editable)
+	•	Content loads with smooth animations.
+	•	Users can edit, refine, or regenerate specific sections.
+	•	AI provides alternative versions to improve variations.
+
+⸻
+
+📌 Final UI & Interaction Details
+
+🔥 Minimalist, modern, and clean design with soft animations.
+🔥 Real-time AI guidance ensures users never get bad content.
+🔥 Mobile-friendly interactions for seamless usability.
+🔥 A structured system that ensures every AI-generated piece is high-quality.
+
+⸻
+
+🚀 Final Objective
+
+📌 Users don’t just “prompt” the AI—they are guided through a structured process to guarantee better marketing content with less effort.
+📌 The top navigation menu makes switching between content types effortless.
+📌 AI adapts based on context, ensuring outputs are always relevant and optimized.
+
+⸻
+
+This ensures your AI Content Hub is next-level, intuitive, and high-performing. Let me know if you want any tweaks! 🚀🔥

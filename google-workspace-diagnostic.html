@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Workspace Integration Diagnostic</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f7f8fa;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin-top: 0;
+      color: #2563eb;
+    }
+    h2 {
+      color: #4b5563;
+      margin-top: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 0.5rem;
+    }
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .card-header {
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .status {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .status-unknown {
+      background-color: #f3f4f6;
+      color: #4b5563;
+    }
+    .status-success {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    .status-warning {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    .status-error {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    button:disabled {
+      background: #93c5fd;
+      cursor: not-allowed;
+    }
+    pre {
+      background: #f1f5f9;
+      padding: 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 14px;
+    }
+    .actions {
+      margin-top: 16px;
+    }
+    #log {
+      background: #111827;
+      color: #f9fafb;
+      padding: 12px;
+      border-radius: 4px;
+      height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      margin-top: 16px;
+    }
+    .log-entry {
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .log-info {
+      color: #93c5fd;
+    }
+    .log-success {
+      color: #6ee7b7;
+    }
+    .log-warning {
+      color: #fcd34d;
+    }
+    .log-error {
+      color: #fca5a5;
+    }
+    .hidden {
+      display: none;
+    }
+    .tabs {
+      display: flex;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .tab {
+      padding: 8px 16px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .tab.active {
+      border-bottom: 2px solid #2563eb;
+      color: #2563eb;
+      font-weight: 500;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Google Workspace Integration Diagnostic</h1>
+    <p>Esta herramienta le ayuda a verificar la configuración de la integración con Google Workspace y solucionar problemas comunes.</p>
+    
+    <div class="tabs">
+      <div class="tab active" data-tab="status">Estado</div>
+      <div class="tab" data-tab="google-drive">Google Drive</div>
+      <div class="tab" data-tab="google-docs">Google Docs</div>
+      <div class="tab" data-tab="settings">Configuración</div>
+    </div>
+    
+    <div class="tab-content active" id="status-tab">
+      <h2>Estado de integración</h2>
+      
+      <div class="card">
+        <div class="card-header">
+          <span>API Server</span>
+          <span id="api-server-status" class="status status-unknown">Verificando...</span>
+        </div>
+        <p>Estado del servidor API principal.</p>
+        <div class="actions">
+          <button id="check-api-server">Verificar servidor API</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span>Google Drive API</span>
+          <span id="google-drive-status" class="status status-unknown">Verificando...</span>
+        </div>
+        <p>Estado de la integración con Google Drive.</p>
+        <div class="actions">
+          <button id="check-drive-status">Verificar estado</button>
+          <button id="test-drive-auth" disabled>Probar autenticación</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span>Google Docs API</span>
+          <span id="google-docs-status" class="status status-unknown">Verificando...</span>
+        </div>
+        <p>Estado de la integración con Google Docs.</p>
+        <div class="actions">
+          <button id="check-docs-status">Verificar estado</button>
+          <button id="test-docs-auth" disabled>Probar autenticación</button>
+        </div>
+      </div>
+      
+      <div id="log">
+        <div class="log-entry log-info">// Registro de eventos aparecerá aquí...</div>
+      </div>
+    </div>
+    
+    <div class="tab-content" id="google-drive-tab">
+      <h2>Google Drive</h2>
+      
+      <div class="card">
+        <div class="card-header">
+          <span>Funcionalidades</span>
+        </div>
+        <p>Pruebe las funcionalidades específicas de Google Drive.</p>
+        <div class="actions">
+          <button id="list-drive-files" disabled>Listar archivos</button>
+          <button id="create-test-folder" disabled>Crear carpeta de prueba</button>
+          <button id="upload-test-file" disabled>Subir archivo de prueba</button>
+        </div>
+      </div>
+      
+      <div id="drive-results"></div>
+    </div>
+    
+    <div class="tab-content" id="google-docs-tab">
+      <h2>Google Docs</h2>
+      
+      <div class="card">
+        <div class="card-header">
+          <span>Funcionalidades</span>
+        </div>
+        <p>Pruebe las funcionalidades específicas de Google Docs.</p>
+        <div class="actions">
+          <button id="list-docs" disabled>Listar documentos</button>
+          <button id="create-test-doc" disabled>Crear documento de prueba</button>
+          <button id="read-test-doc" disabled>Leer documento</button>
+        </div>
+      </div>
+      
+      <div id="docs-results"></div>
+    </div>
+    
+    <div class="tab-content" id="settings-tab">
+      <h2>Configuración</h2>
+      
+      <div class="card">
+        <div class="card-header">
+          <span>Métodos de autenticación</span>
+        </div>
+        <p>Elija el método de autenticación preferido.</p>
+        <div>
+          <input type="radio" id="oauth" name="auth-method" value="oauth" checked>
+          <label for="oauth">OAuth 2.0 (integración de usuario final)</label>
+          
+          <div class="oauth-settings" style="margin-left: 24px; margin-top: 8px;">
+            <p><strong>Redirect URI:</strong> <span id="redirect-uri">https://[su-dominio].repl.co/api/google-drive/callback</span></p>
+            <p>Asegúrese de que esta URI de redirección esté configurada en la consola de desarrolladores de Google.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <input type="radio" id="service-account" name="auth-method" value="service-account">
+          <label for="service-account">Cuenta de servicio (integración a nivel de servidor)</label>
+          
+          <div class="service-account-settings hidden" style="margin-left: 24px; margin-top: 8px;">
+            <p>Suba un archivo de credenciales de cuenta de servicio JSON.</p>
+            <input type="file" id="service-account-file" accept=".json">
+          </div>
+        </div>
+        <div class="actions" style="margin-top: 16px;">
+          <button id="save-auth-settings">Guardar configuración</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span>Scopes</span>
+        </div>
+        <p>Permisos de API requeridos.</p>
+        <div>
+          <div style="margin-bottom: 8px;">
+            <input type="checkbox" id="scope-drive-file" checked>
+            <label for="scope-drive-file">https://www.googleapis.com/auth/drive.file (Acceso a archivos creados por la aplicación)</label>
+          </div>
+          <div style="margin-bottom: 8px;">
+            <input type="checkbox" id="scope-drive-readonly" checked>
+            <label for="scope-drive-readonly">https://www.googleapis.com/auth/drive.metadata.readonly (Ver metadatos de archivos)</label>
+          </div>
+          <div>
+            <input type="checkbox" id="scope-docs" checked>
+            <label for="scope-docs">https://www.googleapis.com/auth/documents (Acceso a Google Docs)</label>
+          </div>
+        </div>
+        <div class="actions" style="margin-top: 16px;">
+          <button id="save-scopes">Guardar scopes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab switching
+      const tabs = document.querySelectorAll('.tab');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabId = tab.dataset.tab;
+          
+          // Update active tab
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Show selected tab content
+          tabContents.forEach(content => {
+            content.classList.remove('active');
+            if (content.id === `${tabId}-tab`) {
+              content.classList.add('active');
+            }
+          });
+        });
+      });
+      
+      // Log function
+      const logElement = document.getElementById('log');
+      
+      function log(message, type = 'info') {
+        const entry = document.createElement('div');
+        entry.className = `log-entry log-${type}`;
+        entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        logElement.appendChild(entry);
+        logElement.scrollTop = logElement.scrollHeight;
+      }
+      
+      // Auth method selection
+      const oauthRadio = document.getElementById('oauth');
+      const serviceAccountRadio = document.getElementById('service-account');
+      const oauthSettings = document.querySelector('.oauth-settings');
+      const serviceAccountSettings = document.querySelector('.service-account-settings');
+      
+      oauthRadio.addEventListener('change', () => {
+        oauthSettings.classList.remove('hidden');
+        serviceAccountSettings.classList.add('hidden');
+      });
+      
+      serviceAccountRadio.addEventListener('change', () => {
+        oauthSettings.classList.add('hidden');
+        serviceAccountSettings.classList.remove('hidden');
+      });
+      
+      // Update redirect URI with current domain
+      const redirectUriElement = document.getElementById('redirect-uri');
+      redirectUriElement.textContent = `${window.location.origin}/api/google-drive/callback`;
+      
+      // API Server check
+      const apiServerStatusElement = document.getElementById('api-server-status');
+      const checkApiServerButton = document.getElementById('check-api-server');
+      
+      checkApiServerButton.addEventListener('click', async () => {
+        apiServerStatusElement.className = 'status status-unknown';
+        apiServerStatusElement.textContent = 'Verificando...';
+        log('Verificando estado del servidor API...');
+        
+        try {
+          const response = await fetch('/api/health');
+          const data = await response.json();
+          
+          if (response.ok) {
+            apiServerStatusElement.className = 'status status-success';
+            apiServerStatusElement.textContent = 'Activo';
+            log(`Servidor API activo: ${JSON.stringify(data)}`, 'success');
+          } else {
+            apiServerStatusElement.className = 'status status-error';
+            apiServerStatusElement.textContent = 'Error';
+            log(`Error al verificar el servidor API: ${JSON.stringify(data)}`, 'error');
+          }
+        } catch (error) {
+          apiServerStatusElement.className = 'status status-error';
+          apiServerStatusElement.textContent = 'Error';
+          log(`Error de conexión al servidor API: ${error.message}`, 'error');
+        }
+      });
+      
+      // Google Drive status check
+      const googleDriveStatusElement = document.getElementById('google-drive-status');
+      const checkDriveStatusButton = document.getElementById('check-drive-status');
+      const testDriveAuthButton = document.getElementById('test-drive-auth');
+      
+      checkDriveStatusButton.addEventListener('click', async () => {
+        googleDriveStatusElement.className = 'status status-unknown';
+        googleDriveStatusElement.textContent = 'Verificando...';
+        log('Verificando estado de Google Drive API...');
+        
+        try {
+          const response = await fetch('/api/google-drive/status');
+          
+          // Add a 3 second timeout
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout')), 3000)
+          );
+          
+          const dataPromise = response.json();
+          const data = await Promise.race([dataPromise, timeoutPromise]);
+          
+          if (response.ok) {
+            googleDriveStatusElement.className = 'status status-success';
+            googleDriveStatusElement.textContent = 'Configurado';
+            log(`Google Drive API configurada: ${JSON.stringify(data)}`, 'success');
+            testDriveAuthButton.disabled = false;
+            document.getElementById('list-drive-files').disabled = false;
+            document.getElementById('create-test-folder').disabled = false;
+            document.getElementById('upload-test-file').disabled = false;
+          } else {
+            googleDriveStatusElement.className = 'status status-warning';
+            googleDriveStatusElement.textContent = 'No configurado';
+            log(`Google Drive API no configurada: ${JSON.stringify(data)}`, 'warning');
+          }
+        } catch (error) {
+          if (error.message === 'Timeout') {
+            googleDriveStatusElement.className = 'status status-warning';
+            googleDriveStatusElement.textContent = 'Timeout';
+            log('La verificación de Google Drive API excedió el tiempo límite.', 'warning');
+          } else {
+            googleDriveStatusElement.className = 'status status-error';
+            googleDriveStatusElement.textContent = 'Error';
+            log(`Error al verificar Google Drive API: ${error.message}`, 'error');
+          }
+        }
+      });
+      
+      // Google Docs status check
+      const googleDocsStatusElement = document.getElementById('google-docs-status');
+      const checkDocsStatusButton = document.getElementById('check-docs-status');
+      const testDocsAuthButton = document.getElementById('test-docs-auth');
+      
+      checkDocsStatusButton.addEventListener('click', async () => {
+        googleDocsStatusElement.className = 'status status-unknown';
+        googleDocsStatusElement.textContent = 'Verificando...';
+        log('Verificando estado de Google Docs API...');
+        
+        try {
+          const response = await fetch('/api/google-docs/status');
+          
+          // Add a 3 second timeout
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout')), 3000)
+          );
+          
+          const dataPromise = response.json();
+          const data = await Promise.race([dataPromise, timeoutPromise]);
+          
+          if (response.ok) {
+            googleDocsStatusElement.className = 'status status-success';
+            googleDocsStatusElement.textContent = 'Configurado';
+            log(`Google Docs API configurada: ${JSON.stringify(data)}`, 'success');
+            testDocsAuthButton.disabled = false;
+            document.getElementById('list-docs').disabled = false;
+            document.getElementById('create-test-doc').disabled = false;
+            document.getElementById('read-test-doc').disabled = false;
+          } else {
+            googleDocsStatusElement.className = 'status status-warning';
+            googleDocsStatusElement.textContent = 'No configurado';
+            log(`Google Docs API no configurada: ${JSON.stringify(data)}`, 'warning');
+          }
+        } catch (error) {
+          if (error.message === 'Timeout') {
+            googleDocsStatusElement.className = 'status status-warning';
+            googleDocsStatusElement.textContent = 'Timeout';
+            log('La verificación de Google Docs API excedió el tiempo límite.', 'warning');
+          } else {
+            googleDocsStatusElement.className = 'status status-error';
+            googleDocsStatusElement.textContent = 'Error';
+            log(`Error al verificar Google Docs API: ${error.message}`, 'error');
+          }
+        }
+      });
+      
+      // Run API server check automatically on load
+      setTimeout(() => {
+        checkApiServerButton.click();
+        
+        // After server check succeeds, check Google services
+        setTimeout(() => {
+          checkDriveStatusButton.click();
+          checkDocsStatusButton.click();
+        }, 1000);
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build files
+dist/
+build/
+.next/
+.cache/
+
+# OS files
+.DS_Store
+
+# Credentials and sensitive data
+*.service-account.json
+*client_secret*.json
+credentials/
+attached_assets/*.json
+token.json
+
+# Other
+coverage/
+
+server/public
+vite.config.ts.*
+*.tar.gz

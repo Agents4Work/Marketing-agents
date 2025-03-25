@@ -1,0 +1,51 @@
+Great! Here’s the updated prompt incorporating AI auto-suggestions for headline improvements based on engagement scores:
+
+⸻
+
+🔥 AI Analyzer - Optimized Prompt for Replit AI
+
+🎯 Goal (Objective)
+Develop an AI-powered Analyzer that evaluates and optimizes marketing performance by analyzing headlines, ads, competition, and integrated data. The AI should not only analyze data but also provide real-time recommendations to improve performance.
+
+📌 Return Format (Expected Output)
+The AI should generate a fully functional analytics system with the following structure:
+
+1️⃣ Main Section (Parent Category)
+	•	AI Analyzer → The central hub for AI-driven marketing analysis.
+
+2️⃣ Subsections (Child Features under AI Analyzer Dashboard)
+	•	💡 Headline Analyzer → AI evaluates headlines for engagement potential and effectiveness.
+✅ Auto-suggests improvements based on engagement scores.
+✅ Color-coded scoring system (e.g., Red = Low Engagement, Green = High Engagement).
+✅ AI-generated headline alternatives that improve clarity, impact, and SEO.
+	•	📊 Ad Analyzer → AI assesses ad performance (CTR, engagement, conversion rates).
+✅ AI provides actionable insights on how to optimize ad copy & targeting.
+	•	🔎 Competition Analyzer → Compares marketing strategies and performance against competitors.
+✅ Users input a competitor’s URL, and AI retrieves insights on their content, ads, and engagement strategies.
+	•	📈 Ad Data Integrations → Connects with third-party ad platforms (Google Ads, Meta Ads, LinkedIn Ads) to pull in real-time performance data.
+✅ AI highlights trends and anomalies in advertising performance.
+
+⚡ Core Functionality & Workflow
+	•	Users land on Headline Analyzer by default.
+	•	AI analyzes input and provides scoring + improvement suggestions instantly.
+	•	Users can switch between Ad Analyzer, Competition Analyzer, and Ad Data Integrations seamlessly.
+	•	AI generates real-time insights, visual reports, and optimization suggestions.
+
+⚠️ Warnings & Constraints
+	•	Ensure fast AI response times for real-time feedback.
+	•	Maintain clear, intuitive UI to prevent data overload.
+	•	Scalability & API Integration → Allow connections with major ad platforms.
+
+📂 Context Dump (Additional Information)
+	•	The Headline Analyzer should provide a numerical engagement score with clear AI-powered alternatives.
+	•	The Ad Analyzer should suggest copy & design optimizations for better engagement.
+	•	The Competition Analyzer should provide insights on competitor performance & strategies.
+	•	The Ad Data Integrations should automate performance tracking across ad platforms.
+
+⸻
+
+💡 Next Steps:
+✅ Do you want the AI-generated headline alternatives to follow specific brand tone settings?
+✅ Should the AI Analyzer provide trend reports over time (e.g., headline engagement trends)?
+
+Once confirmed, we refine & deploy! 🚀🔥

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Diagnostics</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #3b82f6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --text: #1f2937;
+      --text-light: #6b7280;
+      --bg: #f9fafb;
+      --card: #ffffff;
+      --border: #e5e7eb;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+    }
+    h1, h2, h3 {
+      color: var(--primary);
+      line-height: 1.2;
+    }
+    h1 {
+      font-size: 2.25rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.75rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    h3 {
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .card {
+      background-color: var(--card);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: var(--primary-light);
+    }
+    .flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    pre {
+      background-color: #f3f4f6;
+      padding: 1rem;
+      border-radius: 0.25rem;
+      overflow-x: auto;
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+    }
+    .success {
+      color: var(--success);
+      font-weight: bold;
+    }
+    .error {
+      color: var(--error);
+      font-weight: bold;
+    }
+    .warning {
+      color: var(--warning);
+      font-weight: bold;
+    }
+    .result {
+      margin-top: 1rem;
+      border-left: 4px solid var(--border);
+      padding-left: 1rem;
+    }
+    .test-btn:disabled {
+      background-color: var(--text-light);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .progress {
+      height: 8px;
+      background-color: var(--border);
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background-color: var(--primary);
+      width: 0;
+      transition: width 0.3s ease;
+    }
+    .system-info {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .info-item {
+      flex: 1;
+      min-width: 200px;
+    }
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .tab {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .tab.active {
+      border-bottom: 2px solid var(--primary);
+      font-weight: bold;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .metrics {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .metric {
+      flex: 1;
+      min-width: 150px;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 0.5rem 0;
+    }
+    .metric-label {
+      color: var(--text-light);
+      font-size: 0.875rem;
+    }
+    #test-all {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Diagnóstico de la API de AI Marketing Platform</h1>
+  
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">Total de Pruebas</div>
+      <div class="metric-value" id="total-tests">0</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Pruebas Exitosas</div>
+      <div class="metric-value" id="success-tests">0</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Pruebas Fallidas</div>
+      <div class="metric-value" id="failed-tests">0</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Tiempo Promedio</div>
+      <div class="metric-value" id="avg-time">0ms</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Información del Sistema</h2>
+    <div class="system-info">
+      <div class="info-item">
+        <h3>Navegador</h3>
+        <p id="browser-info"></p>
+      </div>
+      <div class="info-item">
+        <h3>Red</h3>
+        <p id="network-info"></p>
+      </div>
+      <div class="info-item">
+        <h3>Entorno</h3>
+        <p>Fecha/Hora: <span id="current-time"></span></p>
+        <p>Replit Environment</p>
+      </div>
+    </div>
+    
+    <button id="run-all-tests" class="test-btn">Ejecutar Todas las Pruebas</button>
+    <div class="progress">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="core-api">API Core</div>
+    <div class="tab" data-tab="auth-api">Autenticación</div>
+    <div class="tab" data-tab="ai-api">Endpoints AI</div>
+    <div class="tab" data-tab="agent-api">Agentes AI</div>
+    <div class="tab" data-tab="response-logs">Registros</div>
+  </div>
+
+  <div class="tab-content active" id="core-api">
+    <h2>Endpoints Core de la API</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Salud del Sistema</h3>
+        <div class="flex">
+          <button class="test-btn" data-endpoint="/health">Health Check</button>
+          <button class="test-btn" data-endpoint="/api/health-cors">Health Check (CORS)</button>
+        </div>
+        <div class="result" id="result-health"></div>
+      </div>
+      
+      <div class="card">
+        <h3>Pruebas de API</h3>
+        <div class="flex">
+          <button class="test-btn" data-endpoint="/api/test">API Test</button>
+          <button class="test-btn" data-endpoint="/simple-test">Simple Test</button>
+        </div>
+        <div class="result" id="result-api-test"></div>
+      </div>
+
+      <div class="card">
+        <h3>Endpoints de Usuario</h3>
+        <div class="flex">
+          <button class="test-btn" data-endpoint="/api/users">Lista de Usuarios</button>
+          <button class="test-btn" data-endpoint="/api/users/test-uid">Usuario por ID</button>
+        </div>
+        <div class="result" id="result-users"></div>
+      </div>
+
+      <div class="card">
+        <h3>Rutas de Diagnóstico</h3>
+        <div class="flex">
+          <button class="test-btn" data-endpoint="/api/debug/routes">Rutas Disponibles</button>
+        </div>
+        <div class="result" id="result-debug"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="auth-api">
+    <h2>Endpoints de Autenticación</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Autenticación</h3>
+        <div class="flex">
+          <button class="test-btn" data-endpoint="/api/auth/me">Usuario Actual</button>
+          <button class="test-btn" data-endpoint="/api/auth/signup" data-method="POST" data-body='{"email":"test@example.com","password":"password123"}'>Registro</button>
+          <button class="test-btn" data-endpoint="/api/auth/login" data-method="POST" data-body='{"email":"test@example.com","password":"password123"}'>Login</button>
+        </div>
+        <div class="result" id="result-auth"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="ai-api">
+    <h2>Endpoints de IA</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>LangChain</h3>
+        <div class="flex">
+          <button class="test-btn" data-endpoint="/api/langchain/generate">Generar Contenido</button>
+          <button class="test-btn" data-endpoint="/api/langchain/health">Salud de LangChain</button>
+        </div>
+        <div class="result" id="result-langchain"></div>
+      </div>
+
+      <div class="card">
+        <h3>OpenAI</h3>
+        <div class="flex">
+          <button class="test-btn" data-endpoint="/api/openai/health">Salud de OpenAI</button>
+        </div>
+        <div class="result" id="result-openai"></div>
+      </div>
+
+      <div class="card">
+        <h3>Workflows</h3>
+        <div class="flex">
+          <button class="test-btn" data-endpoint="/api/workflows">Listar Workflows</button>
+          <button class="test-btn" data-endpoint="/api/workflows/custom/health">Salud de Workflows</button>
+        </div>
+        <div class="result" id="result-workflows"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="agent-api">
+    <h2>Endpoints de Agentes</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Agentes</h3>
+        <div class="flex">
+          <button class="test-btn" data-endpoint="/api/agents">Listar Agentes</button>
+          <button class="test-btn" data-endpoint="/api/agents/1">Agente por ID</button>
+          <button class="test-btn" data-endpoint="/api/agents/health">Salud de Agentes</button>
+        </div>
+        <div class="result" id="result-agents"></div>
+      </div>
+      
+      <div class="card">
+        <h3>Ejecución de Agentes</h3>
+        <div class="flex">
+          <button class="test-btn" data-endpoint="/api/agents/execute" data-method="POST" data-body='{"agentId":1,"prompt":"Test prompt"}'>Ejecutar Agente</button>
+        </div>
+        <div class="result" id="result-agent-execute"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="response-logs">
+    <h2>Registro de Respuestas</h2>
+    <div class="card">
+      <h3>Logs de Respuestas</h3>
+      <pre id="response-log">Ninguna prueba ejecutada aún...</pre>
+    </div>
+  </div>
+
+  <script>
+    // System information
+    document.getElementById('browser-info').textContent = navigator.userAgent;
+    document.getElementById('network-info').textContent = navigator.onLine ? 'Conectado' : 'Desconectado';
+    document.getElementById('current-time').textContent = new Date().toLocaleString();
+
+    // Tab functionality
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Test endpoints
+    const testButtons = document.querySelectorAll('.test-btn');
+    const responseLog = document.getElementById('response-log');
+    const progressBar = document.getElementById('progress-bar');
+    
+    // Metrics
+    let totalTests = 0;
+    let successTests = 0;
+    let failedTests = 0;
+    let totalTime = 0;
+
+    function updateMetrics() {
+      document.getElementById('total-tests').textContent = totalTests;
+      document.getElementById('success-tests').textContent = successTests;
+      document.getElementById('failed-tests').textContent = failedTests;
+      
+      const avgTime = totalTests > 0 ? Math.round(totalTime / totalTests) : 0;
+      document.getElementById('avg-time').textContent = `${avgTime}ms`;
+    }
+
+    async function testEndpoint(button) {
+      const endpoint = button.dataset.endpoint;
+      const method = button.dataset.method || 'GET';
+      const body = button.dataset.body ? JSON.parse(button.dataset.body) : null;
+      
+      const resultId = `result-${endpoint.split('/')[1] || 'root'}`;
+      const resultElement = document.getElementById(resultId) || document.querySelector('.result');
+      
+      button.disabled = true;
+      
+      let startTime = Date.now();
+      totalTests++;
+      
+      try {
+        const options = {
+          method,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+        
+        if (body) {
+          options.body = JSON.stringify(body);
+        }
+        
+        const response = await Promise.race([
+          fetch(endpoint, options),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+        ]);
+        
+        const responseTime = Date.now() - startTime;
+        totalTime += responseTime;
+        
+        const data = await response.json();
+        
+        // Log the response
+        const logEntry = `[${new Date().toLocaleTimeString()}] ${method} ${endpoint} - ${response.status} (${responseTime}ms)\n${JSON.stringify(data, null, 2)}\n\n`;
+        responseLog.textContent += logEntry;
+        
+        // Update the result area
+        resultElement.innerHTML = `
+          <h4 class="success">✅ ${response.status} ${response.statusText}</h4>
+          <div>Tiempo: ${responseTime}ms</div>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+        
+        successTests++;
+      } catch (error) {
+        const responseTime = Date.now() - startTime;
+        totalTime += responseTime;
+        
+        // Log the error
+        const logEntry = `[${new Date().toLocaleTimeString()}] ${method} ${endpoint} - ERROR (${responseTime}ms)\n${error.message}\n\n`;
+        responseLog.textContent += logEntry;
+        
+        // Update the result area
+        resultElement.innerHTML = `
+          <h4 class="error">❌ Error</h4>
+          <div>Tiempo: ${responseTime}ms</div>
+          <pre>${error.message}</pre>
+        `;
+        
+        failedTests++;
+      } finally {
+        button.disabled = false;
+        updateMetrics();
+      }
+    }
+
+    testButtons.forEach(button => {
+      button.addEventListener('click', () => testEndpoint(button));
+    });
+
+    // Run all tests
+    document.getElementById('run-all-tests').addEventListener('click', async () => {
+      const allButtons = Array.from(document.querySelectorAll('.test-btn')).filter(btn => !btn.disabled);
+      responseLog.textContent = 'Iniciando test de todos los endpoints...\n\n';
+      
+      const runButton = document.getElementById('run-all-tests');
+      runButton.disabled = true;
+      runButton.textContent = 'Ejecutando pruebas...';
+      
+      for (let i = 0; i < allButtons.length; i++) {
+        const button = allButtons[i];
+        await testEndpoint(button);
+        
+        // Update progress bar
+        const progress = ((i + 1) / allButtons.length) * 100;
+        progressBar.style.width = `${progress}%`;
+      }
+      
+      runButton.disabled = false;
+      runButton.textContent = 'Ejecutar Todas las Pruebas';
+      
+      // Add summary to log
+      responseLog.textContent += `\n--- Resumen ---\nPruebas totales: ${totalTests}\nExitosas: ${successTests}\nFallidas: ${failedTests}\nTiempo promedio: ${Math.round(totalTime/totalTests)}ms\n`;
+    });
+
+    // Initial update
+    updateMetrics();
+  </script>
+</body>
+</html>

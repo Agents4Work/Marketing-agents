@@ -1,0 +1,70 @@
+🎯 Goal (Objetivo):
+Crear una plataforma SaaS basada en IA que reemplace y automatice funciones de marketing, permitiendo a las empresas gestionar estrategias sin necesidad de contratar personal. La plataforma utilizará agentes de IA autónomos para ejecutar tareas como Community Management, SEO, Copywriting, Ads y más. Se permitirá a los usuarios seleccionar y combinar agentes desde la barra lateral para personalizar su campaña.
+
+📌 Return Format (Formato de Salida)
+
+✅ Frontend en Next.js:
+
+UI inspirada en Jasper AI, con dashboard interactivo.
+
+Sidebar con opciones para seleccionar y combinar agentes IA.
+
+Sección de métricas y analytics para evaluar desempeño.
+
+Modo Autónomo y Semiautónomo:
+
+Los agentes pueden operar de forma independiente o recibir instrucciones específicas.
+
+Generación de texto + imágenes dentro de la plataforma.
+
+✅ Backend en Firebase (Google Cloud):
+
+Autenticación y gestión de usuarios.
+
+Base de datos para almacenar campañas, configuraciones y métricas.
+
+API para conexión con modelos de IA y redes sociales.
+
+✅ IA con Langchain + LangGraph:
+
+Agentes IA especializados en diferentes áreas (SEO, Copywriting, Ads, etc.).
+
+Comunicación entre agentes para trabajar en conjunto y optimizar campañas.
+
+Generación de contenido optimizado con modelos avanzados de OpenAI.
+
+✅ Integraciones Externas:
+
+Redes sociales (Facebook, Instagram, LinkedIn, Twitter, TikTok, etc.).
+
+Google Ads y Meta Ads para campañas publicitarias.
+
+Plataformas de Email Marketing (Mailchimp, Brevo, ActiveCampaign, etc.).
+
+✅ Monetización:
+
+Suscripción mensual con diferentes planes.
+
+Sistema de créditos para generar contenido premium o automatizar campañas.
+
+⚠️ Warnings (Advertencias)
+
+🚨 Optimización de rendimiento: Asegurar que los agentes IA no generen contenido redundante y trabajen de manera eficiente.
+
+🚨 Seguridad: Implementar medidas de seguridad en Firebase para evitar accesos no autorizados.
+
+🚨 Escalabilidad: Firebase debe ser capaz de manejar múltiples usuarios y grandes volúmenes de datos en tiempo real.
+
+🚨 UX intuitiva: La interfaz debe ser accesible y fácil de usar, con flujos de trabajo claros.
+
+📂 Context Dump (Contexto Adicional)
+
+🔹 Los usuarios deben poder crear campañas desde cero o ejecutar tareas individuales.
+
+🔹 Modo autónomo: La IA puede diseñar y ejecutar estrategias sin intervención humana.
+
+🔹 Modo manual: Los usuarios pueden seleccionar agentes individuales para tareas específicas.
+
+🔹 Dashboard con métricas: Reportes sobre alcance, engagement y conversión.
+
+🔹 Escalabilidad global: Preparado para crecimiento y expansión internacional.

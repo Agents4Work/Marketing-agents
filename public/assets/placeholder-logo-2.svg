@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#f0f0f0"/>
+  <polygon points="150,80 180,150 250,150 195,190 215,260 150,220 85,260 105,190 50,150 120,150" fill="#4CAF50"/>
+  <text x="150" y="160" font-family="Arial" font-size="24" text-anchor="middle" fill="white">Logo 2</text>
+</svg>

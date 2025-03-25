@@ -1,0 +1,59 @@
+Yes! But now we refine it to match the new, more streamlined UX—so we don’t include unnecessary navigation or extra tabs. Let’s structure the prompt precisely for Replit AI so it builds the Unified AI Analyzer Dashboard exactly as needed.
+
+⸻
+
+🎯 Goal (Objective)
+
+Develop a Unified AI Analyzer Dashboard where users can run different marketing analyses (Headline, Ad, Competition) from a single interface, without navigating through separate sections. Only the Ad Data Integrations should remain separate, as it connects external platforms.
+
+⸻
+
+📌 Return Format (Expected Output)
+
+✅ Single AI Analyzer Dashboard (No multiple sections, everything is within one clean UI).
+✅ 4 Prompt-Based Functions displayed as selectable options:
+	•	Headline Analyzer → Scores headlines & suggests AI-powered improvements.
+	•	Ad Analyzer → Evaluates ad copy & gives optimization insights.
+	•	Competition Analyzer → Compares performance vs. competitors.
+	•	Ad Data Integrations (separate section for platform connections).
+✅ AI instantly processes inputs & returns actionable insights in the same view.
+✅ No confusing sidebar navigation → Functions feel like “tasks” rather than sections.
+✅ Modern UI with smooth transitions & a premium user experience.
+
+⸻
+
+⚡ Core Functionality & Workflow
+
+1️⃣ Users land on AI Analyzer → They see all available functions.
+2️⃣ They select one function (Headline, Ad, Competition), enter details → AI processes input.
+3️⃣ AI instantly returns insights, scores, and recommendations → No page reloads, just real-time updates.
+4️⃣ Users can tweak inputs & regenerate results quickly.
+5️⃣ For Ad Data Integrations (Google Ads, Facebook Ads, etc.), users access this separately from the sidebar.
+
+⸻
+
+⚠️ Warnings & Constraints
+
+🚨 Ensure real-time AI feedback → No waiting for results.
+🚨 Keep the UI simple, no overwhelming data or unnecessary buttons.
+🚨 No need for AI memory or personalized recommendations (yet).
+🚨 Ad Data Integrations should support API connections for external platforms (Google Ads, Facebook Ads, etc.).
+
+⸻
+
+📂 Context Dump (Additional Info)
+
+🔹 The AI-generated insights should be clear, actionable, and visually structured (e.g., color-coded engagement scores, highlighted key recommendations).
+🔹 Headline Analyzer should provide alternative suggestions directly below the input.
+🔹 Ad Analyzer should include improvement tips on CTA, messaging, and targeting.
+🔹 Competition Analyzer should highlight differences between user content & competitors.
+🔹 Ad Data Integrations should allow users to securely link external ad accounts.
+
+⸻
+
+💡 Final Confirmation Before Replit AI Starts Building
+
+✅ Does this structure feel intuitive enough for users?
+✅ Anything else to simplify further?
+
+🔥 Once confirmed, we send this prompt to Replit AI to build the dashboard! 🚀

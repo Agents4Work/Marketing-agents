@@ -1,0 +1,135 @@
+🎯 Goal (Objetivo):
+Construir una plataforma SaaS que automatiza estrategias de marketing utilizando agentes de IA autónomos. Los usuarios podrán crear campañas, generar contenido y optimizar anuncios mediante un espacio de trabajo interactivo (canvas con drag & drop de agentes de IA).
+
+📌 Return Format (Formato de Salida)
+
+✅ Frontend en Next.js (App Router):
+
+UI inspirada en Jasper AI, con dashboard interactivo.
+
+Sidebar a la izquierda con opciones:
+
+📌 Tareas rápidas (Post en redes, Anuncios, SEO, Email Marketing).
+
+🎛 Modo Personalizado (Canvas interactivo para arrastrar agentes IA).
+
+📊 Historial de Campañas (Métricas y reportes de desempeño).
+
+Espacio de trabajo tipo canvas con Drag & Drop de agentes.
+
+Modo Autónomo y Semiautónomo:
+
+La IA puede operar de forma independiente o recibir instrucciones específicas.
+
+Los agentes se comunican entre sí para generar campañas optimizadas.
+
+Generación de contenido: Texto + imágenes optimizadas para marketing.
+
+✅ Backend en Firebase (Google Cloud):
+
+Autenticación: Google Sign-In.
+
+Base de datos en tiempo real (Firestore):
+
+usuarios: Información del usuario.
+
+campañas: Datos sobre campañas activas y pasadas.
+
+agentes: Registro de interacciones y tareas asignadas.
+
+logs: Historial de acciones de los agentes IA.
+
+Optimización para usuarios concurrentes.
+
+✅ Almacenamiento (Firebase Storage):
+
+Guardado de imágenes, reportes y contenido generado por IA.
+
+Reglas de acceso personalizadas para usuarios.
+
+✅ Hosting (Firebase Hosting, con opción de migrar a Vercel):
+
+Deploy optimizado con Next.js ISR/SSR para carga rápida.
+
+✅ Funciones en la Nube (Firebase Cloud Functions):
+
+Integraciones con APIs externas:
+
+Langchain & LangGraph: Para la comunicación entre agentes.
+
+OpenAI (API Keys): Generación de contenido inteligente.
+
+Automatización de tareas (ej. enviar notificaciones, generar reportes, conectar redes sociales).
+
+✅ Seguridad y Rendimiento:
+
+Reglas estrictas en Firestore y Storage para evitar accesos no autorizados.
+
+Optimización de la base de datos para manejar múltiples usuarios concurrentes sin afectar la velocidad.
+
+Manejo eficiente de caché y consultas indexadas.
+
+⚠️ Warnings (Advertencias)
+
+🚨 Configurar reglas de seguridad en Firebase Authentication, Firestore y Storage.
+
+🚨 Implementar Firebase App Check para evitar accesos no autorizados.
+
+🚨 Optimizar costos de Firebase Functions y Firestore para evitar uso excesivo.
+
+🚨 Tokens y API Keys deben almacenarse en variables de entorno protegidas.
+
+🚨 FireStore debe manejar sharding y optimización para consultas escalables.
+
+📂 Context Dump (Contexto Adicional)
+
+🔹 Estructura de la Plataforma
+
+✅ Landing Page: Explicación del producto + Google Sign-In.
+✅ Dashboard Central (Home Page):
+
+📌 Punto de inicio con acceso a campañas recientes y tareas rápidas.
+✅ Sidebar (Izquierda):
+
+🎛 Modo Personalizado: Accede al canvas interactivo con Drag & Drop de agentes.
+
+📊 Historial de Campañas: Acceso a métricas detalladas.
+✅ Modo Personalizado (Canvas Visual):
+
+🟢 Zona de Trabajo (Espacio de Drag & Drop de Agentes).
+
+Los agentes IA se conectan entre sí mediante nodos visuales.
+✅ Métricas y Publicación:
+
+📊 Métricas en el Dashboard Central.
+
+🔗 Integraciones con redes sociales y Google Ads.
+
+🔹 Agentes Disponibles en el Canvas
+
+✅ 🔍 SEO Agent: Optimiza contenido para posicionamiento.
+✅ 📝 Copywriting Agent: Genera textos persuasivos.
+✅ 📢 Ads Manager: Crea y optimiza campañas pagadas.
+✅ 🎨 Imagen & Creativos: Genera banners y contenido visual.
+✅ ✉️ Email Marketing: Redacta y automatiza correos.
+✅ 📊 Analítica y Reportes: Mide resultados y hace sugerencias.
+
+🔹 Interacciones en el Canvas
+
+Modo Arrastrar y Soltar (Drag & Drop):
+
+Los agentes aparecen en bloques modulares.
+
+Se pueden conectar entre sí con líneas de flujo de trabajo.
+
+Cada agente tiene opciones configurables.
+
+Interacción en tiempo real:
+
+Los agentes IA trabajan juntos y se comunican.
+
+El usuario puede aprobar, modificar o regenerar contenido.
+
+Ejemplo de flujo:
+
+🟢 SEO Agent → 🔵 Copywriting Agent → 🟠 Social Media Agent
