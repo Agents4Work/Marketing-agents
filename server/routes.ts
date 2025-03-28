@@ -10,6 +10,8 @@ import { securityRouter } from './routes/security';
 import { googleDriveRouter } from './routes/google-drive';
 import { googleDocsRouter } from './routes/google-docs';
 import { usersRouter } from './routes/users';
+import { createAIRouter } from './ai-client';
+// Keep these imports for backward compatibility
 import { createOpenAIRouter } from './openai';
 import { createGeminiRouter } from './gemini';
 // TODO: Firebase routes will be integrated here once firebase-api.ts is implemented
@@ -133,8 +135,11 @@ export async function registerRoutes(app: express.Application): Promise<http.Ser
   // Register User routes
   app.use('/api/users', usersRouter);
   
-  // Register AI routers
-  app.use('/api/ai', createOpenAIRouter());
+  // Register the unified AI router
+  app.use('/api/ai', createAIRouter());
+  
+  // Keep these routes for backward compatibility
+  app.use('/api/openai', createOpenAIRouter());
   app.use('/api/gemini', createGeminiRouter());
   
   // Temporarily disable CSRF protection for development
