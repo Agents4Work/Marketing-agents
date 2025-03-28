@@ -1,56 +1,73 @@
-# Guía para exportar el proyecto a GitHub desde Replit
+# Guía de Exportación a GitHub desde Replit
 
-## Estado actual
-Tu proyecto ya está configurado con Git y conectado a un repositorio en GitHub:
-- Repositorio remoto: https://github.com/Agents4Work/Agents4Marketing
+## Configuración Inicial
 
-## Opciones para exportar el proyecto
+1. Abre el proyecto en Replit
+2. En el panel izquierdo, haz clic en el icono de "Tools"
+3. Selecciona "Git"
+4. Conecta tu cuenta de GitHub si aún no lo has hecho
 
-### Opción 1: Usar la interfaz de Replit (Recomendado)
+## Método 1: Usando el Script de Sincronización
 
-Replit proporciona una forma sencilla de conectar y sincronizar con GitHub:
+1. Abre la terminal en Replit
+2. Ejecuta el script de sincronización:
+   ```bash
+   bash sincronizar-con-github.sh
+   ```
+3. El script automáticamente:
+   - Guardará tus cambios locales
+   - Obtendrá cambios remotos
+   - Subirá tus cambios a GitHub
 
-1. Haz clic en el icono de Git en la barra lateral (o en el menú de herramientas)
-2. Si el repositorio ya está conectado, verás la opción de "Pull" o "Push"
-3. Haz clic en "Push" para enviar tus cambios a GitHub
+## Método 2: Usando la Interfaz de Git de Replit
 
-### Opción 2: Exportar como archivo ZIP y subir manualmente
+1. Haz clic en el icono de Git en la barra lateral
+2. Verás los archivos modificados
+3. Escribe un mensaje de commit
+4. Haz clic en "Commit & Push"
 
-Si tienes problemas con los permisos de Git:
+## Método 3: Usando Comandos Git Manualmente
 
-1. Exporta tu proyecto como ZIP desde Replit:
-   - Haz clic en el menú de tres puntos en la parte superior derecha
-   - Selecciona "Download as ZIP"
+1. Abre la terminal
+2. Añade tus cambios:
+   ```bash
+   git add .
+   ```
+3. Crea un commit:
+   ```bash
+   git commit -m "Descripción de tus cambios"
+   ```
+4. Sube los cambios:
+   ```bash
+   git push origin main
+   ```
 
-2. Sube manualmente los archivos a tu repositorio de GitHub:
-   - Ve a tu repositorio en GitHub: https://github.com/Agents4Work/Agents4Marketing
-   - Haz clic en "Add file" > "Upload files"
-   - Arrastra los archivos extraídos del ZIP y confirma los cambios
+## Solución de Problemas
 
-### Opción 3: Usar comandos Git con un token de acceso personal
+Si encuentras errores:
 
-Si prefieres usar la línea de comandos:
+1. **Error de Autenticación**:
+   - Verifica tu conexión con GitHub en Replit
+   - Reconecta tu cuenta si es necesario
 
-1. Crea un token de acceso personal en GitHub:
-   - Ve a GitHub > Settings > Developer settings > Personal access tokens
-   - Genera un nuevo token con permisos de repo
-   - Copia el token
+2. **Conflictos de Merge**:
+   - Usa el script de sincronización que maneja esto automáticamente
+   - O resuelve manualmente:
+     ```bash
+     git pull origin main
+     # Resuelve conflictos
+     git add .
+     git commit -m "Resuelve conflictos"
+     git push origin main
+     ```
 
-2. Usa el token para autenticarte:
-```bash
-git remote set-url origin https://USUARIO:TOKEN@github.com/Agents4Work/Agents4Marketing.git
-git push origin main
-```
+3. **Cambios no Guardados**:
+   - Asegúrate de guardar todos los archivos antes de sincronizar
+   - Usa Ctrl+S o Cmd+S para guardar
 
-## Configuración actual del repositorio
+## Notas Importantes
 
-Configuración actual de Git:
-- Usuario: Hay múltiples configuraciones de usuario (Agents4Work y "Tu Nombre")
-- Repositorio remoto principal: https://github.com/Agents4Work/Agents4Marketing
-- Repositorio remoto secundario: https://github.com/replit/your-repo-name.git
-
-Si necesitas cambiar el repositorio:
-```bash
-# Cambiar la URL del repositorio remoto
-git remote set-url origin https://github.com/tu-usuario/tu-nuevo-repositorio.git
-```
+- Siempre haz commit de tus cambios antes de cerrar Replit
+- Sincroniza regularmente para evitar conflictos grandes
+- Si tienes dudas, usa el script de sincronización automática
+- Mantén una copia de seguridad de tus cambios importantes

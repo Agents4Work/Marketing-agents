@@ -15,38 +15,35 @@ echo -e "${BLUE}   Sincronización con GitHub - Agents4Marketing${NC}"
 echo -e "${BLUE}================================================${NC}"
 echo
 
-# Verificar si hay cambios pendientes
-echo -e "${GREEN}Verificando cambios pendientes...${NC}"
-git status -s
+echo -e "${YELLOW}Sincronizando con GitHub...${NC}"
 
-# Si se proporcionó un mensaje de commit, asumimos que queremos hacer commit
-if [ ! -z "$1" ]; then
-    echo -e "${GREEN}Preparando cambios para commit...${NC}"
-    git add .
-    
-    echo -e "${GREEN}Creando commit con mensaje: ${YELLOW}$1${NC}"
-    git commit -m "$1"
-    
-    echo -e "${GREEN}Intentando subir cambios a GitHub...${NC}"
-    # Intentar sincronizar con GitHub - si falla, mostrar instrucciones
-    if git push origin main; then
-        echo -e "${GREEN}¡Sincronización exitosa!${NC}"
-    else
-        echo -e "${RED}No se pudieron subir los cambios automáticamente.${NC}"
-        echo -e "${YELLOW}Posibles razones:${NC}"
-        echo -e "1. Problemas de autenticación con GitHub"
-        echo -e "2. Conflictos con cambios remotos"
-        echo
-        echo -e "${YELLOW}Recomendaciones:${NC}"
-        echo -e "- Usa la interfaz de Replit para sincronizar (botón Git en la barra lateral)"
-        echo -e "- O exporta tu proyecto como ZIP y súbelo manualmente a GitHub"
-        echo -e "- Consulta el archivo exportar-a-github.md para más opciones"
-    fi
-else
-    echo -e "${YELLOW}No se proporcionó mensaje de commit.${NC}"
-    echo -e "Para hacer commit y sincronizar, ejecuta el script con un mensaje:"
-    echo -e "${BLUE}bash sincronizar-con-github.sh \"Mensaje de commit\"${NC}"
+# Verificar si git está instalado
+if ! command -v git &> /dev/null; then
+    echo -e "${RED}Git no está instalado. Instalando...${NC}"
+    pkg install git
 fi
+
+# Configurar git si no está configurado
+if [ -z "$(git config --global user.email)" ]; then
+    echo -e "${YELLOW}Configurando git...${NC}"
+    git config --global user.email "replit@agents4work.com"
+    git config --global user.name "Replit Agent"
+fi
+
+# Guardar cambios actuales
+echo -e "${YELLOW}Guardando cambios locales...${NC}"
+git add .
+git commit -m "Cambios desde Replit: $(date +%Y%m%d-%H%M%S)"
+
+# Obtener cambios remotos
+echo -e "${YELLOW}Obteniendo cambios remotos...${NC}"
+git pull origin main --no-edit
+
+# Subir cambios
+echo -e "${YELLOW}Subiendo cambios a GitHub...${NC}"
+git push origin main
+
+echo -e "${GREEN}¡Sincronización completada!${NC}"
 
 echo
 echo -e "${BLUE}================================================${NC}"
