@@ -230,4 +230,119 @@ router.get('/health', async (_req: Request, res: Response) => {
   }
 });
 
+/**
+ * @route POST /api/v1/agents/copywriter/generate
+ * @desc Generate copy using Alex Copywriter agent
+ * @access Private
+ */
+router.post('/v1/agents/copywriter/generate', authMiddleware, async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    
+    const { objective, product, audience, style, platform, context } = req.body;
+    
+    // Forward request to Alex Copywriter service
+    const response = await fetch(`${process.env.ALEX_COPYWRITER_URL}/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.ALEX_COPYWRITER_API_KEY}`
+      },
+      body: JSON.stringify({
+        objective,
+        product,
+        audience,
+        style,
+        platform,
+        context
+      })
+    });
+    
+    const data = await response.json();
+    res.json(data);
+  } catch (error: any) {
+    console.error('Generate copy error:', error);
+    res.status(500).json({
+      message: 'Failed to generate copy',
+      error: error.message,
+    });
+  }
+});
+
+/**
+ * @route POST /api/v1/agents/copywriter/refine
+ * @desc Refine copy using Alex Copywriter agent
+ * @access Private
+ */
+router.post('/v1/agents/copywriter/refine', authMiddleware, async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    
+    const { content_id, feedback } = req.body;
+    
+    // Forward request to Alex Copywriter service
+    const response = await fetch(`${process.env.ALEX_COPYWRITER_URL}/refine`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.ALEX_COPYWRITER_API_KEY}`
+      },
+      body: JSON.stringify({
+        content_id,
+        feedback
+      })
+    });
+    
+    const data = await response.json();
+    res.json(data);
+  } catch (error: any) {
+    console.error('Refine copy error:', error);
+    res.status(500).json({
+      message: 'Failed to refine copy',
+      error: error.message,
+    });
+  }
+});
+
+/**
+ * @route POST /api/v1/agents/copywriter/analyze
+ * @desc Analyze copy using Alex Copywriter agent
+ * @access Private
+ */
+router.post('/v1/agents/copywriter/analyze', authMiddleware, async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    
+    const { content_id, criteria } = req.body;
+    
+    // Forward request to Alex Copywriter service
+    const response = await fetch(`${process.env.ALEX_COPYWRITER_URL}/analyze`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.ALEX_COPYWRITER_API_KEY}`
+      },
+      body: JSON.stringify({
+        content_id,
+        criteria
+      })
+    });
+    
+    const data = await response.json();
+    res.json(data);
+  } catch (error: any) {
+    console.error('Analyze copy error:', error);
+    res.status(500).json({
+      message: 'Failed to analyze copy',
+      error: error.message,
+    });
+  }
+});
+
 export const agentsRouter = router;

@@ -55,6 +55,8 @@ import { queryClient } from "@/lib/queryClient";
 import { initializeRouter } from "@/lib/router";
 // Import CSRF security components
 import CsrfTokenProvider from "@/components/security/CsrfTokenProvider";
+import AgentWorkspace from './pages/workspace/[type]/[id]';
+import CopywriterWorkspace from './pages/workspace/CopywriterWorkspace';
 
 function Router() {
   return (
@@ -150,6 +152,8 @@ function Router() {
       <Route path="/chat-test" component={ChatTestPage} />
       <Route path="/chat-adapter-demo" component={ChatAdapterDemo} />
       <Route path="/firebase-auth" component={FirebaseAuthPage} />
+      
+      <Route path="/workspace/copywriter/:id" component={CopywriterWorkspace} />
       
       <Route component={NotFound} />
     </Switch>

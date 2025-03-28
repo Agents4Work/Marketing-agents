@@ -1,8 +1,31 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import express from 'express';
+import express, { RequestHandler } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+// Types for Gemini API
+interface GeneratedImage {
+  data: string;  // base64 encoded image data
+}
+
+interface GenerateImagesResult {
+  images: GeneratedImage[];
+}
+
+interface GenerateImagesConfig {
+  number_of_images: number;
+  aspect_ratio: string;
+  person_generation: 'DONT_ALLOW' | 'ALLOW_ADULT';
+}
+
+interface ImageGenerationRequest {
+  prompt: string;
+  numberOfImages?: number;
+  aspectRatio?: string;
+  allowPersonGeneration?: boolean;
+}
 
 // Initialize Firebase Admin
 admin.initializeApp();
@@ -16,16 +39,16 @@ app.use(express.json());
 dotenv.config();
 
 // Health check endpoint
-app.get('/api/healthcheck', (_req, res) => {
+const healthCheck: RequestHandler = (_req, res) => {
   res.status(200).json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
   });
-});
+};
 
 // Users API endpoints
-app.post('/api/users', async (req, res) => {
+const createUser: RequestHandler = async (req, res) => {
   try {
     const { uid, email, displayName, photoURL } = req.body;
     
@@ -50,42 +73,44 @@ app.post('/api/users', async (req, res) => {
       error: 'Failed to create user' 
     });
   }
-});
+};
 
-app.get('/api/users/:uid', async (req, res) => {
+const getUser: RequestHandler = async (req, res) => {
   try {
     const uid = req.params.uid;
     const userDoc = await admin.firestore().collection('users').doc(uid).get();
     
     if (!userDoc.exists) {
-      return res.status(404).json({ 
+      res.status(404).json({ 
         success: false, 
         error: 'User not found' 
       });
+      return;
     }
     
-    return res.status(200).json({ 
+    res.status(200).json({ 
       success: true, 
       user: userDoc.data() 
     });
   } catch (error) {
     console.error('Error fetching user:', error);
-    return res.status(500).json({ 
+    res.status(500).json({ 
       success: false, 
       error: 'Failed to fetch user' 
     });
   }
-});
+};
 
 // API for campaigns
-app.get('/api/campaigns', async (req, res) => {
+const getCampaigns: RequestHandler = async (req, res) => {
   try {
     const userId = req.query.userId as string;
     if (!userId) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         success: false, 
         error: 'User ID is required' 
       });
+      return;
     }
     
     const campaignsSnapshot = await admin.firestore()
@@ -99,21 +124,21 @@ app.get('/api/campaigns', async (req, res) => {
       ...doc.data()
     }));
     
-    return res.status(200).json({ 
+    res.status(200).json({ 
       success: true, 
       campaigns 
     });
   } catch (error) {
     console.error('Error fetching campaigns:', error);
-    return res.status(500).json({ 
+    res.status(500).json({ 
       success: false, 
       error: 'Failed to fetch campaigns' 
     });
   }
-});
+};
 
 // API for agents
-app.get('/api/agents', async (_req, res) => {
+const getAgents: RequestHandler = async (_req, res) => {
   try {
     const agentsSnapshot = await admin.firestore()
       .collection('agents')
@@ -125,28 +150,29 @@ app.get('/api/agents', async (_req, res) => {
       ...doc.data()
     }));
     
-    return res.status(200).json({ 
+    res.status(200).json({ 
       success: true, 
       agents 
     });
   } catch (error) {
     console.error('Error fetching agents:', error);
-    return res.status(500).json({ 
+    res.status(500).json({ 
       success: false, 
       error: 'Failed to fetch agents' 
     });
   }
-});
+};
 
 // API for workflows
-app.get('/api/workflows', async (req, res) => {
+const getWorkflows: RequestHandler = async (req, res) => {
   try {
     const campaignId = req.query.campaignId as string;
     if (!campaignId) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         success: false, 
         error: 'Campaign ID is required' 
       });
+      return;
     }
     
     const workflowsSnapshot = await admin.firestore()
@@ -160,18 +186,26 @@ app.get('/api/workflows', async (req, res) => {
       ...doc.data()
     }));
     
-    return res.status(200).json({ 
+    res.status(200).json({ 
       success: true, 
       workflows 
     });
   } catch (error) {
     console.error('Error fetching workflows:', error);
-    return res.status(500).json({ 
+    res.status(500).json({ 
       success: false, 
       error: 'Failed to fetch workflows' 
     });
   }
-});
+};
+
+// Register routes
+app.get('/api/healthcheck', healthCheck);
+app.post('/api/users', createUser);
+app.get('/api/users/:uid', getUser);
+app.get('/api/campaigns', getCampaigns);
+app.get('/api/agents', getAgents);
+app.get('/api/workflows', getWorkflows);
 
 // Export the Express API as a Firebase Function
 export const api = functions.https.onRequest(app);
@@ -297,5 +331,104 @@ export const initializeDefaultData = functions.https.onRequest(async (req, res) 
       success: false,
       error: 'Failed to initialize default data'
     });
+  }
+});
+
+// Image generation endpoint
+export const generateImages = functions.https.onCall(async (data: any) => {
+  console.log('Received image generation request:', { ...data, prompt: data.prompt?.substring(0, 50) + '...' });
+
+  try {
+    const { prompt, numberOfImages = 4, aspectRatio = '1:1', allowPersonGeneration = true } = data as ImageGenerationRequest;
+    
+    if (!prompt) {
+      console.error('No prompt provided');
+      throw new functions.https.HttpsError(
+        'invalid-argument',
+        'A prompt is required to generate images'
+      );
+    }
+
+    try {
+      const apiKey = process.env.GOOGLE_API_KEY;
+      if (!apiKey) {
+        throw new Error('Google API Key is not configured');
+      }
+
+      console.log('Initializing Gemini client...');
+      const genAI = new GoogleGenerativeAI(apiKey);
+      
+      console.log('Getting generative model...');
+      const model = genAI.getGenerativeModel({ model: 'gemini-pro-vision' });
+
+      // Configure image generation parameters
+      const config = {
+        model: 'imagen-3.0-generate-002',
+        prompt,
+        params: {
+          number_of_images: Math.min(Math.max(1, numberOfImages), 4),
+          aspect_ratio: aspectRatio,
+          person_generation: allowPersonGeneration ? 'ALLOW_ADULT' : 'DONT_ALLOW'
+        }
+      };
+
+      console.log('Generating images with config:', { 
+        prompt: prompt.substring(0, 50) + '...', 
+        params: config.params 
+      });
+
+      // Generate images
+      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:generateImages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(config)
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('Error from Gemini API:', error);
+        throw new Error(error.error?.message || 'Failed to generate images');
+      }
+
+      const result = await response.json();
+      
+      if (!result.images || result.images.length === 0) {
+        console.error('No images were generated');
+        throw new Error('No images were generated');
+      }
+
+      console.log(`Successfully generated ${result.images.length} images`);
+
+      return {
+        success: true,
+        images: result.images,
+        timestamp: new Date().toISOString()
+      };
+
+    } catch (error) {
+      console.error('Error in image generation:', error);
+      // Return placeholder images on error
+      const [width, height] = aspectRatio.split(':').map(Number);
+      const placeholderImages = Array(numberOfImages).fill(
+        `https://via.placeholder.com/${width * 300}x${height * 300}/FF0000/FFFFFF?text=Error+generating+image`
+      );
+
+      return {
+        success: false,
+        images: placeholderImages,
+        error: error instanceof Error ? error.message : 'Failed to generate images',
+        timestamp: new Date().toISOString()
+      };
+    }
+
+  } catch (error: any) {
+    console.error('Error in generateImages function:', error);
+    throw new functions.https.HttpsError(
+      'internal',
+      error.message || 'Failed to generate images'
+    );
   }
 });

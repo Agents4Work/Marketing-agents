@@ -10,6 +10,12 @@ import { attachCsrfToken, validateCsrfToken, getCsrfTokenHandler } from './middl
 import { securityRouter } from './routes/security';
 import { securityHeaders, contentTypeCheck } from './middleware/security';
 import * as routesModule from './routes';
+import geminiRouter from './routes/gemini';
+import dotenv from 'dotenv';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+// Load environment variables
+dotenv.config();
 
 // Load Google OAuth credentials
 const GOOGLE_CREDENTIALS_PATH = path.join(process.cwd(), 'credentials', 'google-docs-credentials.json');
@@ -55,7 +61,7 @@ const app = express();
 const server = createServer(app);
 
 // Configuration
-const PORT = 5000; // Changed to 5000 to match Replit's expected port
+const PORT = process.env.REPLIT_ENVIRONMENT ? 5000 : 3000; // Use 5000 for Replit, 3000 for local
 const HOST = '0.0.0.0';
 
 // Middleware
@@ -71,6 +77,9 @@ app.get('/api/csrf-token', attachCsrfToken, getCsrfTokenHandler);
 
 // Register security test routes
 app.use('/api', securityRouter);
+
+// Register Gemini routes
+app.use('/api/gemini', geminiRouter);
 
 // Apply CSRF protection to all non-GET API routes
 app.post("/api/*", validateCsrfToken);
@@ -228,45 +237,44 @@ app.get('/debug', (req, res) => {
   `);
 });
 
-// Function to kill process on port if needed
-function killProcessOnPort(port: number): Promise<void> {
-  return new Promise((resolve) => {
-    import('child_process').then(({ exec }) => {
-      console.log(`Attempting to kill processes on port ${port}...`);
-      
-      // Commands to try killing the process
-      const commands = [
-        `fuser -k ${port}/tcp 2>/dev/null || true`,
-        `pkill -f "node.*server" || true`,
-        `pkill -f "tsx.*server" || true`,
-        `pkill -f "node.*index.ts" || true`,
-        `pkill -f "tsx.*index.ts" || true`
-      ];
+// Initialize Gemini client
+const genai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+
+// Gemini routes
+app.post('/api/gemini/generate-images', async (req, res) => {
+  try {
+    const { prompt, numberOfImages = 4, aspectRatio = '1:1', allowPersonGeneration = true } = req.body;
     
-      // Execute commands in sequence
-      let index = 0;
-      const executeNext = () => {
-        if (index >= commands.length) {
-          console.log('Done attempting to free the port');
-          setTimeout(resolve, 1000); // Wait 1 second after killing processes
-          return;
-        }
-        
-        exec(commands[index], (error: any) => {
-          if (error) {
-            console.log(`Command failed or no matching process: ${commands[index]}`);
-          } else {
-            console.log(`Successfully executed: ${commands[index]}`);
-          }
-          index++;
-          executeNext();
-        });
-      };
-      
-      executeNext();
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    const model = genai.getGenerativeModel({ model: 'gemini-1.5-pro' });
+    
+    const result = await model.generateContent([
+      {
+        text: `Generate an image based on this description: ${prompt}. 
+               The image should be high quality and detailed.
+               Do not include any text in the image.`
+      }
+    ]);
+
+    const response = await result.response;
+    const images = response.candidates?.[0]?.content?.parts
+      ?.filter(part => part.inlineData?.mimeType?.startsWith('image/'))
+      ?.map(part => ({
+        url: `data:${part.inlineData?.mimeType};base64,${part.inlineData?.data}`
+      })) || [];
+
+    res.json({ images });
+  } catch (error: any) {
+    console.error('Error generating images:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate images',
+      details: error.message 
     });
-  });
-}
+  }
+});
 
 // Start the server with retry logic
 const startServer = async () => {
@@ -289,20 +297,9 @@ const startServer = async () => {
     });
     
     // Handle server errors
-    server.on('error', async (error: any) => {
-      if (error.code === 'EADDRINUSE') {
-        console.log(`Port ${PORT} is already in use. Attempting to free it...`);
-        
-        // Try to kill the process using the port
-        await killProcessOnPort(PORT);
-        
-        // Try to restart the server
-        console.log('Attempting to restart server...');
-        startServer();
-      } else {
-        console.error('Server error:', error);
-        process.exit(1);
-      }
+    server.on('error', (error: any) => {
+      console.error('Server error:', error);
+      process.exit(1);
     });
     
   } catch (error) {

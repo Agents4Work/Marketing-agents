@@ -1,18 +1,32 @@
-import OpenAI from "openai";
 import { Router, Request, Response } from "express";
 import { z } from "zod";
 
-// Initialize OpenAI client with error handling
-const apiKey = process.env.OPENAI_API_KEY;
-const openai = new OpenAI({ apiKey });
+// Initialize Gemini client with error handling
+const apiKey = process.env.GEMINI_API_KEY;
+
+// Type definitions for Gemini API response
+interface GeminiResponse {
+  candidates?: Array<{
+    content?: {
+      parts?: Array<{
+        text?: string;
+      }>;
+    };
+  }>;
+  usage?: {
+    promptTokens?: number;
+    candidateTokens?: number;
+    totalTokens?: number;
+  };
+}
 
 // Enhanced error handling for AI requests
-async function safeOpenAIRequest<T>(requestFn: () => Promise<T>): Promise<[T | null, string | null]> {
+async function safeGeminiRequest<T>(requestFn: () => Promise<T>): Promise<[T | null, string | null]> {
   try {
     const result = await requestFn();
     return [result, null];
   } catch (error: any) {
-    console.error("OpenAI API error:", error);
+    console.error("Gemini API error:", error);
     
     // Handle specific error types
     if (error.status === 429) {
@@ -38,10 +52,12 @@ function safeJSONParse(str: string): [any | null, string | null] {
   }
 }
 
-// Content generation schema
+// Schema for content generation request
 const generateContentSchema = z.object({
-  prompt: z.string().min(1),
-  type: z.string().default("text")
+  prompt: z.string().min(1, "Prompt is required"),
+  model: z.string().optional(),
+  temperature: z.number().min(0).max(1).optional(),
+  maxTokens: z.number().min(1).optional(),
 });
 
 // SEO analysis schema
@@ -62,54 +78,56 @@ const optimizeAdSchema = z.object({
   platform: z.string()
 });
 
-// Handler for content generation
+// Handle content generation request
 async function handleGenerateContent(req: Request, res: Response) {
   try {
-    const { prompt, type } = generateContentSchema.parse(req.body);
-    
-    let systemPrompt = "You are an expert marketing content creator.";
-    let model = "gpt-3.5-turbo"; // Default to faster model
-    
-    // Customize system prompt based on content type
-    switch (type) {
-      case "blog":
-        systemPrompt += " Create a well-structured, SEO-optimized blog post with headings, subheadings, and engaging paragraphs.";
-        // Use GPT-4 for longer blog content
-        model = "gpt-4";
-        break;
-      case "social":
-        systemPrompt += " Create engaging social media posts with appropriate hashtags and calls to action.";
-        break;
-      case "email":
-        systemPrompt += " Create a professional email with subject line, greeting, body content, and call to action.";
-        break;
-      case "ad":
-        systemPrompt += " Create compelling ad copy optimized for conversions, with attention-grabbing headlines and clear value propositions.";
-        break;
-      default:
-        systemPrompt += " Create high-quality, engaging content optimized for the specified purpose and audience.";
-        break;
+    const validationResult = generateContentSchema.safeParse(req.body);
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Invalid request parameters",
+        details: validationResult.error.issues
+      });
     }
 
-    const [response, error] = await safeOpenAIRequest(() => 
-      openai.chat.completions.create({
-        model: model,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: prompt }
-        ],
-        temperature: 0.7,
-        max_tokens: 1000
-      })
+    const { prompt, model = 'gemini-pro', temperature = 0.7, maxTokens = 1000 } = validationResult.data;
+
+    const requestBody = {
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: prompt }]
+        }
+      ],
+      generationConfig: {
+        temperature,
+        maxOutputTokens: maxTokens,
+        topP: 0.95,
+        topK: 40
+      }
+    };
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      }
     );
-    
-    if (error) {
-      return res.status(500).json({ error });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return res.status(500).json({ error: errorText });
     }
-    
+
+    const data = await response.json() as GeminiResponse;
+    const aiResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
     return res.json({
-      content: response?.choices[0].message.content || "",
-      usage: response?.usage || null
+      content: aiResponse,
+      usage: data.usage || null
     });
   } catch (error: any) {
     console.error("Error generating content:", error);
@@ -142,15 +160,26 @@ Respond in JSON format with the following structure:
 }`;
 
     // Using our safe request wrapper
-    const [response, apiError] = await safeOpenAIRequest(() =>
-      openai.chat.completions.create({
-        model: "gpt-3.5-turbo", // Using 3.5-turbo for faster response times
-        messages: [
-          { role: "system", content: "You are an SEO expert who analyzes content and provides actionable recommendations. Respond in valid JSON format only." },
-          { role: "user", content: promptText }
-        ],
-        temperature: 0.3,
-        max_tokens: 1000
+    const [response, apiError] = await safeGeminiRequest(() =>
+      fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: promptText }]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 1000,
+            topP: 0.95,
+            topK: 40
+          }
+        })
       })
     );
     
@@ -158,7 +187,7 @@ Respond in JSON format with the following structure:
       return res.status(500).json({ error: apiError });
     }
     
-    const content_str = response?.choices[0].message.content || "{}";
+    const content_str = response?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
     const [parsedContent, parseError] = safeJSONParse(content_str);
     
     if (parseError) {
@@ -177,20 +206,39 @@ async function handleGenerateImage(req: Request, res: Response) {
   try {
     const { prompt } = generateImageSchema.parse(req.body);
     
-    const [response, error] = await safeOpenAIRequest(() =>
-      openai.images.generate({
-        model: "dall-e-2", // Using DALL-E 2 for faster response times and lower cost
-        prompt: prompt,
-        n: 1,
-        size: "1024x1024",
-      })
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: prompt }]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1000,
+            topP: 0.95,
+            topK: 40
+          }
+        })
+      }
     );
-    
-    if (error) {
-      return res.status(500).json({ error });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return res.status(500).json({ error: errorText });
     }
-    
-    return res.json({ url: response?.data[0].url || "" });
+
+    const data = await response.json();
+    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    return res.json({ url: aiResponse });
   } catch (error: any) {
     console.error("Error generating image:", error);
     return res.status(400).json({ error: error.message || "An error occurred during image generation" });
@@ -221,23 +269,37 @@ Respond in JSON format with the following structure:
   "rationale": "string"
 }`;
 
-    const [response, apiError] = await safeOpenAIRequest(() =>
-      openai.chat.completions.create({
-        model: "gpt-3.5-turbo", // Using 3.5-turbo for faster response times
-        messages: [
-          { role: "system", content: "You are an expert marketing copywriter specializing in optimizing ad copy for maximum conversions. Respond in valid JSON format only." },
-          { role: "user", content: promptText }
-        ],
-        temperature: 0.5,
-        max_tokens: 700
-      })
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: promptText }]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.5,
+            maxOutputTokens: 700,
+            topP: 0.95,
+            topK: 40
+          }
+        })
+      }
     );
-    
-    if (apiError) {
-      return res.status(500).json({ error: apiError });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return res.status(500).json({ error: errorText });
     }
-    
-    const content = response?.choices[0].message.content || "{}";
+
+    const data = await response.json();
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
     const [parsedContent, parseError] = safeJSONParse(content);
     
     if (parseError) {
@@ -251,61 +313,19 @@ Respond in JSON format with the following structure:
   }
 }
 
-// Create OpenAI router
+// Create router with all endpoints
 export function createOpenAIRouter() {
   const router = Router();
 
-  // Core AI endpoints
   router.post("/generate", handleGenerateContent);
   router.post("/analyze-seo", handleAnalyzeSEO);
   router.post("/generate-image", handleGenerateImage);
   router.post("/optimize-ad", handleOptimizeAdCopy);
   
-  // Chat-based conversation endpoint for the conversation view
-  router.post("/generate-chat", async (req: Request, res: Response) => {
-    try {
-      const { message, contentType, conversationHistory } = req.body;
-      
-      // Simple validation
-      if (!message) {
-        return res.status(400).json({ error: 'Message is required' });
-      }
-      
-      // Log the request for debugging
-      console.log('AI Generate Chat Request:', { message, contentType });
-      
-      // In a production environment, this would call your AI service
-      // For now, we'll return a simulated response
-      const aiResponse = `Thank you for your message about "${message.substring(0, 30)}..."
-      
-This is a simulated AI response for content type: ${contentType || 'general'}.
-
-In production, this would integrate with:
-- OpenAI for general content
-- Vertex AI for enterprise-grade responses
-- Custom LangChain pipelines for specialized marketing content
-
-Your conversation now has ${conversationHistory?.length || 0} messages.`;
-
-      // Add a short delay to simulate processing time
-      setTimeout(() => {
-        res.json({ 
-          content: aiResponse,
-          contentType,
-          timestamp: new Date().toISOString()
-        });
-      }, 500);
-    } catch (error: any) {
-      console.error('Error in AI generate chat endpoint:', error);
-      res.status(500).json({ error: error.message || 'Failed to generate AI response' });
-    }
-  });
-  
-  // Health check endpoint for OpenAI connectivity
+  // Health check endpoint for Gemini connectivity
   router.get("/health", async (_req, res) => {
     const timestamp = new Date().toISOString();
     
-    // Simple health check that doesn't require OpenAI API to be configured
     return res.json({ 
       status: "operational", 
       message: "AI endpoints are available",
@@ -313,7 +333,7 @@ Your conversation now has ${conversationHistory?.length || 0} messages.`;
     });
   });
   
-  // Test endpoint for chat feature that doesn't require OpenAI API to be configured
+  // Test endpoint for chat feature
   router.get("/chat-test", (_req, res) => {
     res.json({
       status: "success",

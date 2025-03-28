@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { User, onAuthStateChanged, updateProfile } from 'firebase/auth';
-import { auth, signInWithGoogle, logOut, loginWithEmailAndPassword, registerWithEmailAndPassword } from '../lib/firebase';
+import { auth, signInWithGoogle, logout as firebaseLogout, loginWithEmailAndPassword, registerWithEmailAndPassword } from '../lib/firebase';
 import { apiRequest } from '../lib/queryClient';
 
 // For development environment, we can use these values to auto-login
@@ -171,7 +171,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Clear the logged out flag when registering
       sessionStorage.removeItem('user_logged_out');
       
-      const user = await registerWithEmailAndPassword(email, password, displayName);
+      const user = await registerWithEmailAndPassword(email, password);
       
       // If we have a user, update profile to add display name
       if (user) {
@@ -230,7 +230,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       
       // Then perform Firebase logout
-      await logOut();
+      await firebaseLogout();
       
       console.log("Firebase logout completed");
       
@@ -246,6 +246,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw error;
     } finally {
       setLoading(false);
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      await firebaseLogout();
+      setUser(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
     }
   };
 

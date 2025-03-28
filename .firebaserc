@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "agents-4-work"
-  }
+  },
+  "targets": {
+    "agents-4-work": {
+      "hosting": {
+        "production": [
+          "agents-4-work"
+        ],
+        "development": [
+          "agents-4-work-dev"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

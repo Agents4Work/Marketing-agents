@@ -38,16 +38,28 @@ export interface VersionedAgent {
 export interface Agent {
   id: string;
   name: string;
-  category: string;
+  type: string;
   description: string;
-  avatar: string;
-  rating: number;
-  reviews: number;
-  level: string;
-  compatibility: number;
-  skills: AgentSkill[];
-  primaryColor: string;
-  secondaryColor: string;
+  shortDescription?: string;
+  avatar?: string;
+  rating?: number;
+  reviews?: number;
+  level?: string;
+  compatibility?: string[];
+  skills?: string[];
+  highlight1?: string;
+  highlight2?: string;
+  highlight3?: string;
+  languages?: string[];
+  integrations?: string[];
+  configuration?: {
+    contentType?: string;
+    tone?: string;
+    length?: string;
+    mode: string;
+  };
+  primaryColor?: string;
+  secondaryColor?: string;
   featured?: boolean;
   trending?: boolean;
   new?: boolean;
@@ -80,14 +92,9 @@ export interface ExtendedAgent extends Agent {
   reviewCount?: number;      // Total number of reviews for the agent
   benefits: string[];
   isPremium?: boolean;       // Whether this is a premium agent (alias for premium)
-  highlight1?: string;       // Key highlight for the agent
-  highlight2?: string;       // Key highlight for the agent
-  highlight3?: string;       // Key highlight for the agent
   uniqueFeature1?: string;   // Unique feature of the agent
   uniqueFeature2?: string;   // Unique feature of the agent
   uniqueFeature3?: string;   // Unique feature of the agent
-  languages?: string[];      // Languages supported by the agent
-  integrations?: string[];   // Tools and platforms this agent integrates with
   testimonials: Array<{
     name: string;
     company: string;

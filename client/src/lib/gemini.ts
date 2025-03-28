@@ -1,4 +1,7 @@
 import { apiRequest } from "@/lib/queryClient";
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import type { ImageGenerationOptions, ImageGenerationRequest } from '@/components/ai-tools/types/imageGenerator';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 
 // Types for Gemini API
 export type GeminiMessage = {
@@ -184,4 +187,76 @@ export async function checkGeminiHealth() {
     console.error("Error checking Gemini health:", error);
     return { status: "error", message: "Could not connect to Gemini API" };
   }
+}
+
+interface GeneratedImage {
+  image: {
+    image_bytes: Uint8Array;
+  };
+}
+
+interface GenerateImagesResponse {
+  generated_images: GeneratedImage[];
+}
+
+function initGemini() {
+  const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+  if (!apiKey) {
+    throw new Error('Google API Key is not configured');
+  }
+  
+  return new GoogleGenerativeAI(apiKey);
+}
+
+// Types
+interface ImageGenerationConfig {
+  number_of_images: number;
+  aspect_ratio: string;
+  person_generation: 'DONT_ALLOW' | 'ALLOW_ADULT';
+}
+
+export async function generateImages(data: ImageGenerationRequest) {
+  try {
+    // Check if prompt is provided
+    if (!data.prompt?.trim()) {
+      throw new Error('Please provide a prompt for image generation');
+    }
+
+    // Get API key from environment variable
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error('Gemini API Key is not configured');
+    }
+
+    // Make request to our backend API instead of directly to Gemini
+    const response = await apiRequest("/api/gemini/generate-images", "POST", {
+      prompt: data.prompt,
+      numberOfImages: data.numberOfImages || 4,
+      aspectRatio: data.aspectRatio || '1:1',
+      allowPersonGeneration: data.allowPersonGeneration || true
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error?.message || 'Failed to generate images');
+    }
+
+    const result = await response.json();
+    
+    if (!result.images || result.images.length === 0) {
+      throw new Error('No images were generated');
+    }
+
+    return result.images;
+  } catch (err) {
+    console.error('Error generating images:', err);
+    throw err;
+  }
+}
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return 'An unexpected error occurred';
 }

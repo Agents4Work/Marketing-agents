@@ -6,7 +6,7 @@ import { Image, Headphones, Video, Subtitles } from "lucide-react";
 import SidebarOptimized from "@/components/SidebarOptimized";
 
 // Import our AI tool components
-import { AIImageCreator } from "@/components/ai-tools/AIImageCreator";
+import AIImageCreator from "@/components/ai-tools/AIImageCreator";
 import { AIVoiceGenerator } from "@/components/ai-tools/AIVoiceGenerator";
 import { AITranscriptionTool } from "@/components/ai-tools/AITranscriptionTool";
 import { AIVideoEditor } from "@/components/ai-tools/AIVideoEditor";

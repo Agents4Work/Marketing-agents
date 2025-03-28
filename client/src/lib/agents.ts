@@ -26,6 +26,19 @@ export interface IAgent {
   avatar?: string;
   capabilities: string[];
   skills?: string[] | Array<{name: string; level: number}>;
+  configuration?: {
+    model: string;
+    temperature: number;
+    maxTokens: number;
+    endpoints: {
+      generate: string;
+      refine: string;
+      analyze: string;
+    };
+  };
+  premium?: boolean;
+  trending?: boolean;
+  new?: boolean;
 }
 
 /**
@@ -82,6 +95,33 @@ export function getAgentColor(type: AgentType): string {
  * Colección de agentes por defecto
  */
 export const DEFAULT_AGENTS: IAgent[] = [
+  {
+    id: 'alex-copywriter-1',
+    name: 'Alex Copywriter',
+    type: 'copywriting',
+    description: 'Award-winning AI copywriter specializing in persuasion and conversion optimization',
+    capabilities: ['Marketing Copy', 'Product Descriptions', 'Ad Copy', 'Email Sequences', 'Landing Pages'],
+    skills: [
+      { name: 'Persuasive Writing', level: 5 },
+      { name: 'Brand Voice', level: 5 },
+      { name: 'Marketing Strategy', level: 4 },
+      { name: 'SEO Optimization', level: 4 },
+      { name: 'A/B Testing', level: 4 }
+    ],
+    configuration: {
+      model: 'gemini-pro',
+      temperature: 0.7,
+      maxTokens: 2048,
+      endpoints: {
+        generate: '/api/v1/agents/copywriter/generate',
+        refine: '/api/v1/agents/copywriter/refine',
+        analyze: '/api/v1/agents/copywriter/analyze'
+      }
+    },
+    premium: true,
+    trending: true,
+    new: true
+  },
   {
     id: '1',
     name: 'SEO Specialist',

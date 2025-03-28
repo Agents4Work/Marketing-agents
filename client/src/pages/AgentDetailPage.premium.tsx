@@ -111,16 +111,11 @@ export default function AgentDetailPage() {
     setProgress(0);
 
     try {
-      // Simulate API call
-      await apiRequest(`/api/agents/execute`, {
-        method: "POST",
-        body: JSON.stringify({
-          agentId: selectedAgent.id,
-          parameters: {},
-        }),
-      });
+      // Navigate to the copywriter workspace
+      window.location.href = `/workspace/copywriter/${selectedAgent.id}`;
     } catch (error) {
-      console.error("Error executing agent:", error);
+      console.error('Error navigating to workspace:', error);
+      setIsTryingAgent(false);
     }
   };
 

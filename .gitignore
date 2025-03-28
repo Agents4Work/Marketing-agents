@@ -1,19 +1,47 @@
 # Dependencies
 node_modules/
+.pnp
+.pnp.js
 
-# Environment variables
-.env
-.env.*
-!.env.example
+# Testing
+coverage/
 
-# Build files
+# Production
 dist/
 build/
-.next/
-.cache/
 
-# OS files
+# Environment files
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Firebase
+.firebase/
+*.log
 
 # Credentials and sensitive data
 *.service-account.json
@@ -23,8 +51,6 @@ attached_assets/*.json
 token.json
 
 # Other
-coverage/
-
 server/public
 vite.config.ts.*
 *.tar.gz
