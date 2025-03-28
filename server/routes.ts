@@ -1,4 +1,3 @@
-
 import express from "express";
 import http from "http";
 import compression from 'compression';
@@ -13,6 +12,7 @@ import { googleDocsRouter } from './routes/google-docs';
 import { usersRouter } from './routes/users';
 import { createOpenAIRouter } from './openai';
 import { createGeminiRouter } from './gemini';
+// TODO: Firebase routes will be integrated here once firebase-api.ts is implemented
 
 export async function registerRoutes(app: express.Application): Promise<http.Server> {
   const server = http.createServer(app);
