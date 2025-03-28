@@ -5,12 +5,12 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx watch server/index.ts",
-    "dev:simple": "node index.js",
+    "dev:simple": "node web-server.js",
     "clean": "rimraf dist",
     "build": "npm run clean && npm run build:client && npm run build:server",
     "build:client": "vite build --outDir=dist/public",
     "build:server": "tsc -p tsconfig.server.json && node scripts/fix-imports.js",
-    "start": "NODE_ENV=production node dist/index.js",
+    "start": "NODE_ENV=production node web-server.js",
     "check": "tsc",
     "db:push": "drizzle-kit push"
   },
